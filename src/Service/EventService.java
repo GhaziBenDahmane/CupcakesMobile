@@ -9,7 +9,7 @@ package Service;
  *
  * @author haffe
  */
-public class ServiceEvent {
+public class EventService {
     
     
     public void addEvent()
