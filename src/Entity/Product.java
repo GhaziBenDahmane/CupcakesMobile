@@ -3,17 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package Entity;
 
-
-import java.sql.Blob;
-import java.util.Objects;
 
 /**
  *
  * @author Arshavin
  */
-public class Product implements Comparable<Product> {
+public class Product{
 
     private Integer id;
     private String name;
@@ -25,13 +22,12 @@ public class Product implements Comparable<Product> {
     private String Photo;
     private String Description;
     private Promotion promotion;
-    private Blob image ;
-    
+    private String image;
 
-    public Product()  {
+    public Product() {
     }
 
-    public Product(Integer id, String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description,Integer barcode,Promotion promotion) {
+    public Product(Integer id, String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description, Integer barcode, Promotion promotion) {
         this.id = id;
         this.name = name;
         this.type = Type;
@@ -40,11 +36,11 @@ public class Product implements Comparable<Product> {
         this.nb_seller = nb_seller;
         this.Photo = Photo;
         this.Description = Description;
-        this.barcode=barcode;
-        this.promotion=promotion;
+        this.barcode = barcode;
+        this.promotion = promotion;
     }
-    
-    public Product(Integer id, String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description,Integer barcode,Promotion promotion,Blob Image) {
+
+    public Product(Integer id, String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description, Integer barcode, Promotion promotion, String Image) {
         this.id = id;
         this.name = name;
         this.type = Type;
@@ -53,13 +49,13 @@ public class Product implements Comparable<Product> {
         this.nb_seller = nb_seller;
         this.Photo = Photo;
         this.Description = Description;
-        this.barcode=barcode;
-        this.promotion=promotion;
-        this.image=image;
+        this.barcode = barcode;
+        this.promotion = promotion;
+        this.image = image;
     }
 
-    public Product(String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description,Integer barcode) {
-     
+    public Product(String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description, Integer barcode) {
+
         this.name = name;
         this.type = Type;
         this.price = price;
@@ -67,12 +63,12 @@ public class Product implements Comparable<Product> {
         this.nb_seller = nb_seller;
         this.Photo = Photo;
         this.Description = Description;
-        this.barcode=barcode;
-        
+        this.barcode = barcode;
+
     }
 
-    public Product(String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description,Integer barcode,Promotion promotion) {
-     
+    public Product(String name, String Type, Double price, Integer nb_view, Integer nb_seller, String Photo, String Description, Integer barcode, Promotion promotion) {
+
         this.name = name;
         this.type = Type;
         this.price = price;
@@ -80,10 +76,10 @@ public class Product implements Comparable<Product> {
         this.nb_seller = nb_seller;
         this.Photo = Photo;
         this.Description = Description;
-        this.barcode=barcode;
-        this.promotion=promotion;
+        this.barcode = barcode;
+        this.promotion = promotion;
     }
-    
+
     public Product(String name, String Type, Double price, String Photo, String Description) {
 
         this.name = name;
@@ -94,29 +90,26 @@ public class Product implements Comparable<Product> {
         this.nb_seller = 0;
         this.nb_view = 0;
     }
-    
-    public Product(Integer id,Integer barcode , String name , String type , Double price,String Description)
-    {
-        this.id=id;
-        this.barcode=barcode;
-        this.name=name;
-        this.type=type;
-        this.price=price;
-        this.Description=Description;  
-        
-        
+
+    public Product(Integer id, Integer barcode, String name, String type, Double price, String Description) {
+        this.id = id;
+        this.barcode = barcode;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.Description = Description;
+
     }
-    
-     public Product(Integer id,Integer barcode , String name , String type , Double price,String Description, Promotion promotion)
-    {
-        this.id=id;
-        this.barcode=barcode;
-        this.name=name;
-        this.type=type;
-        this.price=price;
-        this.Description=Description;  
-        this.promotion=promotion;
-        
+
+    public Product(Integer id, Integer barcode, String name, String type, Double price, String Description, Promotion promotion) {
+        this.id = id;
+        this.barcode = barcode;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.Description = Description;
+        this.promotion = promotion;
+
     }
 
     public Integer getId() {
@@ -199,11 +192,11 @@ public class Product implements Comparable<Product> {
         this.promotion = promotion;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -211,36 +204,5 @@ public class Product implements Comparable<Product> {
     public String toString() {
         return "Product{" + "id=" + id + ", name=" + name + ", type=" + type + ", barcode=" + barcode + ", price=" + price + ", nb_view=" + nb_view + ", nb_seller=" + nb_seller + ", Photo=" + Photo + ", Description=" + Description + ", promotion=" + promotion + ", image=" + image + '}';
     }
-    
-    
-    
-    
-
-   
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Product other = (Product) obj;
-        return Objects.equals(this.name, other.name);
-    }
-
-    @Override
-    public int compareTo(Product o) {
-        return this.getName().compareTo(o.getName());
-    }
-    
 
 }

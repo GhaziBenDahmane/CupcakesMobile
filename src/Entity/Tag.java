@@ -5,7 +5,6 @@
  */
 package entity;
 
-import java.util.Objects;
 
 /**
  *
@@ -35,25 +34,6 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag{" + "id_tag=" + id_tag + ", name=" + name + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Tag other = (Tag) obj;
-        return Objects.equals(this.name, other.name);
     }
 
 }

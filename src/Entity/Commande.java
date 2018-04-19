@@ -5,8 +5,6 @@
  */
 package entity;
 
-import java.util.Objects;
-
 /**
  *
  * @author Arshavin
@@ -44,25 +42,6 @@ public class Commande {
     @Override
     public String toString() {
         return "Commande{" + "id_command=" + id_command + ", quantity=" + quantity + ", price=" + price + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.price);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Commande other = (Commande) obj;
-        return Objects.equals(this.price, other.price);
     }
 
 }
