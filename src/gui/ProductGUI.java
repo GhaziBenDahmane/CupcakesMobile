@@ -9,32 +9,36 @@ import Service.ProductService;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
-import com.codename1.ui.layouts.BorderLayout;
 import Entity.Product;
-import com.codename1.components.ImageViewer;
+import Entity.Rating;
+import Service.RatingService;
 import com.codename1.components.MultiButton;
+import com.codename1.ui.Button;
+import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Image;
-import com.codename1.ui.List;
+import com.codename1.ui.Slider;
+import com.codename1.ui.SwipeableContainer;
 import com.codename1.ui.URLImage;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.list.GenericListCellRenderer;
+import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
+import com.codename1.util.MathUtil;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
  * @author Arshavin
  */
-public class ProductGUI {
-
-    private Label type, name, price, description;
-    private ImageViewer imageView;
+public final class ProductGUI {
 
     private Form form;
     private MultiButton mb;
@@ -50,79 +54,43 @@ public class ProductGUI {
     Font largePlainMonospaceFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE);
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
 
-    public ProductGUI() {
-        List list = new List(createGenericListCellRendererModelData());
-        list.setRenderer(new GenericListCellRenderer(createGenericRendererContainer(), createGenericRendererContainer()));
-        form = new Form("ProductList", new BorderLayout());
-        form.add(BorderLayout.CENTER, list);
-    }
+    public ProductGUI() throws IOException {
+        form = new Form("Product List");
 
-    private Container createGenericRendererContainer() {
-        name = new Label();
-        name.setName("name");
-
-        type = new Label();
-        type.setName("type");
-
-        description = new Label();
-        description.setName("description");
-
-        price = new Label();
-        price.setName("price");
-
-        //imageView = new ImageViewer();
-        //imageView.setName("image");
-        mb = new MultiButton();
-        mb.setIconName("image");
-        mb.setIcon(placeholder);
-
-        //imageView.setImage(image);
-        Container container1 = new Container(BoxLayout.y());
-
-        container1.add(name);
-        container1.add(type);
-        container1.add(description);
-        container1.add(price);
-
-        container = new Container(BoxLayout.x());
-        container.add(mb);
-        container.add(container1);
-        container.setUIID("ListRenderer");
-
-        name.getAllStyles().setFgColor(0xf7786b);
-        type.getAllStyles().setFont(largePlainMonospaceFont);
-        type.getAllStyles().setFont(mediumPlainMonospaceFont);
-        type.getAllStyles().setFgColor(0x000000);
-        description.getAllStyles().setFont(smallPlainSystemFont);
-        description.getAllStyles().setFgColor(0xeaece5);
-        price.getAllStyles().setFont(smallUnderlineMonospaceFont);
-        price.getAllStyles().setFgColor(0xb2b2b2);
-        container.getSelectedStyle().setBgColor(0xffffffff);
-
-        return container;
-    }
-
-    private Object[] createGenericListCellRendererModelData() {
         ArrayList<Product> products = new ArrayList<>();
         ProductService ps = new ProductService();
         products = ps.SelectAllProducts();
-        Map<String, Object>[] data = new HashMap[products.size()];
 
-        for (int i = 0; i < products.size(); i++) {
-            data[i] = new HashMap<>();
+        for (Product product : products) {
 
-            URLImage im = URLImage.createToStorage(placeholder, products.get(i).getImage(),
-                    PATH + products.get(i).getImage());
-            image = (Image) im;
-            data[i].put("name", products.get(i).getName());
-            data[i].put("type", products.get(i).getType());
-            data[i].put("description", products.get(i).getDescription());
-            data[i].put("price", products.get(i).getPrice());
-            data[i].put("image", image);
-
+            form.add(createRankWidget(product));
         }
 
-        return data;
+    }
+
+    public SwipeableContainer createRankWidget(Product p) {
+
+        mb = new MultiButton();
+        mb.setUIID("Button");
+        Button n = new Button();
+        mb.setPropertyValue("name", n);
+        mb.setUIIDLine1("Title");
+        mb.setUIIDLine2("Label");
+        mb.setUIIDLine3("Badge");
+        mb.setUIIDLine4("TouchCommand");
+
+        mb.setTextLine1(p.getName());
+        mb.setTextLine2(p.getType());
+        mb.setTextLine3(p.getDescription());
+        mb.setTextLine4(p.getPrice().toString());
+        URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
+                PATH+ p.getImage());
+        image = (Image) i;
+
+        mb.setIcon(image);
+
+        return new SwipeableContainer(FlowLayout.encloseCenterMiddle(createStarRankSlider(p)),
+                mb);
     }
 
     public Form getForm() {
@@ -139,6 +107,61 @@ public class ProductGUI {
 
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    private Container createStarRankSlider(Product p) {
+        Container c = new Container(BoxLayout.y());
+        Label rate = new Label("Rate");
+
+        Slider starRank = new Slider();
+        starRank.setEditable(true);
+        starRank.setMinValue(1);
+        starRank.setMaxValue(6);
+        starRank.setRenderValueOnTop(true);
+        Font fnt = Font.createTrueTypeFont("native:MainLight", "native:MainLight").
+                derive(Display.getInstance().convertToPixels(5, true), Font.STYLE_PLAIN);
+        Style st = new Style(0xffff33, 0, fnt, (byte) 0);
+        Image fullStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, st).toImage();
+        st.setOpacity(100);
+        st.setFgColor(0);
+        Image emptyStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, st).toImage();
+        initStarRankStyle(starRank.getSliderEmptySelectedStyle(), emptyStar);
+        initStarRankStyle(starRank.getSliderEmptyUnselectedStyle(), emptyStar);
+        initStarRankStyle(starRank.getSliderFullSelectedStyle(), fullStar);
+        initStarRankStyle(starRank.getSliderFullUnselectedStyle(), fullStar);
+        RatingService rs = new RatingService();
+        Rating rating = rs.SelectRatingByProduct(p.getId());
+        starRank.setPreferredSize(new Dimension(fullStar.getWidth() * 5, fullStar.getHeight()));
+        //starRank.setProgress(rating.getRate().intValue());
+        starRank.addActionListener((ActionListener) (ActionEvent evt) -> {
+            System.out.println(starRank.getProgress());
+            Rating newRating = new Rating(starRank.getProgress());
+            newRating.setProducts(p);
+            rs.addStars(newRating);
+            Rating r = rs.SelectRatingByProduct(p.getId());
+            int d = MathUtil.round(r.getRate().floatValue() * 100);
+            Integer l = (Integer) d;
+            Double q = l.doubleValue() / 100;
+            System.out.println(q);
+            rate.setText("Rate : " + q + "/5.0" + " (" + r.getVotes().toString() + " votes)");
+        });
+        int d = MathUtil.round(rating.getRate().floatValue() * 100);
+        Integer l = (Integer) d;
+        Double q = l.doubleValue() / 100;
+        rate.setText("Rate : " + q + "/5.0" + " (" + rating.getVotes().toString() + " votes)");
+        rate.getAllStyles().setFont(mediumPlainMonospaceFont);
+
+        c.add(starRank);
+        c.add(rate);
+
+        return c;
+    }
+
+    private void initStarRankStyle(Style s, Image star) {
+        s.setBackgroundType(Style.BACKGROUND_IMAGE_TILE_BOTH);
+        s.setBorder(Border.createEmpty());
+        s.setBgImage(star);
+        s.setBgTransparency(0);
     }
 
 }

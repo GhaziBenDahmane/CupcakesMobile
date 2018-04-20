@@ -5,13 +5,14 @@
  */
 package Service;
 
+import Entity.Product;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
-import Entity.Product;
+import Entity.Rating;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,12 @@ import java.util.Map;
  *
  * @author Arshavin
  */
-public class ProductService {
-
-    public ArrayList<Product> SelectAllProducts() {
-        ArrayList<Product> listProducts = new ArrayList<>();
+public class RatingService {
+    
+    public Rating SelectRatingByProduct(int id) {
+        Rating rating = new Rating();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListProduct.php");
+        con.setUrl("http://localhost/WebService/Product/ListRating.php/?id="+id);
 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -38,21 +39,15 @@ public class ProductService {
                 try {
                     Map<String, Object> tasks = jsonp.parseJSON(new CharArrayReader(new String(con.getResponseData()).toCharArray()));
                     System.out.println(tasks);
-                    //System.out.println(tasks);
+                    
                     List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
                     System.out.println("list" + list);
                     for (Map<String, Object> obj : list) {
-                        Product product = new Product();
-
-                        float id = Float.parseFloat(obj.get("id").toString());
-
-                        product.setId((int) id);
-                        product.setName(obj.get("name").toString());
-                        product.setType(obj.get("type").toString());
-                        product.setDescription(obj.get("description").toString());
-                        product.setPrice(Double.parseDouble(obj.get("price").toString()));
-                        product.setImage(obj.get("photo1").toString());
-                        listProducts.add(product);
+                        
+ rating.setVotes(Integer.parseInt(obj.get("count").toString()));
+                        
+                        rating.setRate(Double.parseDouble(obj.get("rate").toString()));
+                        
 
                     }
                 } catch (IOException ex) {
@@ -61,7 +56,30 @@ public class ProductService {
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
-        return listProducts;
+        return rating;
     }
+    
+    public void addStars(Rating rating) {
+        ConnectionRequest con = new ConnectionRequest();
+        String Url = "http://localhost/WebService/Product/AddRating.php/?id="+rating.getProducts().getId()+"&note="+ rating.getNote();
+       
+        con.setUrl(Url);
 
+        System.out.println(Url);
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());
+            System.out.println(str);
+//            if (str.trim().equalsIgnoreCase("OK")) {
+//                f2.setTitle(tlogin.getText());
+//             f2.show();
+//            }
+//            else{
+//            Dialog.show("error", "login ou pwd invalid", "ok", null);
+//            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+    
+    
 }
