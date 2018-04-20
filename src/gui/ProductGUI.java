@@ -43,7 +43,8 @@ public final class ProductGUI {
     private Form form;
     private MultiButton mb;
     private Container container;
-    private Image image, ii;
+    private Image image;
+    private Double price;
 
     private static final String PATH = "http://localhost/picture/";
     Style s = UIManager.getInstance().getComponentStyle("Button");
@@ -78,11 +79,12 @@ public final class ProductGUI {
         mb.setUIIDLine2("Label");
         mb.setUIIDLine3("Badge");
         mb.setUIIDLine4("TouchCommand");
-
+       
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-        mb.setTextLine4(p.getPrice().toString());
+        price = p.getPrice() - (p.getPrice()*p.getPromotion().getDiscount());
+        mb.setTextLine4(price.toString()+" DT");
         URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
                 PATH+ p.getImage());
         image = (Image) i;

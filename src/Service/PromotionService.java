@@ -5,15 +5,13 @@
  */
 package Service;
 
+import Entity.Promotion;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
-import Entity.Product;
-import Entity.Promotion;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,18 +19,17 @@ import java.util.Map;
  *
  * @author Arshavin
  */
-public class ProductService {
+public class PromotionService {
 
-    public ArrayList<Product> SelectAllProducts() {
-        ArrayList<Product> listProducts = new ArrayList<>();
+    public Promotion SelectAllProducts(int id) {
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListProduct.php");
+        con.setUrl("http://localhost/WebService/Product/ListPromotion.php/?id=" + id);
+        Promotion promotion = new Promotion();
 
         con.addResponseListener((NetworkEvent evt) -> {
             //listTasks = getListTask(new String(con.getResponseData()));
             JSONParser jsonp = new JSONParser();
             System.out.println("Response" + new CharArrayReader(new String(con.getResponseData()).toCharArray()));
-
             try {
                 Map<String, Object> tasks = jsonp.parseJSON(new CharArrayReader(new String(con.getResponseData()).toCharArray()));
                 System.out.println(tasks);
@@ -40,28 +37,15 @@ public class ProductService {
                 List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("root");
                 System.out.println("list" + list);
                 for (Map<String, Object> obj : list) {
-                    Product product = new Product();
-
-                    float id = Float.parseFloat(obj.get("id").toString());
-
-                    product.setId((int) id);
-                    product.setName(obj.get("name").toString());
-                    product.setType(obj.get("type").toString());
-                    product.setDescription(obj.get("description").toString());
-                    product.setPrice(Double.parseDouble(obj.get("price").toString()));
-                    product.setImage(obj.get("photo1").toString());
-                    PromotionService ps = new PromotionService();
-
-                    Promotion promotion = ps.SelectAllProducts(Integer.parseInt(obj.get("promotion_id").toString()));
-                    product.setPromotion(promotion);
-                    listProducts.add(product);
-
+                    float id1 = Float.parseFloat(obj.get("id").toString());
+                    promotion.setId_promotion((int) id1);
+                    promotion.setDiscount(Double.parseDouble(obj.get("discount").toString()));
                 }
-            } catch (IOException ex) {
+            }catch (IOException ex) {
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
-        return listProducts;
+        return promotion;
     }
 
 }
