@@ -13,6 +13,7 @@ import Entity.Product;
 import Entity.Rating;
 import Service.RatingService;
 import com.codename1.components.MultiButton;
+import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
@@ -27,9 +28,11 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.list.DefaultListModel;
 import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
+import com.codename1.ui.util.Resources;
 import com.codename1.util.MathUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,9 +48,12 @@ public final class ProductGUI {
     private Container container;
     private Image image;
     private Double price;
+    protected final AutoCompleteTextField search;
+    private Resources theme;
 
     private static final String PATH = "http://localhost/picture/";
     Style s = UIManager.getInstance().getComponentStyle("Button");
+    Style style = UIManager.getInstance().getComponentStyle("Label");
     FontImage p = FontImage.createMaterial(FontImage.MATERIAL_PORTRAIT, s);
     EncodedImage placeholder = EncodedImage.createFromImage(p.scaled(p.getWidth() * 4, p.getHeight() * 5), false);
     Font smallPlainSystemFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_SMALL);
@@ -57,11 +63,56 @@ public final class ProductGUI {
 
     public ProductGUI() throws IOException {
         form = new Form("Product List");
-
+        theme = UIManager.initFirstTheme("/theme");
         ArrayList<Product> products = new ArrayList<>();
         ProductService ps = new ProductService();
         products = ps.SelectAllProducts();
+        final DefaultListModel<String> options = new DefaultListModel<>();
+        final Form f = new Form("products");
+        final ArrayList<Product> pr = products;
+        ArrayList<Integer> ids = new ArrayList<>();
+        search = new AutoCompleteTextField(options) {
+            @Override
+            protected boolean filter(String text) {
+                if (text.length() == 0) {
+                    return false;
+                }
+                ArrayList<Product> l = ps.findProducts(text);
 
+                if (l == null || l.isEmpty()) {
+                    return false;
+                }
+
+                options.removeAll();
+                for (Product s : l) {
+                    options.addItem(s.getName());
+                    ids.add(s.getId());
+                }
+
+                return true;
+            }
+
+        };
+
+        search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
+        search.addListListener((ActionListener) (ActionEvent evt) -> {
+            System.out.println(search.getText());
+            int i = ids.get(options.getSelectedIndex());
+            for (Product p1 : pr) {
+                if (p1.getId() == i) {
+                    f.add(createRankWidget(p1));
+                }
+            }
+            f.show();
+        });
+
+        search.setMinimumElementsShownInPopup(4);
+        f.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+            form.show();
+            f.removeAll();
+        });
+
+        form.add(search);
         for (Product product : products) {
 
             form.add(createRankWidget(product));
@@ -79,14 +130,14 @@ public final class ProductGUI {
         mb.setUIIDLine2("Label");
         mb.setUIIDLine3("Badge");
         mb.setUIIDLine4("TouchCommand");
-       
+
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-        price = p.getPrice() - (p.getPrice()*p.getPromotion().getDiscount());
-        mb.setTextLine4(price.toString()+" DT");
+        price = p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount());
+        mb.setTextLine4(price.toString() + " DT");
         URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
-                PATH+ p.getImage());
+                PATH + p.getImage());
         image = (Image) i;
 
         mb.setIcon(image);
