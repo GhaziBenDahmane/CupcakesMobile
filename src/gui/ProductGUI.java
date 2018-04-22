@@ -12,6 +12,7 @@ import com.codename1.ui.Label;
 import Entity.Product;
 import Entity.Rating;
 import Service.RatingService;
+import Service.ScanCodeService;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
@@ -45,13 +46,15 @@ public final class ProductGUI {
 
     private Form form;
     private MultiButton mb;
+    private Button  max_min_price;
     private Container container;
     private Image image;
     private Double price;
-    protected final AutoCompleteTextField search;
     private Resources theme;
+    protected final AutoCompleteTextField search;
 
     private static final String PATH = "http://localhost/picture/";
+
     Style s = UIManager.getInstance().getComponentStyle("Button");
     Style style = UIManager.getInstance().getComponentStyle("Label");
     FontImage p = FontImage.createMaterial(FontImage.MATERIAL_PORTRAIT, s);
@@ -62,8 +65,9 @@ public final class ProductGUI {
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
 
     public ProductGUI() throws IOException {
-        form = new Form("Product List");
+        form = new Form("Products");
         theme = UIManager.initFirstTheme("/theme");
+
         ArrayList<Product> products = new ArrayList<>();
         ProductService ps = new ProductService();
         products = ps.SelectAllProducts();
@@ -71,6 +75,10 @@ public final class ProductGUI {
         final Form f = new Form("products");
         final ArrayList<Product> pr = products;
         ArrayList<Integer> ids = new ArrayList<>();
+
+        max_min_price = new Button();
+        max_min_price.setIcon(FontImage.createMaterial(FontImage.MATERIAL_ACCOUNT_BALANCE_WALLET, style));
+
         search = new AutoCompleteTextField(options) {
             @Override
             protected boolean filter(String text) {
@@ -110,11 +118,24 @@ public final class ProductGUI {
         f.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
             form.show();
             f.removeAll();
+            search.clear();
+            search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
+
         });
+        form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), e -> {
+          ScanCodeService scs= new ScanCodeService();
+          Product product = new Product();
+          product =scs.ScanBarCode();
+          f.add(createRankWidget(product));
+          f.show();
+        });
+        Container co = new Container(BoxLayout.x());
+        
+        co.add(search);
 
-        form.add(search);
+        form.add(co);
+
         for (Product product : products) {
-
             form.add(createRankWidget(product));
         }
 

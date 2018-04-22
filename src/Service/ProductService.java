@@ -27,7 +27,7 @@ public class ProductService {
     public ArrayList<Product> SelectAllProducts() {
         ArrayList<Product> listProducts = new ArrayList<>();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListProduct.php");
+        con.setUrl("http://192.168.0.101/WebService/Product/ListProduct.php");
 
         con.addResponseListener((NetworkEvent evt) -> {
             //listTasks = getListTask(new String(con.getResponseData()));

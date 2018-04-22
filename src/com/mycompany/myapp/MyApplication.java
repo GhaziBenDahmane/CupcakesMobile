@@ -25,6 +25,14 @@ public class MyApplication {
     private Form current;
     private Resources theme;
 
+    public Resources getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Resources theme) {
+        this.theme = theme;
+    }
+
     public void init(Object context) {
         // use two network threads instead of one
         updateNetworkThreadCount(2);
