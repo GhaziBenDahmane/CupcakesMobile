@@ -11,9 +11,11 @@ import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import Entity.Product;
 import Entity.Rating;
+import Service.CurrencyConvertService;
 import Service.RatingService;
 import Service.ScanCodeService;
 import com.codename1.components.MultiButton;
+import com.codename1.io.Storage;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
 import com.codename1.ui.Display;
@@ -46,7 +48,7 @@ public final class ProductGUI {
 
     private Form form;
     private MultiButton mb;
-    private Button  max_min_price;
+    private Button max_min_price;
     private Container container;
     private Image image;
     private Double price;
@@ -123,14 +125,14 @@ public final class ProductGUI {
 
         });
         form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), e -> {
-          ScanCodeService scs= new ScanCodeService();
-          Product product = new Product();
-          product =scs.ScanBarCode();
-          f.add(createRankWidget(product));
-          f.show();
+            ScanCodeService scs = new ScanCodeService();
+            Product product = new Product();
+            product = scs.ScanBarCode();
+            f.add(createRankWidget(product));
+            f.show();
         });
         Container co = new Container(BoxLayout.x());
-        
+
         co.add(search);
 
         form.add(co);
@@ -155,8 +157,11 @@ public final class ProductGUI {
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-        price = p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount());
-        mb.setTextLine4(price.toString() + " DT");
+        CurrencyConvertService c = new CurrencyConvertService();
+
+        price = (p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount()));
+        mb.setTextLine4(price.toString() +" "+ Storage.getInstance().readObject("currency"));
+
         URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
                 PATH + p.getImage());
         image = (Image) i;
