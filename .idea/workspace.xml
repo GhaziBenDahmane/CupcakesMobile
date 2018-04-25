@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="782f87b2-703f-4c1f-9e13-bb9b883f434e" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codenameone_settings.properties" beforeDir="false" afterPath="$PROJECT_DIR$/codenameone_settings.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/android/com/codename1/ext/codescan/NativeCodeScannerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/android/com/codename1/ext/codescan/NativeCodeScannerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/CVZBarReaderViewControllerExt.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/CVZBarReaderViewControllerExt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/CVZBarReaderViewControllerExt.m" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/CVZBarReaderViewControllerExt.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Decoder.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Decoder.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Image.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Image.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ImageScanner.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ImageScanner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Processor.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Processor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ScanCodeImplExt.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ScanCodeImplExt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ScanCodeImplExt.m" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ScanCodeImplExt.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Scanner.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Scanner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Symbol.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Symbol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Video.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Video.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/Window.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/Window.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBARException.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBARException.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarCameraSimulator.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarCameraSimulator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarCaptureReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarCaptureReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarHelpController.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarHelpController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarImage.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarImage.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarImageScanner.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarImageScanner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderController.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderView.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderView.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderViewController.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarReaderViewController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarSDK.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarSDK.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/ZBarSymbol.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/ZBarSymbol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/com_codename1_ext_codescan_NativeCodeScannerImpl.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/com_codename1_ext_codescan_NativeCodeScannerImpl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/com_codename1_ext_codescan_NativeCodeScannerImpl.m" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/com_codename1_ext_codescan_NativeCodeScannerImpl.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/zbar-help.html" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/zbar-help.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/ios/zbar.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/ios/zbar.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/AdvancedMultimediaManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/AdvancedMultimediaManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/BarCodeScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/BarCodeScanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/CN1ImageLuminanceSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/CN1ImageLuminanceSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/DefaultMultimediaManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/DefaultMultimediaManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/MultimediaManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/MultimediaManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/NativeCodeScannerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/NativeCodeScannerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/ScannerHider.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/ScannerHider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/SnapshotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/ext/codescan/SnapshotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/io/CodeScannerUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/j2me/com/codename1/io/CodeScannerUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/javascript/com_codename1_ext_codescan_NativeCodeScanner.js" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/javascript/com_codename1_ext_codescan_NativeCodeScanner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/javase/com/codename1/ext/codescan/NativeCodeScannerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/javase/com/codename1/ext/codescan/NativeCodeScannerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/BitmapLuminanceSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/BitmapLuminanceSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/MultimediaManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/MultimediaManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/NativeCodeScannerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/rim/com/codename1/ext/codescan/NativeCodeScannerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/impl/native/win/com/codename1/ext/codescan/NativeCodeScannerImpl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/lib/impl/native/win/com/codename1/ext/codescan/NativeCodeScannerImpl.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ProductGUI.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/gui/ProductGUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#9132#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="85" />
+    <option name="y" value="25" />
+    <option name="width" value="1750" />
+    <option name="height" value="970" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="CupcakesMobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CupcakesMobile" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CupcakesMobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CupcakesMobile" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CupcakesMobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CupcakesMobile" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Entity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CupcakesMobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CupcakesMobile" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../web/PiWeb" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+    <configuration name="Run in Device Simulator" type="#com.codename1.plugin.intellij.run.CodenameOneConfigurationType" factoryName="Codename One" temporary="true">
+      <setting name="mainClass" value="com.mycompany.myapp.MyApplication" />
+      <setting name="vmparams" value="" />
+      <setting name="workDir" value="" />
+      <setting name="debug" value="false" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Codename One.Run in Device Simulator" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="782f87b2-703f-4c1f-9e13-bb9b883f434e" name="Default" comment="" />
+      <created>1524516005877</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1524516005877</updated>
+      <workItem from="1524516007776" duration="1959000" />
+      <workItem from="1524580915586" duration="49000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2008000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32965517" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Entity/Cart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#971#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/CurrencySettingsGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#4873#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/ProductGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9132#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/CurrencySettingsGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#4873#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/Cart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#971#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/ProductGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9132#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
