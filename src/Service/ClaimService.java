@@ -15,7 +15,8 @@ import java.util.Map;
  */
 public class ClaimService {
 
-    public final static String API_URL = "http://localhost:8000/api/";
+    public final static String host = "http://192.168.43.65/PiWeb/web/app_dev.php";
+    public final static String API_URL = host + "/api/";
 
     public static void add(Claim claim) {
         Map responseData = Rest.post(API_URL + "claims")
@@ -28,13 +29,7 @@ public class ClaimService {
     }
 
     public static void getByUser() {
-        /*Map result = (Map) Rest.post(API_URL + "claim")
-                .queryParam("description", claim.getDescription())
-                .queryParam("type", claim.getType())
-                .queryParam("user", claim.getClient().getUsername())
-                .getAsJsonMap()
-                .getResponseData()
-                .get("data");*/
+
         String result = Rest.post(API_URL + "claims")
                 .queryParam("description", "can't")
                 .queryParam("type", "problem")

@@ -5,8 +5,11 @@
  */
 package Util;
 
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
 import com.codename1.util.Base64;
+import com.mycompany.myapp.MyApplication;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,5 +44,14 @@ public class Util {
     public static String uploadProfilePicture(byte[] image) {
         String imageb64 = Base64.encode(image);
         return uploadProfilePicture(imageb64);
+    }
+
+    public static void downloadUserImage() {
+        ConnectionRequest r = new ConnectionRequest();
+        r.setUrl(MyApplication.currentUser.getPhotoprofil());
+        r.downloadImageToStorage(FileSystemStorage.getInstance().getAppHomePath() + " /picture.png", e -> {
+            System.out.println("e");
+
+        });
     }
 }

@@ -8,10 +8,8 @@ package Service;
 import Entity.User;
 import Util.Util;
 import com.codename1.capture.Capture;
-import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
 import com.mycompany.myapp.MyApplication;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +20,11 @@ import java.util.Map;
  */
 public class UserService {
 
-    public final static String API_URL = "http://localhost:8000";
+    public final static String API_URL = "http://192.168.43.65/PiWeb/web/app_dev.php";
     public final static String API_PATH = API_URL + "/api/";
 
     public static boolean login(String username, String password) {
-        String loginUrl = API_URL + "/app_dev.php/oauth/v2/token";
+        String loginUrl = API_URL + "/oauth/v2/token";
         String responseData = Rest.post(loginUrl)
                 .queryParam("grant_type", "password")
                 .queryParam("client_id", "1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4")
@@ -45,6 +43,19 @@ public class UserService {
 
     }
 
+    public static void update(User u) {
+        String loginUrl = API_URL + "/users";
+        String responseData = Rest.post(loginUrl)
+                .queryParam("id", "" + u.getId())
+                .queryParam("username", u.getUsername())
+                .queryParam("phone", u.getEmail())
+                .queryParam("photo", u.getEmail())
+                .queryParam("email", u.getEmail())
+                .getAsString()
+                .getResponseData();
+        System.out.println(responseData);
+    }
+
     public static User get(String username) {
         String url = API_PATH + "users/" + username;
         Map responseData = Rest.get(url)
@@ -54,14 +65,9 @@ public class UserService {
     }
 
     void changePicture() {
-        try {
-            String fileName = Capture.capturePhoto();
-            if (fileName != null) {
-                byte byteArray[] = Util.getBytesFromInputStream(FileSystemStorage.getInstance().openInputStream(fileName));
-                System.out.println(Util.uploadProfilePicture(byteArray));
-            }
-        } catch (IOException ex) {
-
+        String fileName = Capture.capturePhoto();
+        if (fileName != null) {
+            String url = Util.uploadProfilePicture(fileName);
         }
     }
 
@@ -102,7 +108,7 @@ public class UserService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void update(User a) {
+    public void (User a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -113,9 +119,5 @@ public class UserService {
     public void deleteId(int a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    public User fromMap(Map a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
-
+     */
 }
