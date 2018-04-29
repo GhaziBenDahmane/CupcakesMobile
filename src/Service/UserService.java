@@ -12,7 +12,6 @@ import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
 import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,7 +77,7 @@ public class UserService {
         return u;
 
     }
-
+    /*
     public List<User> getAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -105,6 +104,6 @@ public class UserService {
 
     public User fromMap(Map a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 
 }

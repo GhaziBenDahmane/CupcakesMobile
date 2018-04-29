@@ -7,7 +7,6 @@ package Service;
 
 import Entity.Claim;
 import com.codename1.io.rest.Rest;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,7 +94,7 @@ public class ClaimService {
         return m;
 
     }
-
+    /*
     public Claim get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -121,5 +120,5 @@ public class ClaimService {
                 .getResponseData();
         System.out.println(result);
         return null;
-    }
+    }*/
 }
