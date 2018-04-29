@@ -12,6 +12,8 @@ import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
 import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,11 +79,21 @@ public class UserService {
         return u;
 
     }
-    /*
-    public List<User> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
+    public static List<User> getAll() {
+        List u = new ArrayList<>();
+        String url = API_PATH + "users";
+        Map responseData = Rest.get(url)
+                .getAsJsonMap()
+                .getResponseData();
+        List l = (ArrayList) responseData.get("root");
+        for (Object x : l) {
+            u.add(mapToUser((Map) x));
+        }
+        System.out.println(u);
+        return u;
+    }
+    /*
     public User get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
