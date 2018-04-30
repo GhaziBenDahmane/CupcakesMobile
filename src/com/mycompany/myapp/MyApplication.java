@@ -15,6 +15,8 @@ import gui.LoginForm;
  */
 public class MyApplication {
 
+    public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
+
     public static User currentUser = null;
     private Form current;
     private Resources theme;

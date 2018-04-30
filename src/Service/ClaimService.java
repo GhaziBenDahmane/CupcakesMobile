@@ -7,6 +7,7 @@ package Service;
 
 import Entity.Claim;
 import com.codename1.io.rest.Rest;
+import com.mycompany.myapp.MyApplication;
 import java.util.Map;
 
 /**
@@ -15,8 +16,7 @@ import java.util.Map;
  */
 public class ClaimService {
 
-    public final static String host = "http://192.168.43.65/PiWeb/web/app_dev.php";
-    public final static String API_URL = host + "/api/";
+    public final static String API_URL = MyApplication.API_URL + "/api/";
 
     public static void add(Claim claim) {
         Map responseData = Rest.post(API_URL + "claims")

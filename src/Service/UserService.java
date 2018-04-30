@@ -20,12 +20,11 @@ import java.util.Map;
  */
 public class UserService {
 
-    public final static String API_URL = "http://192.168.43.65/PiWeb/web/app_dev.php";
     //public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
-    public final static String API_PATH = API_URL + "/api/";
+    public final static String API_PATH = MyApplication.API_URL + "/api/";
 
     public static boolean login(String username, String password) {
-        String loginUrl = API_URL + "/oauth/v2/token";
+        String loginUrl = MyApplication.API_URL + "/oauth/v2/token";
         String responseData = Rest.post(loginUrl)
                 .queryParam("grant_type", "password")
                 .queryParam("client_id", "1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4")
@@ -45,7 +44,7 @@ public class UserService {
     }
 
     public static void update(User u) {
-        String url = API_URL + "users";
+        String url = MyApplication.API_URL + "users";
         String responseData = Rest.put(url)
                 .queryParam("id", "" + u.getId())
                 .queryParam("username", u.getUsername())
