@@ -7,23 +7,29 @@ package Entity;
 
 import java.util.Date;
 
-
-
 /**
  *
  * @author Arshavin
  */
 public class Promotion {
 
-    public Promotion(Date starting_date, Date ending_date) {
-        this.starting_date = starting_date;
-        this.ending_date = ending_date;
-    }
-
     private Integer id_promotion;
     private Double Discount;
     private Date starting_date;
     private Date ending_date;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public Promotion(Date starting_date, Date ending_date) {
+        this.starting_date = starting_date;
+        this.ending_date = ending_date;
+    }
 
     public Promotion(Double Discount, Date starting_date, Date ending_date) {
         this.Discount = Discount;
