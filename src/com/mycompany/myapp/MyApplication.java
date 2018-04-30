@@ -7,6 +7,7 @@ import com.codename1.ui.Form;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import gui.EventForm;
 import gui.LoginForm;
 import gui.WalkthruForm;
 
@@ -35,7 +36,8 @@ public class MyApplication {
             current.show();
             return;
         }
-                new WalkthruForm(theme).show();
+             //   new WalkthruForm(theme).show();
+                new EventForm(theme).show();
     }
 
     public void stop() {

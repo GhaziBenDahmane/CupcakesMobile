@@ -38,11 +38,14 @@ public abstract class SideMenuBaseForm extends Form {
         sidemenuTop.setUIID("SidemenuTop");
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Dashboard", FontImage.MATERIAL_DASHBOARD, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Activity", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Tasks", FontImage.MATERIAL_ACCESS_TIME, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Account Settings", FontImage.MATERIAL_SETTINGS, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Training", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Product", FontImage.MATERIAL_ACCESS_TIME, e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Promotion", FontImage.MATERIAL_SETTINGS, e -> new PromotionForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Claim", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Event", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Pastries", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Reservation", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
     }
 
     protected abstract void showOtherForm(Resources res);
