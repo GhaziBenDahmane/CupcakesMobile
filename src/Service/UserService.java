@@ -21,6 +21,7 @@ import java.util.Map;
 public class UserService {
 
     public final static String API_URL = "http://192.168.43.65/PiWeb/web/app_dev.php";
+    //public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
     public final static String API_PATH = API_URL + "/api/";
 
     public static boolean login(String username, String password) {
@@ -44,12 +45,12 @@ public class UserService {
     }
 
     public static void update(User u) {
-        String loginUrl = API_URL + "/users";
-        String responseData = Rest.post(loginUrl)
+        String url = API_URL + "users";
+        String responseData = Rest.put(url)
                 .queryParam("id", "" + u.getId())
                 .queryParam("username", u.getUsername())
-                .queryParam("phone", u.getEmail())
-                .queryParam("photo", u.getEmail())
+                .queryParam("phone", u.getPhone())
+                .queryParam("photo", u.getPhotoprofil())
                 .queryParam("email", u.getEmail())
                 .getAsString()
                 .getResponseData();
@@ -68,6 +69,8 @@ public class UserService {
         String fileName = Capture.capturePhoto();
         if (fileName != null) {
             String url = Util.uploadProfilePicture(fileName);
+            MyApplication.currentUser.setPhotoprofil(url);
+
         }
     }
 
@@ -99,25 +102,4 @@ public class UserService {
         System.out.println(u);
         return u;
     }
-    /*
-    public User get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void add(User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void (User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void delete(User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void deleteId(int a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-     */
 }
