@@ -56,7 +56,7 @@ public abstract class SideMenuBaseForm extends Form {
         getToolbar().addMaterialCommandToSideMenu("  Claims", FontImage.MATERIAL_EXIT_TO_APP, e -> new ClaimForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Event", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Pastries", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Reservation", FontImage.MATERIAL_EXIT_TO_APP, e -> new ReservationList().show());
+        getToolbar().addMaterialCommandToSideMenu("  Reservation", FontImage.MATERIAL_EXIT_TO_APP, e -> new ReservationForm(res).show());
     }
 
     protected abstract void showOtherForm(Resources res);
