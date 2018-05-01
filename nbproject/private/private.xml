@@ -4,16 +4,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/haffe/OneDrive/Documents/NetBeansProjects/CupcakesMobile/src/com/mycompany/myapp/MyApplication.java</file>
-            <file>file:/C:/Users/haffe/OneDrive/Documents/NetBeansProjects/CupcakesMobile/src/Service/EventService.java</file>
-            <file>file:/C:/Users/haffe/OneDrive/Documents/NetBeansProjects/CupcakesMobile/src/Service/PastryService.java</file>
-            <file>file:/C:/Users/haffe/OneDrive/Documents/NetBeansProjects/CupcakesMobile/src/Service/PromotionService.java</file>
-=======
-            <file>file:/home/ding/CupcakesMobile/src/Util/Util.java</file>
-            <file>file:/home/ding/CupcakesMobile/src/gui/LoginForm.java</file>
-            <file>file:/home/ding/CupcakesMobile/src/Service/UserService.java</file>
->>>>>>> master
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/gui/ReservationList.java</file>
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/Service/ControleSaisie.java</file>
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/Util/Util.java</file>
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/Entity/Reservation.java</file>
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/Service/ReservationService.java</file>
+            <file>file:/C:/Users/LENOVO/IdeaProjects/CupcakesMobile/src/com/mycompany/myapp/MyApplication.java</file>
         </group>
     </open-files>
 </project-private>
