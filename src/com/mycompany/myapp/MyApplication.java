@@ -3,6 +3,7 @@ package com.mycompany.myapp;
 import Entity.Promotion;
 import Entity.User;
 import Service.FavouriteService;
+import Service.PaymentService;
 import com.codename1.io.Storage;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -10,8 +11,10 @@ import com.codename1.ui.Form;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import gui.CartGUI;
 import gui.EventForm;
 import gui.LoginForm;
+import gui.PayementGUI;
 import gui.ProductGUI;
 import gui.WalkthruForm;
 import java.io.IOException;
@@ -27,7 +30,7 @@ public class MyApplication {
     private Resources theme;
 
     public void init(Object context) {
-        theme = UIManager.initFirstTheme("/theme_1");
+        theme = UIManager.initFirstTheme("/theme");
 
         // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);
@@ -43,11 +46,12 @@ public class MyApplication {
         }
              //   new WalkthruForm(theme).show();
               //  new EventForm(theme).show();
-                 try {
+              /*  try {
             FavouriteService.db.delete("Cupcake");
         } catch (IOException ex) {
-        }
+        }*/
         Storage.getInstance().writeObject("currency", "TND");
+        Storage.getInstance().writeObject("rate", "false");
         FavouriteService fs = new FavouriteService();
        
         fs.createSQLiteDB();
@@ -64,6 +68,11 @@ public class MyApplication {
         } catch (IOException ex) {
             System.out.println("log" + ex.getMessage());
         }
+       // CartGUI c=new CartGUI();
+       // c.getForm().show();
+       
+        
+        
        
     }
 

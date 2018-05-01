@@ -28,7 +28,7 @@ public class PromotionService {
 
     public Promotion SelectAllProducts(int id) {
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListPromotion.php/?id=" + id);
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/ListPromotion.php/?id=" + id);
         Promotion promotion = new Promotion();
 
         con.addResponseListener((NetworkEvent evt) -> {

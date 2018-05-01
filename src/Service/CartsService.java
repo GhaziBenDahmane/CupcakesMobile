@@ -25,11 +25,13 @@ import java.util.Map;
  */
 public class CartsService {
         private boolean isCartAdded= false;
+        
 
-    public ArrayList<Cart> SelectCartOfUser() {
+    public ArrayList<Cart> SelectCartOfUser(int id_user) {
           ArrayList<Cart> listCarts = new ArrayList<>();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListOrder.php");
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/ListOrder.php?id="+id_user);
+        
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -67,7 +69,7 @@ public class CartsService {
 
     public void addProductInCart(Cart cart) {
         ConnectionRequest con = new ConnectionRequest();
-        String Url = "http://localhost/WebService/Product/AddToCart.php?product=" + cart.getProduct().getId() + "&user=1";
+        String Url = "http://192.168.0.100:9999/WebService/Product/AddToCart.php?product=" + cart.getProduct().getId() + "&user=1";
 
         con.setUrl(Url);
 
@@ -87,7 +89,23 @@ public class CartsService {
     
      public void deleteFromCart(int id) {
         ConnectionRequest con = new ConnectionRequest();
-        String Url = "http://localhost/WebService/Product/DeleteFromCart.php?id="+id ;
+        String Url = "http://192.168.0.100:9999/WebService/Product/DeleteFromCart.php?id="+id ;
+
+        con.setUrl(Url);
+
+        System.out.println(Url);
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());
+            System.out.println(str);
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+     
+      public void deleteAllProductsFromCart(int id_user) {
+        ConnectionRequest con = new ConnectionRequest();
+        String Url = "http://192.168.0.100:9999/WebService/Product/EmptyCart.php?id="+id_user ;
 
         con.setUrl(Url);
 
