@@ -6,10 +6,13 @@
 package Service;
 
 import Entity.User;
-import Util.Util;
+import Utils.Util;
 import com.codename1.capture.Capture;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
+import com.codename1.ui.Image;
 import com.mycompany.myapp.MyApplication;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,11 @@ public class UserService {
         boolean loggedIn = !responseData.contains("error");
         if (loggedIn) {
             MyApplication.currentUser = get(username);
+            try {
+                downloadPhoto();
+            } catch (Exception e) {
+
+            }
             return true;
         } else {
             return false;
@@ -44,7 +52,7 @@ public class UserService {
     }
 
     public static void update(User u) {
-        String url = MyApplication.API_URL + "users";
+        String url = API_PATH + "user";
         String responseData = Rest.put(url)
                 .queryParam("id", "" + u.getId())
                 .queryParam("username", u.getUsername())
@@ -64,13 +72,35 @@ public class UserService {
         return mapToUser(responseData);
     }
 
-    void changePicture() {
+    public static void changePicture() {
         String fileName = Capture.capturePhoto();
-        if (fileName != null) {
-            String url = Util.uploadProfilePicture(fileName);
-            MyApplication.currentUser.setPhotoprofil(url);
+        try {
+            if (fileName != null) {
+                InputStream openInputStream = FileSystemStorage.getInstance().openInputStream(fileName);
+                byte[] bytesFromInputStream = Util.getBytesFromInputStream(openInputStream);
+                String url = Util.uploadProfilePicture(bytesFromInputStream);
+                System.out.println(url);
+                MyApplication.currentUser.setPhotoprofil(url);
+                update(MyApplication.currentUser);
+                MyApplication.userPicture = Image.createImage(bytesFromInputStream, 0, bytesFromInputStream.length);
+
+            }
+        } catch (Exception e) {
 
         }
+
+    }
+
+    public static void downloadPhoto() {
+        if (!MyApplication.currentUser.getPhotoprofil().isEmpty()) {
+            byte[] responseData = Rest.get(MyApplication.currentUser.getPhotoprofil())
+                    .getAsBytes()
+                    .getResponseData();
+            MyApplication.userPicture = Image.createImage(responseData, 0, responseData.length);
+        } else {
+            MyApplication.userPicture = null;
+        }
+
     }
 
     public static User mapToUser(Map responseData) {

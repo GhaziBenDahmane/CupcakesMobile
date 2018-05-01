@@ -1,7 +1,6 @@
 package gui;
 
 import Service.UserService;
-import Util.Util;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -49,7 +48,7 @@ public class LoginForm extends Form {
         loginButton.setUIID("LoginButton");
         loginButton.addActionListener(e -> {
             if (UserService.login(login.getText(), password.getText())) {
-                Util.downloadUserImage();
+                UserService.downloadPhoto();
                 Toolbar.setGlobalToolbar(false);
                 new WalkthruForm(theme).show();
                 Toolbar.setGlobalToolbar(true);

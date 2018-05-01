@@ -3,20 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Util;
+package Utils;
 
-import com.codename1.components.ToastBar;
-import com.codename1.io.ConnectionRequest;
-import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
-import com.codename1.ui.Dialog;
 import com.codename1.util.Base64;
-import com.codename1.util.StringUtil;
-import com.mycompany.myapp.MyApplication;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,16 +43,4 @@ public class Util {
         return uploadProfilePicture(imageb64);
     }
 
-    public static void downloadUserImage() {
-        ConnectionRequest r = new ConnectionRequest();
-        String imageUrl = MyApplication.currentUser.getPhotoprofil();
-        List<String> tokenize = StringUtil.tokenize(imageUrl, "/");
-        String imageName = tokenize.get(tokenize.size() - 1);
-        System.out.println("imageName " + imageName);
-        r.setUrl(imageUrl);
-        ToastBar.showInfoMessage(FileSystemStorage.getInstance().getAppHomePath() + imageName);
-        r.downloadImageToStorage(imageName, e -> {
-            Dialog.show(FileSystemStorage.getInstance().getAppHomePath() + imageName, e.toString(), "OK", null);
-        });
-    }
 }

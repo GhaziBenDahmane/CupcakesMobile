@@ -15,6 +15,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 
 public class ProfileForm extends SideMenuBaseForm {
 
@@ -22,7 +23,15 @@ public class ProfileForm extends SideMenuBaseForm {
         super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitleCentered(false);
-        Image profilePic = res.getImage("user-picture.jpg");
+        Image profilePic;
+        if (MyApplication.userPicture != null) {
+            profilePic = MyApplication.userPicture;
+
+        } else {
+            profilePic = res.getImage("user-picture.jpg");
+
+        }
+        System.out.println(profilePic);
         Image mask = res.getImage("round-mask.png");
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePicTitle");

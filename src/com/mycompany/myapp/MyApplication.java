@@ -4,6 +4,7 @@ import Entity.User;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
+import com.codename1.ui.Image;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
@@ -15,8 +16,8 @@ import gui.LoginForm;
  */
 public class MyApplication {
 
-    public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
-
+    public final static String API_URL = "http://192.168.43.245/PiWeb/web/app_dev.php";
+    public static Image userPicture = null;
     public static User currentUser = null;
     private Form current;
     private Resources theme;
