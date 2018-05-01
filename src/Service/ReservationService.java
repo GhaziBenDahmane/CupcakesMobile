@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -43,16 +44,21 @@ public class ReservationService {
         con.setPost(true);
         con.setUrl("http://127.0.0.1:8000/reservation/add?dateReservation=" + toDateTime(e.getDateReservation()) + ""
                 + "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable());
-       /* Message m = new Message("You have reserva=ed a table in our cupcake corner !!");
+        /* Message m = new Message("You have reserva=ed a table in our cupcake corner !!");
         m.getAttachments().put("jjjj", "text/plain");
         m.getAttachments().put("rrr", "image/png");
         Display.getInstance().sendMessage(new String[]{"anis.helaoui@esprit.tn"}, "Subject of message", m);
-*/
-       Date today = new Date();
-          Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
+         */
+        Date today = new Date();
+        Random r = new Random();
+        String val = "" + r.nextInt(10000);
+        while (val.length() < 4) {
+            val = "0" + val;
+        }
+        Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
                 queryParam("To", "+21652746638").
                 queryParam("From", fromPhone).
-                queryParam("Body", "You have a reservation at Cupcakes corner at " +today.toString()).
+                queryParam("Body", "You have reserved a table at Cupcakes corner at " + today.toString()+" This the entry code : "+val ).
                 header("Authorization", "Basic " + Base64.encodeNoNewline((accountSID + ":" + authToken).getBytes())).
                 getAsJsonMap();
         NetworkManager.getInstance().addToQueueAndWait(con);

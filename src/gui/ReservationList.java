@@ -178,6 +178,7 @@ public final class ReservationList {
                     Button ok1 = new Button(new Command("OK"));
                     dlg1.add(ok1);
                     dlg1.showDialog();
+                    dlg1.dispose();
                    
 
                 } else if (!s.isNumberPerson(nbPerson.getText())) {
@@ -196,11 +197,12 @@ public final class ReservationList {
                     Button ok1 = new Button(new Command("OK"));
                     dlg1.add(ok1);
                     dlg1.showDialog();
+                    dlg1.dispose();
                   
 
                 } 
               
-               if (s.isValidDate(sDate.getDate())) {
+              else if (!s.isValidDate(sDate.getDate())) {
                     
                     Label title = dlg1.getTitleComponent();
                     dlg1.setLayout(BoxLayout.y());
@@ -215,7 +217,30 @@ public final class ReservationList {
                     dlg1.add(grayLabel);
                     Button ok1 = new Button(new Command("OK"));
                     dlg1.add(ok1);
-                    dlg1.showDialog();}
+                    dlg1.showDialog();
+                    dlg1.dispose();
+               
+               }
+               
+              else if (s.isValidDate2(sDate.getDate())) {
+                    
+                    Label title = dlg1.getTitleComponent();
+                    dlg1.setLayout(BoxLayout.y());
+                    Label blueLabel = new Label();
+                    dlg1.add(blueLabel);
+                    TextArea ta = new TextArea("You can't reserve a table before more than one month ) ...");
+                    ta.setEditable(false);
+                    ta.setUIID("DialogBody");
+                    ta.getAllStyles().setFgColor(0);
+                    dlg1.add(ta);
+                    Label grayLabel = new Label();
+                    dlg1.add(grayLabel);
+                    Button ok1 = new Button(new Command("OK"));
+                    dlg1.add(ok1);
+                    dlg1.showDialog();
+                    dlg1.dispose();
+               
+               }
            
                 
                 else {

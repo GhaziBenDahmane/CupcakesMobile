@@ -88,6 +88,12 @@ public class ControleSaisie {
         return date.getTime() >= new Date().getTime();
 
     }
+      public static boolean isValidDate2(Date date) {
+
+        return date.getTime() >= new Date().getTime()+2.628e+9;
+
+    }
+
 
           public static boolean isNumberTable(String text) {
 
