@@ -5,8 +5,9 @@
  */
 package Service;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.codename1.util.regex.RE;
+import java.util.Date;
+
 
 /**
  *
@@ -14,13 +15,13 @@ import java.util.regex.Pattern;
  */
 public class ControleSaisie {
     
-     private static Matcher matcher;
+  
 
     public static boolean isString(String text) {
 
+        RE r = new RE("^[a-zA-Z]+$");
 
-
-        if (text.matches("^[a-zA-Z]+$")) {
+        if (r.match(text)) {
 
             return true;
 
@@ -42,7 +43,7 @@ public class ControleSaisie {
 
      }
 
-          public static boolean isUsername(String text) {
+    /*      public static boolean isUsername(String text) {
 
 
 
@@ -80,13 +81,13 @@ public class ControleSaisie {
 
             return false;
 
-    }
+    }*/
+     
+     public static boolean isValidDate(Date text) {
 
-          public static boolean iscin(String text) {
 
-
-
-        if (text.matches("^[0-9]+$")&& text.length()== 8) {
+    //   Date date = new Date();
+        if(0==1) {
 
             return true;
 
@@ -98,7 +99,38 @@ public class ControleSaisie {
 
     }
 
-                  public static boolean isTel(String text) {
+          public static boolean isNumberTable(String text) {
+
+
+       // RE r = new RE("^[0-9]+$");
+        if ( Integer.parseInt(text)>0 && Integer.parseInt(text)<16) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+          public static boolean isNumberPerson(String text) {
+
+
+       // RE r = new RE("^[0-9]+$");
+        if ( Integer.parseInt(text)>0 && Integer.parseInt(text)<5) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+           /*       public static boolean isTel(String text) {
 
 
 
@@ -142,6 +174,6 @@ public class ControleSaisie {
 
         return matcher.matches();
 
-    }
+    } */
     
 }
