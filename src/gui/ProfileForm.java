@@ -57,8 +57,8 @@ public class ProfileForm extends SideMenuBaseForm {
                 FlowLayout.encloseIn(menuButton),
                 BorderLayout.centerAbsolute(
                         BoxLayout.encloseY(
-                                new Label("Jennifer Wilson", "Title"),
-                                new Label("UI/UX Designer", "SubTitle")
+                                new Label(MyApplication.currentUser.getUsername(), "Title"),
+                                new Label(MyApplication.currentUser.getEmail(), "SubTitle")
                         )
                 ).add(BorderLayout.WEST, profilePicLabel),
                 GridLayout.encloseIn(2, remainingTasks, completedTasks)

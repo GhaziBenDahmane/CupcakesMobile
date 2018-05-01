@@ -7,7 +7,13 @@ package Service;
 
 import Entity.Claim;
 import com.codename1.io.rest.Rest;
+import com.codename1.util.StringUtil;
 import com.mycompany.myapp.MyApplication;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,50 +26,28 @@ public class ClaimService {
 
     public static void add(Claim claim) {
         Map responseData = Rest.post(API_URL + "claims")
-                .queryParam("description", "can't")
-                .queryParam("type", "problem")
-                .queryParam("user", "ghazi")
+                .queryParam("description", claim.getDescription())
+                .queryParam("type", claim.getType())
+                .queryParam("user", MyApplication.currentUser.getUsername())
                 .getAsJsonMap()
                 .getResponseData();
 
     }
 
-    public static void getByUser() {
-
-        String result = Rest.post(API_URL + "claims")
-                .queryParam("description", "can't")
-                .queryParam("type", "problem")
-                .queryParam("user", "ghazi")
-                .getAsString()
+    public static List<Claim> getByUser() {
+        List<Claim> u = new ArrayList<>();
+        Map result = Rest.get(API_URL + "users/" + MyApplication.currentUser.getUsername() + "/claims")
+                .getAsJsonMap()
                 .getResponseData();
-        System.out.println(result);
+        List l = (ArrayList) result.get("root");
+        for (Object x : l) {
+            u.add(mapToClaim((Map) x));
+        }
+        System.out.println(u);
+        return u;
     }
 
     public static void delete(Claim claim) {
-        /*Map result = (Map) Rest.post(API_URL + "claim")
-                .queryParam("description", claim.getDescription())
-                .queryParam("type", claim.getType())
-                .queryParam("user", claim.getClient().getUsername())
-                .getAsJsonMap()
-                .getResponseData()
-                .get("data");*/
-        String result = Rest.post(API_URL + "claims")
-                .queryParam("description", "can't")
-                .queryParam("type", "problem")
-                .queryParam("user", "ghazi")
-                .getAsString()
-                .getResponseData();
-        System.out.println(result);
-    }
-
-    public static void addClaim(Claim claim) {
-        /*Map result = (Map) Rest.post(API_URL + "claim")
-                .queryParam("description", claim.getDescription())
-                .queryParam("type", claim.getType())
-                .queryParam("user", claim.getClient().getUsername())
-                .getAsJsonMap()
-                .getResponseData()
-                .get("data");*/
         String result = Rest.post(API_URL + "claims")
                 .queryParam("description", "can't")
                 .queryParam("type", "problem")
@@ -74,46 +58,34 @@ public class ClaimService {
     }
 
     public static Claim mapToClaim(Map<String, Object> e) {
+
         Claim m = new Claim();
-        m.setId(Integer.parseInt((String) e.get("id")));
+        m.setId(((Double) e.get("id")).intValue());
         m.setDescription((String) e.get("description"));
         m.setType((String) e.get("type"));
-
-        m.setAnswer((String) e.get("answer"));
-        m.setAnswered((boolean) e.get("answered"));
-
-        //m.setPostedOn(e.get("posted_on"));
-        m.setAnsweredBy(UserService.mapToUser((Map) e.get("answeredBy")));
         m.setClient(UserService.mapToUser((Map) e.get("client")));
 
-        return m;
+        if (!((String) e.get("answered")).equals("false")) {
+            m.setAnswer((String) e.get("answer"));
+            m.setAnswered(true);
+            m.setAnsweredBy(UserService.mapToUser((Map) e.get("answeredBy")));
+        } else {
+            m.setAnswered(false);
+
+        }
+        try {
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+
+            String date = StringUtil.tokenize(((String) e.get("posted_on")), "T").get(0);
+            Date parse = formatter1.parse(date);
+            m.setPostedOn(parse);
+
+            return m;
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            return null;
+        }
 
     }
-    /*
-    public Claim get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    public void update(Claim a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void deleteId(int a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Claim fromMap(Map a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public List<Claim> getAll() {
-        String result = Rest.post(API_URL + "claims")
-                .queryParam("description", "can't")
-                .queryParam("type", "problem")
-                .queryParam("user", "ghazi")
-                .getAsString()
-                .getResponseData();
-        System.out.println(result);
-        return null;
-    }*/
 }

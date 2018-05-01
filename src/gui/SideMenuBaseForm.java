@@ -1,6 +1,6 @@
 package gui;
 
-import Service.UserService;
+import Service.ClaimService;
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -39,7 +39,7 @@ public abstract class SideMenuBaseForm extends Form {
         sidemenuTop.setUIID("SidemenuTop");
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Change picture", FontImage.MATERIAL_DASHBOARD, e -> UserService.changePicture());
+        getToolbar().addMaterialCommandToSideMenu("  Change picture", FontImage.MATERIAL_DASHBOARD, e -> ClaimService.getByUser());
         getToolbar().addMaterialCommandToSideMenu("  Profile", FontImage.MATERIAL_DASHBOARD, e -> new ProfileForm(res).show());
 
         getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
