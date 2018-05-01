@@ -122,6 +122,7 @@ public class UserService {
 
     public static User mapToUser(Map responseData) {
         User u = new User();
+        System.out.println(responseData);
         u.setId(((Double) responseData.get("id")).intValue());
         u.setUsername((String) responseData.get("username"));
         u.setEmail((String) responseData.get("email"));

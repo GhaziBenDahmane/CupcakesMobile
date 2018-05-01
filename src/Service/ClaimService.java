@@ -40,6 +40,10 @@ public class ClaimService {
                 .getAsJsonMap()
                 .getResponseData();
         List l = (ArrayList) result.get("root");
+        System.out.println(l);
+        if (l == null) {
+            return u;
+        }
         for (Object x : l) {
             u.add(mapToClaim((Map) x));
         }
@@ -48,10 +52,7 @@ public class ClaimService {
     }
 
     public static void delete(Claim claim) {
-        String result = Rest.post(API_URL + "claims")
-                .queryParam("description", "can't")
-                .queryParam("type", "problem")
-                .queryParam("user", "ghazi")
+        String result = Rest.delete(API_URL + "claims/" + claim.getId())
                 .getAsString()
                 .getResponseData();
         System.out.println(result);
@@ -68,7 +69,7 @@ public class ClaimService {
         if (!((String) e.get("answered")).equals("false")) {
             m.setAnswer((String) e.get("answer"));
             m.setAnswered(true);
-            m.setAnsweredBy(UserService.mapToUser((Map) e.get("answeredBy")));
+            m.setAnsweredBy(UserService.mapToUser((Map) e.get("answered_by")));
         } else {
             m.setAnswered(false);
 
