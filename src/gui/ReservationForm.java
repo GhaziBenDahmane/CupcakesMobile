@@ -10,6 +10,7 @@ import Service.ControleSaisie;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import Service.ReservationService;
+import com.codename1.components.FloatingActionButton;
 import com.codename1.components.InfiniteProgress;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.MultiButton;
@@ -22,6 +23,8 @@ import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Graphics;
+import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.Stroke;
 import com.codename1.ui.TextArea;
@@ -30,6 +33,7 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.list.DefaultListModel;
@@ -46,7 +50,7 @@ import java.util.Date;
 /**
  *
  */
-public final class ReservationList {
+public final class ReservationForm extends SideMenuBaseForm{
 
     private Form form;
     private MultiButton mb;
@@ -67,7 +71,20 @@ public final class ReservationList {
     ReservationService rs = new ReservationService();
     final DefaultListModel<String> options = new DefaultListModel<>();
 
-    public ReservationList()  {
+    public ReservationForm(Resources res)  {
+        super(BoxLayout.y());
+        Toolbar tb = getToolbar();
+        tb.setTitle("Reservation");
+          
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
+        Container titleCmp = BoxLayout.encloseY(
+                FlowLayout.encloseIn(menuButton),
+                GridLayout.encloseIn(2)
+        );
         form = new Form("Reservation List", new BoxLayout(BoxLayout.Y_AXIS));
         theme_1 = UIManager.initFirstTheme("/theme_1");
         reservations = rs.listReservation();
@@ -82,7 +99,7 @@ public final class ReservationList {
         Display.getInstance().scheduleBackgroundTask(() -> {
             // this will take a while...
             Display.getInstance().callSerially(() -> {
-                form.removeAll();
+                removeAll();
                 for (Reservation c : reservations) {
 
                     MultiButton m = new MultiButton();
@@ -102,14 +119,14 @@ public final class ReservationList {
                         new ReservationList();
                     });
                     m.setEmblem(i);
-                    form.add(m);
+                    add(m);
                 }
 
-                form.revalidate();
+                revalidate();
             });
         });
 
-        form.getToolbar().addSearchCommand(e -> {
+        getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
             if (text == null || text.length() == 0) {
                 // clear search
@@ -117,10 +134,10 @@ public final class ReservationList {
                     cmp.setHidden(false);
                     cmp.setVisible(true);
                 }
-                form.getContentPane().animateLayout(150);
+                getContentPane().animateLayout(150);
             } else {
                 text = text.toLowerCase();
-                for (Component cmp : form.getContentPane()) {
+                for (Component cmp : getContentPane()) {
                     MultiButton mb = (MultiButton) cmp;
                     String line1 = mb.getTextLine1();
                     String line2 = mb.getTextLine2();
@@ -131,11 +148,11 @@ public final class ReservationList {
                     mb.setHidden(!show);
                     mb.setVisible(show);
                 }
-                form.getContentPane().animateLayout(150);
+                getContentPane().animateLayout(150);
             }
         }, 4);
 
-        form.getToolbar().addCommandToLeftBar("", FontImage.createMaterial(FontImage.MATERIAL_ADD, style), e -> {
+        getToolbar().addCommandToLeftBar("", FontImage.createMaterial(FontImage.MATERIAL_ADD, style), e -> {
             InteractionDialog dlg = new InteractionDialog("");
             dlg.setLayout(new BorderLayout(BorderLayout.CENTER_BEHAVIOR_CENTER));
             Button ok = new Button("OK");
@@ -277,9 +294,19 @@ public final class ReservationList {
             dlg.getAllStyles().setBgColor(0xffffff);
             dlg.show(0, 0, 0, 0);
         });
-        form.show();
-    }
+         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
+        fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
+        //fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
+        //tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
+        tb.setTitleComponent(titleCmp);
 
+        setupSideMenu(res);
+        
+    }
+    
+     
+
+    
     public Container createContainer(Reservation e) {
 
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
@@ -344,5 +371,9 @@ public final class ReservationList {
         s.setMargin(Component.BOTTOM, 3);
     }
 
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
+    }
 
 }
