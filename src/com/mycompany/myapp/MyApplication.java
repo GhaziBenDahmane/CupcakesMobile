@@ -16,7 +16,7 @@ import gui.LoginForm;
  */
 public class MyApplication {
 
-    public final static String API_URL = "http://192.168.43.245/PiWeb/web/app_dev.php";
+    public final static String API_URL = "http://192.168.0.105/PiWeb/web/app_dev.php";
     public static Image userPicture = null;
     public static User currentUser = null;
     private Form current;
@@ -45,7 +45,7 @@ public class MyApplication {
         }
         Storage.getInstance().writeObject("currency", "TND");
         FavouriteService fs = new FavouriteService();
-       
+
         fs.createSQLiteDB();
         Promotion p = new Promotion();
         p.setDiscount(0.1);
