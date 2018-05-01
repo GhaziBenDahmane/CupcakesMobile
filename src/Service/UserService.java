@@ -50,18 +50,30 @@ public class UserService {
         }
 
     }
+        public static void register(User u) {
+        String url = API_PATH + "users";
+        Map responseData = Rest.post(url)
+                .queryParam("username", u.getUsername())
+                .queryParam("password", u.getPassword())
+                .queryParam("email", u.getEmail())
+                .queryParam("phone", u.getPhone())
+                .getAsJsonMap()
+                .getResponseData();
+        MyApplication.currentUser = mapToUser(responseData);
+
+
+    }
 
     public static void update(User u) {
         String url = API_PATH + "user";
-        String responseData = Rest.put(url)
+        Map responseData = Rest.put(url)
                 .queryParam("id", "" + u.getId())
                 .queryParam("username", u.getUsername())
                 .queryParam("phone", u.getPhone())
                 .queryParam("photo", u.getPhotoprofil())
                 .queryParam("email", u.getEmail())
-                .getAsString()
+                .getAsJsonMap()
                 .getResponseData();
-        System.out.println(responseData);
     }
 
     public static User get(String username) {
