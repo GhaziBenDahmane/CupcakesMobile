@@ -31,7 +31,6 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.util.MathUtil;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.scene.control.ProgressBar;
 
 /**
  *
@@ -69,9 +68,12 @@ public final class CartGUI {
         container = new Container(BoxLayout.x());
         purchasePrice = new Label();
 
+
         carts = cs.SelectCartOfUser(1);
-        purchasePrice.getAllStyles().setFgColor(0x0000ff
-);
+        purchasePrice.getAllStyles().setFgColor(0x0000ff);
+
+        //carts = cs.SelectCartOfUser();
+        //purchasePrice.getAllStyles().setFgColor(Color.BLUE.getIntArgbPre());
         purchasePrice.setAutoSizeMode(true);
 
         form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {

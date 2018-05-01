@@ -12,7 +12,12 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.io.rest.Response;
+import com.codename1.io.rest.Rest;
+import com.codename1.messaging.Message;
+import com.codename1.ui.Display;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.util.Base64;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,20 +26,41 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
  * @author LENOVO
  */
 public class ReservationService {
-    
+
+    String accountSID = "AC9c29e1446233ddd287081010ffab29fa";
+    String authToken = "c6c636b57d22a48b0e4b26cd9d14138e";
+    String fromPhone = "+19388000179";
+
     public void addReservation(Reservation e) {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/reservation/add?dateReservation="+ toDateTime(e.getDateReservation())+ ""+
-                "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable());
-
+        con.setUrl("http://127.0.0.1:8000/reservation/add?dateReservation=" + toDateTime(e.getDateReservation()) + ""
+                + "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable());
+        /* Message m = new Message("You have reserva=ed a table in our cupcake corner !!");
+        m.getAttachments().put("jjjj", "text/plain");
+        m.getAttachments().put("rrr", "image/png");
+        Display.getInstance().sendMessage(new String[]{"anis.helaoui@esprit.tn"}, "Subject of message", m);
+         */
+        Date today = new Date();
+        Random r = new Random();
+        String val = "" + r.nextInt(10000);
+        while (val.length() < 4) {
+            val = "0" + val;
+        }
+        Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
+                queryParam("To", "+21652746638").
+                queryParam("From", fromPhone).
+                queryParam("Body", "You have reserved a table at Cupcakes corner at " + today.toString()+" This the entry code : "+val ).
+                header("Authorization", "Basic " + Base64.encodeNoNewline((accountSID + ":" + authToken).getBytes())).
+                getAsJsonMap();
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
 
@@ -49,6 +75,7 @@ public class ReservationService {
             public void actionPerformed(NetworkEvent evt) {
                 //listTasks = getListTask(new String(con.getResponseData()));
                 JSONParser jsonp = new JSONParser();
+
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
@@ -75,12 +102,10 @@ public class ReservationService {
                         float id = Float.parseFloat(obj.get("id").toString());
                         float nbPerson = Float.parseFloat(obj.get("nbPerson").toString());
                         float nbTable = Float.parseFloat(obj.get("nbTable").toString());
-                       reservation.setId((int) id);
-                       reservation.setDateReservation(toDate(obj.get("dateReservation").toString()));
-                       reservation.setNbPerson((int) nbPerson );
-                       reservation.setNbTable((int) nbTable);
-                        
-                        
+                        reservation.setId((int) id);
+                        reservation.setDateReservation(toDate(obj.get("dateReservation").toString()));
+                        reservation.setNbPerson((int) nbPerson);
+                        reservation.setNbTable((int) nbTable);
 
                         listReservations.add(reservation);
                     }
@@ -95,7 +120,7 @@ public class ReservationService {
 
     public Date toDate(String date) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             return sdf.parse(date);
         } catch (ParseException ex) {
         }
@@ -149,5 +174,4 @@ public class ReservationService {
         return dateFormat.format(date);
     }
 
-    
 }

@@ -1,5 +1,6 @@
 package gui;
 
+import Service.UserService;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
@@ -15,6 +16,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 
 public class ProfileForm extends SideMenuBaseForm {
 
@@ -22,12 +24,22 @@ public class ProfileForm extends SideMenuBaseForm {
         super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitleCentered(false);
-        Image profilePic = res.getImage("user-picture.jpg");
+        Image profilePic;
+        if (MyApplication.userPicture != null) {
+            profilePic = MyApplication.userPicture;
+
+        } else {
+            profilePic = res.getImage("user-picture.jpg");
+
+        }
+        System.out.println(profilePic);
         Image mask = res.getImage("round-mask.png");
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePicTitle");
         profilePicLabel.setMask(mask.createMask());
-
+        profilePicLabel.addPointerPressedListener((evt) -> {
+            UserService.changePicture();
+        });
         Button menuButton = new Button("");
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
@@ -48,8 +60,8 @@ public class ProfileForm extends SideMenuBaseForm {
                 FlowLayout.encloseIn(menuButton),
                 BorderLayout.centerAbsolute(
                         BoxLayout.encloseY(
-                                new Label("Jennifer Wilson", "Title"),
-                                new Label("UI/UX Designer", "SubTitle")
+                                new Label(MyApplication.currentUser.getUsername(), "Title"),
+                                new Label(MyApplication.currentUser.getEmail(), "SubTitle")
                         )
                 ).add(BorderLayout.WEST, profilePicLabel),
                 GridLayout.encloseIn(2, remainingTasks, completedTasks)
