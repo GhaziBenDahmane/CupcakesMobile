@@ -30,6 +30,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 import java.util.List;
 
 public class ClaimForm extends SideMenuBaseForm {
@@ -101,6 +102,11 @@ public class ClaimForm extends SideMenuBaseForm {
                         "Pending",
                         0.0)
                 );*/
+                Claim c = new Claim();
+                c.setClient(MyApplication.currentUser);
+                c.setDescription(description.getText());
+                c.setType(p.getSelectedString());
+                ClaimService.add(c);
                 dlg.dispose();
 
             });
