@@ -46,7 +46,7 @@ import java.util.Date;
 /**
  *
  */
-public final class ReservationList {
+public final class ReservationList extends SideMenuBaseForm{
 
     private Form form;
     private MultiButton mb;
@@ -67,7 +67,7 @@ public final class ReservationList {
     ReservationService rs = new ReservationService();
     final DefaultListModel<String> options = new DefaultListModel<>();
 
-    public ReservationList() throws IOException {
+    public ReservationList()  {
         form = new Form("Reservation List", new BoxLayout(BoxLayout.Y_AXIS));
         theme_1 = UIManager.initFirstTheme("/theme_1");
         reservations = rs.listReservation();
@@ -98,11 +98,8 @@ public final class ReservationList {
                     Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
                     
                     delete.addPointerPressedListener((evt) -> {
-                        try {
-                            rs.delReservation(c);
-                            new ReservationList();
-                        } catch (IOException ex) {
-                        }
+                        rs.delReservation(c);
+                        new ReservationList();
                     });
                     m.setEmblem(i);
                     form.add(m);
@@ -253,11 +250,7 @@ public final class ReservationList {
 
                     dlg.dispose();
                 }
-                try {
-                    new ReservationList();
-                } catch (IOException ex) {
-                    System.out.println("Error");
-                }
+                new ReservationList();
 
             });
 
@@ -292,11 +285,8 @@ public final class ReservationList {
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
 
         delete.addPointerPressedListener((evt) -> {
-            try {
-                rs.delReservation(e);
-                new ReservationList();
-            } catch (IOException ex) {
-            }
+            rs.delReservation(e);
+            new ReservationList();
         });
 
         Label nbTable = new Label("Number of table = " + e.getNbTable(), "Container");
@@ -352,6 +342,11 @@ public final class ReservationList {
                 stroke(borderStroke));
         s.setMarginUnit(Style.UNIT_TYPE_DIPS);
         s.setMargin(Component.BOTTOM, 3);
+    }
+
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
     }
 
 }
