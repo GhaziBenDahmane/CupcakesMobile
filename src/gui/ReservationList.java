@@ -101,6 +101,7 @@ public final class ReservationList {
                         rs.delReservation(c);
                         new ReservationList();
                     });
+                    
                     m.setEmblem(i);
                     form.add(m);
                 }
