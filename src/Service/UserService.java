@@ -56,9 +56,9 @@ public class UserService {
         try {
             Map responseData = Rest.post(url)
                     .queryParam("username", username)
-                    .queryParam("password", emailAd)
-                    .queryParam("email", phoneNumber)
-                    .queryParam("phone", pass1)
+                    .queryParam("password", pass1)
+                    .queryParam("email", emailAd)
+                    .queryParam("phone", phoneNumber)
                     .getAsJsonMap()
                     .getResponseData();
             MyApplication.currentUser = mapToUser(responseData);
