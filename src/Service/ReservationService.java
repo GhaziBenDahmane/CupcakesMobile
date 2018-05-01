@@ -42,7 +42,7 @@ public class ReservationService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://192.168.0.103/reservation/add?dateReservation=" + toDateTime(e.getDateReservation()) + ""
+        con.setUrl("http://192.168.0.103:8000/reservation/add?dateReservation=" + toDateTime(e.getDateReservation()) + ""
                 + "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable());
         /* Message m = new Message("You have reserva=ed a table in our cupcake corner !!");
         m.getAttachments().put("jjjj", "text/plain");
@@ -69,7 +69,7 @@ public class ReservationService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://192.168.0.103/reservation/" + e.getId() + "/delete");
+        con.setUrl("http://192.168.0.103:8000/reservation/" + e.getId() + "/delete");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -86,7 +86,7 @@ public class ReservationService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://192.168.0.103/reservation/list");
+        con.setUrl("http://192.168.0.103:8000/reservation/list");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
