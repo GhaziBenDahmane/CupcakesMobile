@@ -17,6 +17,7 @@ import Service.FavouriteService;
 import Service.RatingService;
 import Service.ScanCodeService;
 import com.codename1.components.MultiButton;
+import com.codename1.components.ToastBar;
 import com.codename1.io.Storage;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
@@ -39,6 +40,7 @@ import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
+import com.codename1.util.EasyThread;
 import com.codename1.util.MathUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +59,8 @@ public final class ProductGUI {
     private Double price;
     private Resources theme;
     protected final AutoCompleteTextField search;
-    public static int id_cart=0; 
+    public static int id_cart = 0;
+    public static boolean hasRated = false;
 
     private static final String PATH = "http://192.168.0.100:10000/picture/";
 
@@ -130,20 +133,43 @@ public final class ProductGUI {
             search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
 
         });
-        form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), e -> {
-            ScanCodeService scs = new ScanCodeService();
-            Product product = new Product();
-            product = scs.ScanBarCode();
-            
-            f.add(createRankWidget(product));
-            f.show();
+        Button code = new Button("code");
+        code.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                ScanCodeService scs = new ScanCodeService();
+                Product product;
+                scs.ScanBarCode();
+
+                product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
+                
+                f.add(createRankWidget(product));
+                f.show();
+            }
         });
+        
+       /* form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                
+                    ScanCodeService scs = new ScanCodeService();
+                    Product product;
+                    scs.ScanBarCode();
+                    product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
+                   
+                    f.add(createRankWidget(product));
+                    f.show();
+                
+            }
+        });*/
         Container co = new Container(BoxLayout.x());
 
         co.add(search);
+        co.add(code);
 
         form.add(co);
-        
+
         for (Product product : products) {
             form.add(createRankWidget(product));
         }
@@ -159,8 +185,6 @@ public final class ProductGUI {
         mb.setUIIDLine2("Label");
         mb.setUIIDLine3("Badge");
         mb.setUIIDLine4("TouchCommand");
-        
-        
 
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
@@ -191,23 +215,20 @@ public final class ProductGUI {
                 ccs.getForm().show();
             }
         });
-        
+
         favourite.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
                 FavouriteService fs = new FavouriteService();
                 fs.createSQLiteDB();
-                if(isProductInFavourite(fs.SelectProductFromSQLiteDB(), p))
-                {
-                fs.insertProductInSQLiteDB(p);
-                
+                if (isProductInFavourite(fs.SelectProductFromSQLiteDB(), p)) {
+                    fs.insertProductInSQLiteDB(p);
+
+                } else {
+                    Dialog.show("Warning", "Product already exist in Favourites.", "OK", null);
                 }
-                else
-                {
-                    Dialog.show("Warning", "Product already exist in Favourites.", "OK",null);
-                }
-                FavouriteGUI cg =new FavouriteGUI();
+                FavouriteGUI cg = new FavouriteGUI();
                 cg.getForm().show();
             }
         });
@@ -223,11 +244,11 @@ public final class ProductGUI {
                 cart.setProduct(p);
 
                 ArrayList<Cart> carts = new ArrayList<>();
-                carts = cs.SelectCartOfUser();
+                carts = cs.SelectCartOfUser(1);
 
                 if (isProductInCart(carts, p)) {
                     cs.addProductInCart(cart);
-               
+
                     if (cs.isIsCartAdded()) {
                         Dialog.show("Succes", "The product is added in your cart.", "OK", null);
                     } else {
@@ -288,7 +309,13 @@ public final class ProductGUI {
             System.out.println(starRank.getProgress());
             Rating newRating = new Rating(starRank.getProgress());
             newRating.setProducts(p);
-            rs.addStars(newRating);
+            if (Storage.getInstance().readObject("rate") == "false") {
+                rs.addStars(newRating, 1);
+                hasRated = true;
+                Storage.getInstance().writeObject("rate", "true");
+            } else {
+                rs.UpdateStars(newRating, 1);
+            }
             Rating r = rs.SelectRatingByProduct(p.getId());
             int d = MathUtil.round(r.getRate().floatValue() * 100);
             Integer l = (Integer) d;
@@ -323,6 +350,7 @@ public final class ProductGUI {
         }
         return true;
     }
+
     private boolean isProductInFavourite(ArrayList<Product> products, Product product) {
         for (Product p : products) {
             if (p.getId() == product.getId()) {
@@ -331,7 +359,5 @@ public final class ProductGUI {
         }
         return true;
     }
-    
-    
 
 }

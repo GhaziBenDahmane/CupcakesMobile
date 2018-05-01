@@ -48,13 +48,12 @@ public abstract class SideMenuBaseForm extends Form {
         sidemenuTop.setUIID("SidemenuTop");
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Profile", FontImage.MATERIAL_DASHBOARD, e -> new ProfileForm(res).show());
 
         getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Training", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
         getToolbar().addMaterialCommandToSideMenu("  Product", FontImage.MATERIAL_ACCESS_TIME, e -> showOtherForm(res));
         getToolbar().addMaterialCommandToSideMenu("  Promotion", FontImage.MATERIAL_SETTINGS, e -> new PromotionForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Claim", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Claims", FontImage.MATERIAL_EXIT_TO_APP, e -> new ClaimForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Event", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Pastries", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Reservation", FontImage.MATERIAL_EXIT_TO_APP, e -> new ReservationForm(res).show());

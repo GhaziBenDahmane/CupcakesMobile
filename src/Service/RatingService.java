@@ -25,7 +25,7 @@ public class RatingService {
     public Rating SelectRatingByProduct(int id) {
         Rating rating = new Rating();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/ListRating.php/?id=" + id);
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/ListRating.php/?id=" + id);
 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -56,9 +56,23 @@ public class RatingService {
         return rating;
     }
 
-    public void addStars(Rating rating) {
+    public void addStars(Rating rating, int id_user) {
         ConnectionRequest con = new ConnectionRequest();
-        String Url = "http://localhost/WebService/Product/AddRating.php/?id=" + rating.getProducts().getId() + "&note=" + rating.getNote();
+        String Url = "http://192.168.0.100:9999/WebService/Product/AddRating.php?id=" + rating.getProducts().getId() + "&note=" + rating.getNote() + "&user=" + id_user;
+
+        con.setUrl(Url);
+
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());
+            System.out.println(str);
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+
+    public void UpdateStars(Rating rating, int id_user) {
+        ConnectionRequest con = new ConnectionRequest();
+        String Url = "http://192.168.0.100:9999/WebService/Product/UpdateProduct.php?user=" + id_user + "&product=" + rating.getProducts().getId() + "&note=" + rating.getNote();
 
         con.setUrl(Url);
 

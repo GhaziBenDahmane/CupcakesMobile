@@ -96,10 +96,10 @@ public class FavouriteService {
         return products;
     }
 
-    public void deleteProductFromCartInSQLiteDB(int id) {
+    public void deleteProductFromFavouriteInSQLiteDB(int id) {
 
         try {
-            db.execute("delete from cart where id=" + id);
+            db.execute("delete from products where id_product=" + id);
         } catch (IOException ex) {
             System.out.println(ex);
         }

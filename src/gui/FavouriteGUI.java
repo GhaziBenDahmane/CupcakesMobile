@@ -11,9 +11,9 @@ import Entity.Rating;
 import Service.CartsService;
 import Service.FavouriteService;
 import Service.RatingService;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.io.Storage;
-import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -37,6 +37,7 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.MathUtil;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -44,7 +45,7 @@ import java.util.ArrayList;
  * @author Arshavin
  */
 public class FavouriteGUI {
-    
+
     private Form form;
     private MultiButton mb;
     private Button max_min_price;
@@ -52,7 +53,7 @@ public class FavouriteGUI {
     private Image image;
     private Double price;
     private Resources theme;
-    public static int id_cart=0; 
+    public static int id_cart = 0;
 
     private static final String PATH = "http://192.168.0.100:10000/picture/";
 
@@ -64,24 +65,31 @@ public class FavouriteGUI {
     Font mediumPlainMonospaceFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_MEDIUM);
     Font largePlainMonospaceFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE);
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
-    
-    public FavouriteGUI()
-    {
+
+    public FavouriteGUI() {
         form = new Form("Favourite");
         mb = new MultiButton();
         mb.setWidth(Display.getInstance().getDisplayWidth());
         ArrayList<Product> products = new ArrayList<>();
         FavouriteService fs = new FavouriteService();
         fs.createSQLiteDB();
+        form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+            ProductGUI pp;
+            try {
+                pp = new ProductGUI();
+                pp.getForm().show();
+            } catch (IOException ex) {
+                System.out.println("log" + ex.getMessage());
+            }
+
+        });
         products = fs.SelectProductFromSQLiteDB();
-        for (Product product : products)
-        {
-            form.add( createFavouriteWidget(product));
+        for (Product product : products) {
+            form.add(createFavouriteWidget(product));
         }
     }
-    
-    
-    public  SwipeableContainer createFavouriteWidget(Product p) {
+
+    public SwipeableContainer createFavouriteWidget(Product p) {
         mb = new MultiButton();
         mb.setUIID("Button");
         Button n = new Button();
@@ -106,11 +114,11 @@ public class FavouriteGUI {
         Container c1 = new Container(BoxLayout.y());
         Button addButton = new Button();
         addButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_ADD_SHOPPING_CART, style));
-        Button favourite = new Button();
+        Button removeFavourite = new Button();
         Button settings = new Button();
-        favourite.setIcon(FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, style));
+        removeFavourite.setIcon(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
         settings.setIcon(FontImage.createMaterial(FontImage.MATERIAL_SETTINGS, style));
-        c1.addAll(addButton, favourite, settings);
+        c1.addAll(addButton, removeFavourite, settings);
 
         settings.addActionListener(new ActionListener() {
 
@@ -120,13 +128,31 @@ public class FavouriteGUI {
                 ccs.getForm().show();
             }
         });
-        
-        favourite.addActionListener(new ActionListener() {
+
+        removeFavourite.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                CartGUI cg =new CartGUI();
-                cg.getForm().show();
+                Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+                form.removeAll();
+                FavouriteService fs = new FavouriteService();
+                fs.deleteProductFromFavouriteInSQLiteDB(p.getId());
+
+                ArrayList<Product> products = fs.SelectProductFromSQLiteDB();
+                if (!products.isEmpty()) {
+                    for (Product pro : products) {
+
+                        form.add(createFavouriteWidget(pro));
+
+                    }
+
+                    form.add(container);
+                } else {
+                    form.add(new Label("Favourite list is empty !"));
+                }
+                //form.revalidate();
+
+                ip.dispose();
             }
         });
 
@@ -141,11 +167,11 @@ public class FavouriteGUI {
                 cart.setProduct(p);
 
                 ArrayList<Cart> carts = new ArrayList<>();
-                carts = cs.SelectCartOfUser();
+                carts = cs.SelectCartOfUser(1);
 
                 if (isProductInCart(carts, p)) {
                     cs.addProductInCart(cart);
-               
+
                     if (cs.isIsCartAdded()) {
                         Dialog.show("Succes", "The product is added in your cart.", "OK", null);
                     } else {
@@ -161,7 +187,7 @@ public class FavouriteGUI {
         return new SwipeableContainer(FlowLayout.encloseCenterMiddle(createStarRankSlider(p)),
                 c1, mb);
     }
-    
+
     public Form getForm() {
         return form;
     }
@@ -206,7 +232,7 @@ public class FavouriteGUI {
             System.out.println(starRank.getProgress());
             Rating newRating = new Rating(starRank.getProgress());
             newRating.setProducts(p);
-            rs.addStars(newRating);
+            rs.addStars(newRating, 1);
             Rating r = rs.SelectRatingByProduct(p.getId());
             int d = MathUtil.round(r.getRate().floatValue() * 100);
             Integer l = (Integer) d;
@@ -232,7 +258,7 @@ public class FavouriteGUI {
         s.setBgImage(star);
         s.setBgTransparency(0);
     }
-    
+
     private boolean isProductInCart(ArrayList<Cart> carts, Product product) {
         for (Cart cart : carts) {
             if (cart.getProduct().getId() == product.getId()) {
@@ -242,5 +268,4 @@ public class FavouriteGUI {
         return true;
     }
 
-    
 }
