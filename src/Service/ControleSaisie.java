@@ -83,19 +83,9 @@ public class ControleSaisie {
 
     }*/
      
-     public static boolean isValidDate(Date text) {
+     public static boolean isValidDate(Date date) {
 
-
-    //   Date date = new Date();
-        if(0==1) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
+        return date.getTime() >= new Date().getTime();
 
     }
 

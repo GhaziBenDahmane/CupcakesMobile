@@ -156,7 +156,7 @@ public final class ReservationList {
 
             TextField nbPerson = new TextField("", "Number of Person", 20, TextArea.ANY);
             Picker sDate = new Picker();
-            sDate.setType(Display.PICKER_TYPE_DATE_AND_TIME);
+            sDate.setType(Display.PICKER_TYPE_DATE);
             TextField nbTable = new TextField("", "Number of table", 20, TextArea.ANY);
             ControleSaisie s = new ControleSaisie();
 
@@ -199,8 +199,8 @@ public final class ReservationList {
                   
 
                 } 
-              //  Date today =new Date();
-              /*  if (sDate.getDate().before(sDate.getDate())) {
+              
+               if (s.isValidDate(sDate.getDate())) {
                     
                     Label title = dlg1.getTitleComponent();
                     dlg1.setLayout(BoxLayout.y());
@@ -215,7 +215,7 @@ public final class ReservationList {
                     dlg1.add(grayLabel);
                     Button ok1 = new Button(new Command("OK"));
                     dlg1.add(ok1);
-                    dlg1.showDialog();}*/
+                    dlg1.showDialog();}
            
                 
                 else {
