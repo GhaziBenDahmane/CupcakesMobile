@@ -6,10 +6,13 @@
 package Service;
 
 import Entity.User;
-import Util.Util;
+import Utils.Util;
 import com.codename1.capture.Capture;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
+import com.codename1.ui.Image;
 import com.mycompany.myapp.MyApplication;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +23,11 @@ import java.util.Map;
  */
 public class UserService {
 
-    public final static String API_URL = "http://192.168.43.65/PiWeb/web/app_dev.php";
-    public final static String API_PATH = API_URL + "/api/";
+    //public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
+    public final static String API_PATH = MyApplication.API_URL + "/api/";
 
     public static boolean login(String username, String password) {
-        String loginUrl = API_URL + "/oauth/v2/token";
+        String loginUrl = MyApplication.API_URL + "/oauth/v2/token";
         String responseData = Rest.post(loginUrl)
                 .queryParam("grant_type", "password")
                 .queryParam("client_id", "1_3bcbxd9e24g0gk4swg0kwgcwg4o8k8g4g888kwc44gcc0gwwk4")
@@ -36,6 +39,11 @@ public class UserService {
         boolean loggedIn = !responseData.contains("error");
         if (loggedIn) {
             MyApplication.currentUser = get(username);
+            try {
+                downloadPhoto();
+            } catch (Exception e) {
+
+            }
             return true;
         } else {
             return false;
@@ -44,12 +52,12 @@ public class UserService {
     }
 
     public static void update(User u) {
-        String loginUrl = API_URL + "/users";
-        String responseData = Rest.post(loginUrl)
+        String url = API_PATH + "user";
+        String responseData = Rest.put(url)
                 .queryParam("id", "" + u.getId())
                 .queryParam("username", u.getUsername())
-                .queryParam("phone", u.getEmail())
-                .queryParam("photo", u.getEmail())
+                .queryParam("phone", u.getPhone())
+                .queryParam("photo", u.getPhotoprofil())
                 .queryParam("email", u.getEmail())
                 .getAsString()
                 .getResponseData();
@@ -64,11 +72,35 @@ public class UserService {
         return mapToUser(responseData);
     }
 
-    void changePicture() {
+    public static void changePicture() {
         String fileName = Capture.capturePhoto();
-        if (fileName != null) {
-            String url = Util.uploadProfilePicture(fileName);
+        try {
+            if (fileName != null) {
+                InputStream openInputStream = FileSystemStorage.getInstance().openInputStream(fileName);
+                byte[] bytesFromInputStream = Util.getBytesFromInputStream(openInputStream);
+                String url = Util.uploadProfilePicture(bytesFromInputStream);
+                System.out.println(url);
+                MyApplication.currentUser.setPhotoprofil(url);
+                update(MyApplication.currentUser);
+                MyApplication.userPicture = Image.createImage(bytesFromInputStream, 0, bytesFromInputStream.length);
+
+            }
+        } catch (Exception e) {
+
         }
+
+    }
+
+    public static void downloadPhoto() {
+        if (!MyApplication.currentUser.getPhotoprofil().isEmpty()) {
+            byte[] responseData = Rest.get(MyApplication.currentUser.getPhotoprofil())
+                    .getAsBytes()
+                    .getResponseData();
+            MyApplication.userPicture = Image.createImage(responseData, 0, responseData.length);
+        } else {
+            MyApplication.userPicture = null;
+        }
+
     }
 
     public static User mapToUser(Map responseData) {
@@ -99,25 +131,4 @@ public class UserService {
         System.out.println(u);
         return u;
     }
-    /*
-    public User get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void add(User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void (User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void delete(User a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void deleteId(int a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-     */
 }

@@ -4,6 +4,7 @@ import Entity.User;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
+import com.codename1.ui.Image;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
@@ -15,6 +16,8 @@ import gui.LoginForm;
  */
 public class MyApplication {
 
+    public final static String API_URL = "http://192.168.43.245/PiWeb/web/app_dev.php";
+    public static Image userPicture = null;
     public static User currentUser = null;
     private Form current;
     private Resources theme;
@@ -35,6 +38,29 @@ public class MyApplication {
             return;
         }
         new LoginForm(theme).show();
+        //  new EventForm(theme).show();
+        /*           try {
+            FavouriteService.db.delete("Cupcake");
+        } catch (IOException ex) {
+        }
+        Storage.getInstance().writeObject("currency", "TND");
+        FavouriteService fs = new FavouriteService();
+       
+        fs.createSQLiteDB();
+        Promotion p = new Promotion();
+        p.setDiscount(0.1);
+        p.setId_promotion(1);
+        fs.insertPromotionInSQLiteDB(p);
+        fs.closeDB();
+
+        ProductGUI pp;
+        try {
+            pp = new ProductGUI();
+            pp.getForm().show();
+        } catch (IOException ex) {
+            System.out.println("log" + ex.getMessage());
+        }*/
+
     }
 
     public void stop() {

@@ -24,7 +24,6 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import java.io.IOException;
 
-
 /**
  *
  * @author Arshavin
@@ -37,10 +36,11 @@ public class CurrencySettingsGUI {
     private Form form;
     private final Container container;
     private static String def = "TND";
-    private Style style = UIManager.getInstance().getComponentStyle("Label");
-
+    private final Style style = UIManager.getInstance().getComponentStyle("Label");
 
     public CurrencySettingsGUI() {
+
+        Label test = new Label();
         form = new Form("Settings");
         container = new Container(BoxLayout.y());
         save = new Button("Save");
@@ -54,33 +54,35 @@ public class CurrencySettingsGUI {
         dollar.setSelected(false);
         pound.setSelected(false);
         clearCheckBoxs();
+
         save.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
                 Storage.getInstance().writeObject("currency", saveChoice());
                 System.out.println(Storage.getInstance().readObject("currency"));
-                        Dialog ip = new InfiniteProgress().showInifiniteBlocking();
-                        ip.setTimeout(10000);
-                
+                Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+                ip.setTimeout(10000);
+
                 CurrencyConvertService ccs = new CurrencyConvertService();
+                
                 Storage.getInstance().writeObject("price", ccs.ConvertPrice());
-               
                 ip.dispose();
+               // test.setText(Storage.getInstance().readObject("price").toString());
+
             }
         });
-        form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {try {
-            ProductGUI
-                    p  = new ProductGUI();
-            p.getForm().show();
+        form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+            try {
+                ProductGUI p = new ProductGUI();
+                p.getForm().show();
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
-        
+
         });
 
-        
-        container.add(label).add(dinar).add(euro).add(dollar).add(pound).add(save);
+        container.add(label).add(dinar).add(euro).add(dollar).add(pound).add(save).add(test);
         form.add(container);
 
     }

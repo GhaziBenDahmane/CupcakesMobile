@@ -14,6 +14,9 @@ public class Pastry {
     private String adress ;
     private int nbTable;
 
+    public Pastry() {
+    }
+
     public Pastry(int id, String adress, int nbTable) {
         this.id = id;
         this.adress = adress;

@@ -5,6 +5,8 @@
  */
 package Entity;
 
+import com.codename1.ui.TextField;
+import com.codename1.ui.spinner.Picker;
 import java.util.Date;
 
 /**
@@ -26,6 +28,19 @@ public class Event {
     public Event() {
     }
 
+    public Event(int id,String title, int nbPerson, Date startDate, Date endDate, int nbTable, int band, String status, double cost) {
+        this.title = title;
+        this.nbPerson = nbPerson;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.nbTable = nbTable;
+        this.band = band;
+        this.status = status;
+        this.cost = cost;
+    }
+
+   
+    
     public int getId() {
         return id;
     }

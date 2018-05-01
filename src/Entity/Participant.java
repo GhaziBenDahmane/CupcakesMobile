@@ -5,16 +5,31 @@
  */
 package Entity;
 
+import java.util.Date;
+
 /**
  *
  * @author haffe
  */
 public class Participant {
     private int id;
-    private int event_id;
-    private int user_id;
+    private String event_id;
+    private String user_id;
+    private Date date;
 
-    public Participant(int id, int event_id, int user_id) {
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
+
+    public Participant() {
+    }
+
+    public Participant(int id, String event_id, String user_id) {
         this.id = id;
         this.event_id = event_id;
         this.user_id = user_id;
@@ -28,19 +43,19 @@ public class Participant {
         this.id = id;
     }
 
-    public int getEvent_id() {
+    public String getEvent_id() {
         return event_id;
     }
 
-    public void setEvent_id(int event_id) {
+    public void setEvent_id(String event_id) {
         this.event_id = event_id;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
     

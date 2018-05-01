@@ -5,19 +5,22 @@
  */
 package gui;
 
+import Entity.Cart;
 import Service.ProductService;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import Entity.Product;
 import Entity.Rating;
-import Service.CurrencyConvertService;
+import Service.CartsService;
+import Service.FavouriteService;
 import Service.RatingService;
 import Service.ScanCodeService;
 import com.codename1.components.MultiButton;
 import com.codename1.io.Storage;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
@@ -54,8 +57,9 @@ public final class ProductGUI {
     private Double price;
     private Resources theme;
     protected final AutoCompleteTextField search;
+    public static int id_cart=0; 
 
-    private static final String PATH = "http://localhost/picture/";
+    private static final String PATH = "http://192.168.0.100:10000/picture/";
 
     Style s = UIManager.getInstance().getComponentStyle("Button");
     Style style = UIManager.getInstance().getComponentStyle("Label");
@@ -69,6 +73,8 @@ public final class ProductGUI {
     public ProductGUI() throws IOException {
         form = new Form("Products");
         theme = UIManager.initFirstTheme("/theme");
+        mb = new MultiButton();
+        mb.setWidth(Display.getInstance().getDisplayWidth());
 
         ArrayList<Product> products = new ArrayList<>();
         ProductService ps = new ProductService();
@@ -128,6 +134,7 @@ public final class ProductGUI {
             ScanCodeService scs = new ScanCodeService();
             Product product = new Product();
             product = scs.ScanBarCode();
+            
             f.add(createRankWidget(product));
             f.show();
         });
@@ -136,7 +143,7 @@ public final class ProductGUI {
         co.add(search);
 
         form.add(co);
-
+        
         for (Product product : products) {
             form.add(createRankWidget(product));
         }
@@ -144,7 +151,6 @@ public final class ProductGUI {
     }
 
     public SwipeableContainer createRankWidget(Product p) {
-
         mb = new MultiButton();
         mb.setUIID("Button");
         Button n = new Button();
@@ -153,23 +159,89 @@ public final class ProductGUI {
         mb.setUIIDLine2("Label");
         mb.setUIIDLine3("Badge");
         mb.setUIIDLine4("TouchCommand");
+        
+        
 
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-        CurrencyConvertService c = new CurrencyConvertService();
 
         price = (p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount()));
-        mb.setTextLine4(price.toString() +" "+ Storage.getInstance().readObject("currency"));
+        mb.setTextLine4(price.toString() + " " + Storage.getInstance().readObject("currency"));
 
         URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
                 PATH + p.getImage());
         image = (Image) i;
 
         mb.setIcon(image);
+        Container c1 = new Container(BoxLayout.y());
+        Button addButton = new Button();
+        addButton.setIcon(FontImage.createMaterial(FontImage.MATERIAL_ADD_SHOPPING_CART, style));
+        Button favourite = new Button();
+        Button settings = new Button();
+        favourite.setIcon(FontImage.createMaterial(FontImage.MATERIAL_FAVORITE, style));
+        settings.setIcon(FontImage.createMaterial(FontImage.MATERIAL_SETTINGS, style));
+        c1.addAll(addButton, favourite, settings);
+
+        settings.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                CurrencySettingsGUI ccs = new CurrencySettingsGUI();
+                ccs.getForm().show();
+            }
+        });
+        
+        favourite.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                FavouriteService fs = new FavouriteService();
+                fs.createSQLiteDB();
+                if(isProductInFavourite(fs.SelectProductFromSQLiteDB(), p))
+                {
+                fs.insertProductInSQLiteDB(p);
+                
+                }
+                else
+                {
+                    Dialog.show("Warning", "Product already exist in Favourites.", "OK",null);
+                }
+                FavouriteGUI cg =new FavouriteGUI();
+                cg.getForm().show();
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                CartsService cs = new CartsService();
+                Cart cart = new Cart();
+                cart.setId_cart(id_cart);
+                id_cart++;
+                cart.setProduct(p);
+
+                ArrayList<Cart> carts = new ArrayList<>();
+                carts = cs.SelectCartOfUser();
+
+                if (isProductInCart(carts, p)) {
+                    cs.addProductInCart(cart);
+               
+                    if (cs.isIsCartAdded()) {
+                        Dialog.show("Succes", "The product is added in your cart.", "OK", null);
+                    } else {
+                        Dialog.show("Error", "Adding product failed.", "OK", null);
+                    }
+                } else {
+                    Dialog.show("Warning", "Product exist in your cart.", "OK", null);
+                }
+
+            }
+        });
 
         return new SwipeableContainer(FlowLayout.encloseCenterMiddle(createStarRankSlider(p)),
-                mb);
+                c1, mb);
     }
 
     public Form getForm() {
@@ -242,5 +314,24 @@ public final class ProductGUI {
         s.setBgImage(star);
         s.setBgTransparency(0);
     }
+
+    private boolean isProductInCart(ArrayList<Cart> carts, Product product) {
+        for (Cart cart : carts) {
+            if (cart.getProduct().getId() == product.getId()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean isProductInFavourite(ArrayList<Product> products, Product product) {
+        for (Product p : products) {
+            if (p.getId() == product.getId()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
 
 }
