@@ -1,5 +1,6 @@
 package gui;
 
+import Service.UserService;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
@@ -36,7 +37,9 @@ public class ProfileForm extends SideMenuBaseForm {
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePicTitle");
         profilePicLabel.setMask(mask.createMask());
-
+        profilePicLabel.addPointerPressedListener((evt) -> {
+            UserService.changePicture();
+        });
         Button menuButton = new Button("");
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);

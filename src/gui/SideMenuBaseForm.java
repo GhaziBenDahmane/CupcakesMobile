@@ -1,6 +1,5 @@
 package gui;
 
-import Service.ClaimService;
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -9,6 +8,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 
 public abstract class SideMenuBaseForm extends Form {
 
@@ -28,18 +28,26 @@ public abstract class SideMenuBaseForm extends Form {
     }
 
     public void setupSideMenu(Resources res) {
-        Image profilePic = res.getImage("user-picture.jpg");
+        Image profilePic;
+        if (MyApplication.userPicture != null) {
+            profilePic = MyApplication.userPicture;
+
+        } else {
+            profilePic = res.getImage("user-picture.jpg");
+
+        }
         Image mask = res.getImage("round-mask.png");
         mask = mask.scaledHeight(mask.getHeight() / 4 * 3);
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label("  Jennifer Wilson", profilePic, "SideMenuTitle");
         profilePicLabel.setMask(mask.createMask());
-
+        profilePicLabel.addPointerPressedListener((evt) -> {
+            new ProfileForm(res).show();
+        });
         Container sidemenuTop = BorderLayout.center(profilePicLabel);
         sidemenuTop.setUIID("SidemenuTop");
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Change picture", FontImage.MATERIAL_DASHBOARD, e -> ClaimService.getByUser());
         getToolbar().addMaterialCommandToSideMenu("  Profile", FontImage.MATERIAL_DASHBOARD, e -> new ProfileForm(res).show());
 
         getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());

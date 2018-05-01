@@ -6,7 +6,7 @@
 package Service;
 
 import Entity.User;
-import Utils.Util;
+import Utils.Utils;
 import com.codename1.capture.Capture;
 import com.codename1.io.FileSystemStorage;
 import com.codename1.io.rest.Rest;
@@ -50,17 +50,22 @@ public class UserService {
         }
 
     }
-        public static void register(User u) {
-        String url = API_PATH + "users";
-        Map responseData = Rest.post(url)
-                .queryParam("username", u.getUsername())
-                .queryParam("password", u.getPassword())
-                .queryParam("email", u.getEmail())
-                .queryParam("phone", u.getPhone())
-                .getAsJsonMap()
-                .getResponseData();
-        MyApplication.currentUser = mapToUser(responseData);
 
+    public static boolean register(String username, String emailAd, String phoneNumber, String pass1) {
+        String url = API_PATH + "users";
+        try {
+            Map responseData = Rest.post(url)
+                    .queryParam("username", username)
+                    .queryParam("password", pass1)
+                    .queryParam("email", emailAd)
+                    .queryParam("phone", phoneNumber)
+                    .getAsJsonMap()
+                    .getResponseData();
+            MyApplication.currentUser = mapToUser(responseData);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
 
     }
 
@@ -89,8 +94,8 @@ public class UserService {
         try {
             if (fileName != null) {
                 InputStream openInputStream = FileSystemStorage.getInstance().openInputStream(fileName);
-                byte[] bytesFromInputStream = Util.getBytesFromInputStream(openInputStream);
-                String url = Util.uploadProfilePicture(bytesFromInputStream);
+                byte[] bytesFromInputStream = Utils.getBytesFromInputStream(openInputStream);
+                String url = Utils.uploadProfilePicture(bytesFromInputStream);
                 System.out.println(url);
                 MyApplication.currentUser.setPhotoprofil(url);
                 update(MyApplication.currentUser);
