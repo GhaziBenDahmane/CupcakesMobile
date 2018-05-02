@@ -100,6 +100,7 @@ public class ConfirmAccountForm extends Form {
 
         });
         SMSInterceptor.grabNextSMS(e -> {
+            System.out.println(UserService.confirmation);
             number.setText(UserService.confirmation);
 
         });
