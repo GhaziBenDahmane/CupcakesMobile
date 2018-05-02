@@ -84,7 +84,6 @@ public final class ProductGUI extends SideMenuBaseForm {
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
-        //form = new Form("Products");
         theme = UIManager.initFirstTheme("/theme_1");
         mb = new MultiButton();
         mb.setWidth(Display.getInstance().getDisplayWidth());
@@ -150,9 +149,15 @@ public final class ProductGUI extends SideMenuBaseForm {
             public void actionPerformed(ActionEvent evt) {
                 ScanCodeService scs = new ScanCodeService();
                 Product product;
-                scs.ScanBarCode();
+                try {
+                    scs.ScanBarCode();
+                } catch (NullPointerException ex) {
+                    Dialog.show("Warning", "Null", "ok", null);
+                }
 
-                product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
+                Dialog.show("Waring", ScanCodeService.code, "Ok", null);
+
+                product = scs.findProducts(123456);
 
                 f.add(createRankWidget(product));
                 f.show();
@@ -240,7 +245,7 @@ public final class ProductGUI extends SideMenuBaseForm {
                     Dialog.show("Warning", "Product already exist in Favourites.", "OK", null);
                 }
                 FavouriteGUI cg = new FavouriteGUI();
-                cg.getForm().show();
+                cg.show();
             }
         });
 
