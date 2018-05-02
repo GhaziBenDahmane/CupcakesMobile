@@ -209,6 +209,8 @@ public class Utils {
         popupBody.setUIID("DialogBody");
         popupBody.getAllStyles().setFgColor(0);
         setDesign(popupBody.getAllStyles());
+        setDesign(popupBody2.getAllStyles());
+
         dlg.add(popupBody);
         dlg.add(popupBody2);
 
