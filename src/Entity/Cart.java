@@ -12,18 +12,7 @@ package Entity;
 public class Cart {
 
     private Integer id_cart;
-    private Product products;
-
-    public Cart(Integer id_cart, Product products) {
-        this.id_cart = id_cart;
-        this.products = products;
-    }
-    
-    public Cart(Product products) {
-        
-        this.products = products;
-    }
-
+    private Product product;
 
     public Integer getId_cart() {
         return id_cart;
@@ -33,17 +22,17 @@ public class Cart {
         this.id_cart = id_cart;
     }
 
-    public Product getProducts() {
-        return products;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts(Product products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override
     public String toString() {
-        return "Cart{" + "id_cart=" + id_cart + ", products=" + products + '}';
+        return "Cart{" + "id_cart=" + id_cart + ", products=" + product + '}';
     }
 
 }

@@ -1,7 +1,6 @@
 package gui;
 
 import Service.UserService;
-import Util.Util;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -15,6 +14,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 
 public class LoginForm extends Form {
 
@@ -35,7 +35,7 @@ public class LoginForm extends Form {
         profilePicLabel.setMask(mask.createMask());
 
         TextField login = new TextField("", "Login", 20, TextField.EMAILADDR);
-        TextField password = new TextField("password", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         login.getAllStyles().setMargin(LEFT, 0);
         password.getAllStyles().setMargin(LEFT, 0);
         Label loginIcon = new Label("", "TextField");
@@ -49,7 +49,12 @@ public class LoginForm extends Form {
         loginButton.setUIID("LoginButton");
         loginButton.addActionListener(e -> {
             if (UserService.login(login.getText(), password.getText())) {
-                Util.downloadUserImage();
+                try {
+                    UserService.downloadPhoto();
+
+                } catch (Exception z) {
+                    MyApplication.userPicture = null;
+                }
                 Toolbar.setGlobalToolbar(false);
                 new WalkthruForm(theme).show();
                 Toolbar.setGlobalToolbar(true);
@@ -75,9 +80,9 @@ public class LoginForm extends Form {
                 profilePicLabel,
                 spaceLabel,
                 BorderLayout.center(login).
-                        add(BorderLayout.WEST, loginIcon),
+                add(BorderLayout.WEST, loginIcon),
                 BorderLayout.center(password).
-                        add(BorderLayout.WEST, passwordIcon),
+                add(BorderLayout.WEST, passwordIcon),
                 loginButton,
                 createNewAccount
         );
