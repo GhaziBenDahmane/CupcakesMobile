@@ -84,7 +84,7 @@ public class ClaimForm extends SideMenuBaseForm {
 
             Picker p = new Picker();
             p.setStrings(characters);
-
+            p.setText("Select type!");
             Label typeLabel = new Label("Type", "Container");
             typeLabel.getAllStyles().setAlignment(Component.CENTER);
 
@@ -92,13 +92,21 @@ public class ClaimForm extends SideMenuBaseForm {
             descLabel.getAllStyles().setAlignment(Component.CENTER);
             TextArea description = new TextArea("", 5, 20, TextArea.ANY);
             ok.addActionListener((evt) -> {
-                Claim c = new Claim();
-                c.setClient(MyApplication.currentUser);
-                c.setDescription(description.getText());
-                c.setType(p.getSelectedString());
-                ClaimService.add(c);
-                dlg.dispose();
-                new ClaimForm(UIManager.initFirstTheme("/theme_1")).show();
+                if (null == p.getSelectedString()) {
+                    Utils.showDialog("Select a type");
+                } else if (description.getText().trim().isEmpty()) {
+                    Utils.showDialog("You need to write a description!");
+
+                } else {
+                    Claim c = new Claim();
+                    c.setClient(MyApplication.currentUser);
+                    c.setDescription(description.getText());
+                    c.setType(p.getSelectedString());
+                    ClaimService.add(c);
+                    System.out.println(p.getSelectedString());
+                    dlg.dispose();
+                    new ClaimForm(UIManager.initFirstTheme("/theme_1")).show();
+                }
 
             });
 
