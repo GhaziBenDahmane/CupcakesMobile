@@ -1,8 +1,10 @@
 package gui;
 
 import Service.UserService;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -49,7 +51,9 @@ public class LoginForm extends Form {
         loginButton.addActionListener(e -> {
             if (UserService.login(login.getText(), password.getText())) {
                 try {
+                    Dialog ip = new InfiniteProgress().showInifiniteBlocking();
                     UserService.downloadPhoto();
+                    ip.dispose();
 
                 } catch (Exception z) {
                     MyApplication.userPicture = null;

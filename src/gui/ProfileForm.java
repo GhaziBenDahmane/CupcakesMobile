@@ -2,9 +2,11 @@ package gui;
 
 import Service.UserService;
 import Utils.Utils;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
@@ -136,10 +138,17 @@ public class ProfileForm extends SideMenuBaseForm {
         photo.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
         photo.setIconUIID("Container");
         photo.addActionListener(x -> {
+            Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+
             if (UserService.changePicture()) {
                 new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+                ip.dispose();
 
+            } else {
+                ip.dispose();
+                Utils.showDialog("Please check your connection");
             }
+
         });
         add(FlowLayout.encloseIn(photo));
 
@@ -172,7 +181,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(TableLayout.encloseIn(2,finishLandingPage));
+        add(TableLayout.encloseIn(2, finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -195,6 +204,5 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
-    
-    
+
 }
