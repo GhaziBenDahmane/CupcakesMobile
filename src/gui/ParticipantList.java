@@ -92,16 +92,15 @@ public class ParticipantList {
 
         search.setHint("Find user to add", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
         search.setMinimumElementsShownInPopup(4);
-        f.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
-            form.show();
-            f.removeAll();
-        });
+     
         form.add(search);
         for (Participant e : participants) {
             form.add(createContainer(e));
             id = e.getId();
         }
-        form.getToolbar().addCommandToLeftBar("", FontImage.createMaterial(FontImage.MATERIAL_ADD, style), e -> {
+        form.getToolbar().addCommandToLeftBar("Return", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+       form.removeAll();
+        new EventForm(theme);
         });
         form.show();
 

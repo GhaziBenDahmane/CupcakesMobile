@@ -285,6 +285,7 @@ public class ReservationGUI extends SideMenuBaseForm{
         boxStyle.setPadding(1, 1, 1, 1);
 
         Container layers = LayeredLayout.encloseIn(box);
+        
         return layers;
     }
 

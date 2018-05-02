@@ -15,6 +15,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.UIManager;
+import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
 import com.mycompany.myapp.MyApplication;
@@ -171,7 +172,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(FlowLayout.encloseIn(finishLandingPage));
+        add(TableLayout.encloseIn(2,finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -194,4 +195,6 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
+    
+    
 }
