@@ -34,7 +34,7 @@ public class ProductService {
         ArrayList<Product> listProducts = new ArrayList<>();
         ConnectionRequest con = new ConnectionRequest();
 
-        con.setUrl("http://localhost/WebService/Product/ListProduct.php");
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/ListProduct.php");
 
         con.addResponseListener((NetworkEvent evt) -> {
             //listTasks = getListTask(new String(con.getResponseData()));
@@ -90,7 +90,7 @@ public class ProductService {
         if (name.length() > 0) {
             ArrayList<Product> listProducts = new ArrayList<>();
             ConnectionRequest con = new ConnectionRequest();
-            con.setUrl("http://localhost/WebService/Product/FindProducts.php/?name" + name);
+            con.setUrl("http://192.168.0.100:9999/WebService/Product/FindProducts.php/?name" + name);
 
             con.addResponseListener(new ActionListener<NetworkEvent>() {
                 @Override
@@ -133,7 +133,7 @@ public class ProductService {
     public Product findProductById(int id) {
 
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/FindProductById.php?id=" + id);
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/FindProductById.php?id=" + id);
 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override

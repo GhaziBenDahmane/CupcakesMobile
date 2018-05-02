@@ -15,6 +15,7 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.events.ActionListener;
 import java.io.IOException;
 import java.util.List;
@@ -27,50 +28,46 @@ import java.util.Map;
 public class ScanCodeService {
 
     private Product product;
+    public static String code ="";
 
-    public Product ScanBarCode() {
+    public void ScanBarCode() {
 
         if (!CodeScanner.isSupported()) {
             ToastBar.showErrorMessage("CodeScanner not supported on this platform");
 
-        } else {
+        } 
+            ToastBar.showErrorMessage("CodeScanner not supported on this platform");
 
             CodeScanner.getInstance().scanBarCode(new ScanResult() {
 
                 @Override
                 public void scanCompleted(String contents, String formatName, byte[] rawBytes) {
-                            //barCode.setText("Bar: " + contents);
-
-                    product = findProducts(Integer.parseInt(contents));
-
-                    if (product == null) {
-                        ToastBar.showErrorMessage("Product not found");
-                    }
+                    //barCode.setText("Bar: " + contents);
+                     code = contents;
+                   
 
                 }
 
                 @Override
                 public void scanCanceled() {
-                    System.out.println("cancelled");
+                    Dialog.show("ok", "le", "ok", null);
                 }
 
                 @Override
                 public void scanError(int errorCode, String message) {
                     System.out.println("err " + message);
+                    Dialog.show("ok", message, "ok", null);
                 }
 
             });
-            return product;
-        }
-
-        return null;
+       
     }
 
     public Product findProducts(int barcode) {
 
         Product product = new Product();
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://localhost/WebService/Product/FindProductByBarCode.php/?barcode=" + barcode);
+        con.setUrl("http://192.168.0.100:9999/WebService/Product/FindProductByBarCode.php?barcode=" + barcode);
 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override

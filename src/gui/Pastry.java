@@ -6,7 +6,7 @@
 package gui;
 
 import com.codename1.components.ToastBar;
-import com.codename1.googlemaps.MapContainer;
+//import com.codename1.googlemaps.MapContainer;
 import com.codename1.maps.*;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -49,7 +49,7 @@ public class Pastry {
         }
         Form hi = new Form("Pastry");
         hi.setLayout(new BorderLayout());
-        MapContainer cnt = new MapContainer(HTML_API_KEY);
+      /*  MapContainer cnt = new MapContainer(HTML_API_KEY);
 
         Style s = new Style();
         s.setFgColor(0xff0000);
@@ -107,14 +107,14 @@ public class Pastry {
             enterName.startEditingAsync();
         });
          */
-        Container root = LayeredLayout.encloseIn(
+      /*  Container root = LayeredLayout.encloseIn(
                 BorderLayout.center(cnt),
                 BorderLayout.south(
                         FlowLayout.encloseBottom()
                 )
-        );
+        );*/
 
-        hi.add(BorderLayout.CENTER, root);
+       // hi.add(BorderLayout.CENTER, root);
         hi.show();
 
     }

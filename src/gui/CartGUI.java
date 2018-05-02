@@ -42,7 +42,7 @@ public final class CartGUI {
     private final Container container;
     private MultiButton mb;
     private Image image;
-    private static final String PATH = "http://192.168.0.100:10000/picture/";
+    private static final String PATH = "http://192.168.0.100:9999/picture/";
     private Double price;
     private Integer ch;
     private final Label purchasePrice;
@@ -68,7 +68,11 @@ public final class CartGUI {
         container = new Container(BoxLayout.x());
         purchasePrice = new Label();
 
-        carts = cs.SelectCartOfUser();
+
+        carts = cs.SelectCartOfUser(1);
+        purchasePrice.getAllStyles().setFgColor(0x0000ff);
+
+        //carts = cs.SelectCartOfUser();
         //purchasePrice.getAllStyles().setFgColor(Color.BLUE.getIntArgbPre());
         purchasePrice.setAutoSizeMode(true);
 
@@ -98,7 +102,15 @@ public final class CartGUI {
             purchasePrice.setText("0.0");
             form.add(empty);
         }
+        purchase.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                PayementGUI pgui = new PayementGUI(purchasePrice.getText());
+                t=new Float(0);
+                pgui.getVal().show();
+            }
+        });
         form.add(container);
 
     }
@@ -160,7 +172,7 @@ public final class CartGUI {
                 form.removeAll();
                 cs.deleteFromCart(c.getId_cart());
 
-                carts = cs.SelectCartOfUser();
+                carts = cs.SelectCartOfUser(1);
 
                 isRemoved = true;
                 System.out.println(t);
