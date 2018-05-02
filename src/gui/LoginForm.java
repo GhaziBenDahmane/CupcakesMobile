@@ -27,7 +27,7 @@ public class LoginForm extends Form {
 
         getTitleArea().setUIID("Container");
 
-        Image profilePic = theme.getImage("user-picture.jpg");
+        Image profilePic = theme.getImage("profile.jpg");
         Image mask = theme.getImage("round-mask.png");
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePic");
@@ -58,7 +58,7 @@ public class LoginForm extends Form {
                 new WalkthruForm(theme).show();
                 Toolbar.setGlobalToolbar(true);
             } else {
-
+                Utils.Utils.showDialog("Incorrect combination");
             }
         });
 

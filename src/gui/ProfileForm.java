@@ -14,6 +14,7 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
 import com.mycompany.myapp.MyApplication;
@@ -81,6 +82,7 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setUsername(ret);
                 UserService.changeUserName(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
             }
         });
         add(FlowLayout.encloseIn(username));
@@ -99,6 +101,8 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setEmail(ret);
                 UserService.changeEmail(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
             }
         });
         add(FlowLayout.encloseIn(email));
@@ -117,6 +121,8 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setPhone(ret);
                 UserService.changePhone(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
             }
 
         });
@@ -129,7 +135,10 @@ public class ProfileForm extends SideMenuBaseForm {
         photo.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
         photo.setIconUIID("Container");
         photo.addActionListener(x -> {
-            UserService.changePicture();
+            if (UserService.changePicture()) {
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
+            }
         });
         add(FlowLayout.encloseIn(photo));
 

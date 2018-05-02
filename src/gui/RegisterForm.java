@@ -4,18 +4,22 @@ import Service.UserService;
 import Utils.Utils;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.plaf.Border;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
 
@@ -93,7 +97,7 @@ public class RegisterForm extends Form {
 
                 } else {
                     Toolbar.setGlobalToolbar(false);
-                    new WalkthruForm(theme).show();
+                    new ConfirmAccountForm(theme).show();
                     Toolbar.setGlobalToolbar(true);
                 }
             }
@@ -134,5 +138,12 @@ public class RegisterForm extends Form {
         // for low res and landscape devices
         by.setScrollableY(true);
         by.setScrollVisible(false);
+    }
+
+    public static void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(Border.createLineBorder(1));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
     }
 }

@@ -5,19 +5,10 @@
  */
 package gui;
 
-import com.codename1.components.ToastBar;
-//import com.codename1.googlemaps.MapContainer;
-import com.codename1.maps.*;
-import com.codename1.ui.Container;
 import com.codename1.ui.Display;
-import com.codename1.ui.EncodedImage;
-import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.SideMenuBar;
 import com.codename1.ui.layouts.BorderLayout;
-import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.layouts.LayeredLayout;
-import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
@@ -49,7 +40,7 @@ public class Pastry {
         }
         Form hi = new Form("Pastry");
         hi.setLayout(new BorderLayout());
-      /*  MapContainer cnt = new MapContainer(HTML_API_KEY);
+        /*  MapContainer cnt = new MapContainer(HTML_API_KEY);
 
         Style s = new Style();
         s.setFgColor(0xff0000);
@@ -57,7 +48,7 @@ public class Pastry {
         FontImage markerImg = FontImage.createMaterial(FontImage.MATERIAL_PLACE, s, Display.getInstance().convertToPixels(3));
         cnt.zoom(new Coord(36.8367566, 10.2316940), 13);
         cnt.setCameraPosition(new Coord(36.8367566, 10.2316940));
-        
+
         cnt.addMarker(
                 EncodedImage.createFromImage(markerImg, false),
                 new Coord(36.862499, 10.195556),
@@ -107,14 +98,14 @@ public class Pastry {
             enterName.startEditingAsync();
         });
          */
-      /*  Container root = LayeredLayout.encloseIn(
+ /*  Container root = LayeredLayout.encloseIn(
                 BorderLayout.center(cnt),
                 BorderLayout.south(
                         FlowLayout.encloseBottom()
                 )
         );*/
 
-       // hi.add(BorderLayout.CENTER, root);
+        // hi.add(BorderLayout.CENTER, root);
         hi.show();
 
     }
@@ -125,5 +116,5 @@ public class Pastry {
 
     public void destroy() {
     }
-    
+
 }

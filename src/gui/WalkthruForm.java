@@ -33,7 +33,7 @@ public class WalkthruForm extends Form {
         walkthruTabs.hideTabs();
 
         Image notes = res.getImage("notes.png");
-        Image duke = res.getImage("duke.png");
+        Image duke = res.getImage("cups.png");
 
         Label notesPlaceholder = new Label("", "ProfilePic");
         Label notesLabel = new Label(notes, "ProfilePic");
@@ -43,10 +43,10 @@ public class WalkthruForm extends Form {
 
         Container tab1 = BorderLayout.centerAbsolute(BoxLayout.encloseY(
                 notesPlaceholder,
-                new Label("Keep track of your tasks", "WalkthruWhite"),
-                new SpanLabel("Never miss an appointment, never forget about your "
-                        + "daily team meeting and remember when your favorite "
-                        + "team is playing.", "WalkthruBody"),
+                new Label("Keep track of your pastries!", "WalkthruWhite"),
+                new SpanLabel("You can have as many events as you want."
+                        + "In as many of our pastries as you want"
+                        + "You can keep track of our pastries using our crazy map! ", "WalkthruBody"),
                 bottomSpace
         ));
         tab1.setUIID("WalkthruTab1");
@@ -57,10 +57,10 @@ public class WalkthruForm extends Form {
 
         Container tab2 = BorderLayout.centerAbsolute(BoxLayout.encloseY(
                 new Label(duke, "ProfilePic"),
-                new Label("Codename One", "WalkthruWhite"),
-                new SpanLabel("Write once run anywhere native mobile development "
-                        + "Get Java working on all devices as it was always meant "
-                        + "to be!", "WalkthruBody"),
+                new Label("Cupcakes", "WalkthruWhite"),
+                new SpanLabel("Here you can find your favourite cupcakes. "
+                        + "  They're so delicous you'll forget we have a claim"
+                        + "section in our app.", "WalkthruBody"),
                 bottomSpaceTab2
         ));
 
