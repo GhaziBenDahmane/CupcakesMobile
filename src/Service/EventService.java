@@ -12,6 +12,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
+import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class EventService {
         con.setPost(true);
         con.setUrl("http://192.168.0.101:8000/event/add?title=" + e.getTitle() + "&sdate=" + toDateTime(e.getStartDate()) + ""
                 + "&edate=" + toDateTime(e.getEndDate()) + "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable()
-                + "&band=" + e.getBand() + "&cost=" + e.getCost() + "&user=user&url=" + e.getId());
+                + "&band=" + e.getBand() + "&cost=" + e.getCost() + "&user="+MyApplication.currentUser.getUsername()+"&url=" + e.getId());
 
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
@@ -79,6 +80,7 @@ public class EventService {
                         event.setStatus(obj.get("status").toString());
                         event.setStartDate(toDate(obj.get("startDate").toString()));
                         event.setEndDate(toDate((String) obj.get("endDate")));
+                        event.setUser( obj.get("user").toString());
                         event.setNbPerson((int)nbPerson);
 
                         listEvents.add(event);

@@ -2,9 +2,11 @@ package gui;
 
 import Service.UserService;
 import Utils.Utils;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
@@ -14,6 +16,7 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
@@ -82,6 +85,7 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setUsername(ret);
                 UserService.changeUserName(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
             }
         });
         add(FlowLayout.encloseIn(username));
@@ -100,6 +104,8 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setEmail(ret);
                 UserService.changeEmail(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
             }
         });
         add(FlowLayout.encloseIn(email));
@@ -118,19 +124,31 @@ public class ProfileForm extends SideMenuBaseForm {
             } else {
                 MyApplication.currentUser.setPhone(ret);
                 UserService.changePhone(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
             }
 
         });
         add(FlowLayout.encloseIn(phone));
 
         MultiButton photo = new MultiButton("Change Picture");
-        photo.setEmblem(arrowDown);
+        photo.setEmblem(FontImage.createMaterial(FontImage.MATERIAL_PHOTO_CAMERA, "Label", 3));
         photo.setUIID("Container");
         photo.setUIIDLine1("TodayEntry");
         photo.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
         photo.setIconUIID("Container");
         photo.addActionListener(x -> {
-            UserService.changePicture();
+            Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+
+            if (UserService.changePicture()) {
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+                ip.dispose();
+
+            } else {
+                ip.dispose();
+                Utils.showDialog("Please check your connection");
+            }
+
         });
         add(FlowLayout.encloseIn(photo));
 
@@ -163,7 +181,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(TableLayout.encloseIn(2,finishLandingPage));
+        add(TableLayout.encloseIn(2, finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -186,6 +204,5 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
-    
-    
+
 }

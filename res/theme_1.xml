@@ -2,10 +2,16 @@
 
 <resource majorVersion="1" minorVersion="9" useXmlUI="false">
     <image name="BackgroundRect.png" type="multi"  />
+    <image name="cupcake.png"  />
+    <image name="cups.png"  />
     <image name="duke.png" type="multi"  />
     <image name="gradient-overlay.png"  />
+    <image name="Image 1"  />
+    <image name="Image 2"  />
+    <image name="Image 3"  />
     <image name="login-background.jpg"  />
     <image name="notes.png" type="multi"  />
+    <image name="profile.jpg"  />
     <image name="round-mask.png" type="multi"  />
     <image name="selected-walkthru.png" type="multi"  />
     <image name="sidemenu-top.png" type="multi"  />
@@ -102,11 +108,11 @@
         <val key="LoginButton.sel#padding" value="2,2,2,2" />
         <val key="LoginButton.sel#transparency" value="255" />
         <val key="LoginButton.transparency" value="255" />
-        <val key="LoginForm.bgImage" value="login-background.jpg" />
+        <val key="LoginForm.bgImage" value="Image 2" />
         <val key="LoginForm.bgType" value="33" />
-        <val key="LoginForm.margin" value="0,0,0,0" />
+        <val key="LoginForm.margin" value="0.0,0.0,0.0,0.0" />
         <val key="LoginForm.padUnit" value="2,2,2,2" />
-        <val key="LoginForm.padding" value="0,0,5,5" />
+        <val key="LoginForm.padding" value="0.0,0.0,5.0,5.0" />
         <val key="LoginForm.transparency" value="255" />
         <val key="MenuButton.fgColor" value="ffffff" />
         <font key="MenuButton.font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="4.5" />

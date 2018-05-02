@@ -8,11 +8,13 @@ package gui;
 import Service.LocalPastryDB;
 import Service.PastryService;
 import com.codename1.googlemaps.MapContainer;
+import com.codename1.googlemaps.MapContainer.MarkerOptions;
 import com.codename1.maps.Coord;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.SideMenuBar;
 import com.codename1.ui.events.ActionEvent;
@@ -20,6 +22,7 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
@@ -32,7 +35,8 @@ import java.util.ArrayList;
 public class Pastry extends SideMenuBaseForm {
 
     private static final String HTML_API_KEY = "AIzaSyDajgw0nmPpqAVnPhHsyMx6qNKTG7dyk1s";
-    private Form current;
+    private Form current;                       
+    Style s = UIManager.getInstance().getComponentStyle("Button");
 
     
 
@@ -43,10 +47,11 @@ public class Pastry extends SideMenuBaseForm {
         }
         Form hi = new Form("Pastry");
         hi.setLayout(new BorderLayout());
-        MapContainer cnt = new MapContainer(HTML_API_KEY);
+        MapContainer cnt = new MapContainer();
         cnt.zoom(new Coord(36.8367566, 10.2316940), 13);
         cnt.setCameraPosition(new Coord(36.8367566, 10.2316940));
-
+        
+       
         PastryService ps = new PastryService();
 
         try {
@@ -79,11 +84,12 @@ public class Pastry extends SideMenuBaseForm {
             LocalPastryDB ldb = new LocalPastryDB();
             ArrayList<Entity.Pastry> ls = ldb.SelectFromSQLiteDB();
             for (Entity.Pastry l : ls) {
-                try {
+               
                     System.out.println("pastry =" + l.toString() + "ALT= " + l.getLat() + "LON " + l.getLon());
-                    
+                    FontImage markerImg = FontImage.createMaterial(FontImage.MATERIAL_PLACE, s, Display.getInstance().convertToPixels(3));
                     cnt.setCameraPosition(new Coord(36.8367566, 10.2316940));
-                    cnt.addMarker(EncodedImage.create("/maps-pin.png"),
+                    cnt.addMarker(
+                            EncodedImage.createFromImage(markerImg,false),
                             new Coord(l.getLat(), l.getLon()), "Hi marker",
                             "Optional long description",
                             new ActionListener() {
@@ -91,10 +97,7 @@ public class Pastry extends SideMenuBaseForm {
                                     Dialog.show("Marker Clicked!", "This pastry has " + l.getNbTable() + " table", "OK", null);
                                 }
                             });
-                } catch (IOException ex) {
-                    System.out.println("Image Not Found");
-
-                }
+                
             }
 
         }

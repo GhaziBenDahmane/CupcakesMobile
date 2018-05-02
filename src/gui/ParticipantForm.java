@@ -10,16 +10,12 @@ import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
-import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
-import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.Stroke;
-import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
-import com.codename1.ui.events.DataChangedListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
@@ -28,11 +24,8 @@ import com.codename1.ui.list.DefaultListModel;
 import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
-import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ParticipantForm extends SideMenuBaseForm {
 
@@ -48,7 +41,7 @@ public class ParticipantForm extends SideMenuBaseForm {
         removeAll();
         Toolbar tb = getToolbar();
         tb.setTitle("Participant");
-        this.id = 1;
+        this.id = event.getId();
         Button menuButton = new Button("");
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
@@ -73,6 +66,8 @@ public class ParticipantForm extends SideMenuBaseForm {
                 removeAll();
                 add(new Label("Add friends"));
                 for (Participant s : l) {
+                    if (!participantExist(participants,s))
+                {
                     FontImage arrowDown = FontImage.createMaterial(FontImage.MATERIAL_ADD, "Label", 3);
                     Label add = new Label(arrowDown);
                     add.setAlignment(RIGHT);
@@ -94,6 +89,7 @@ public class ParticipantForm extends SideMenuBaseForm {
 
                     Container layers = LayeredLayout.encloseIn(box);
                     add(layers);
+                }
                     
                 }
                 add(new Label("Particiapant List"));
@@ -193,5 +189,17 @@ public class ParticipantForm extends SideMenuBaseForm {
         g.setColor(color);
         g.fillArc(height / 2 - height / 4, height / 6, height / 2, height / 2, 0, 360);
         return img;
+    }
+    
+    public boolean participantExist( ArrayList<Participant> l, Participant p)
+    {
+            for (Participant e : l) {
+            if(e.getUser_id().equals(p.getUser_id())){
+            
+            return true;
+            }
+        }
+        
+    return false;
     }
 }
