@@ -7,19 +7,20 @@ package gui;
 
 import Entity.Reservation;
 import Service.ControleSaisie;
-import com.codename1.ui.Container;
-import com.codename1.ui.Form;
 import Service.ReservationService;
+import com.codename1.components.FloatingActionButton;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Component;
+import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.Stroke;
 import com.codename1.ui.TextArea;
@@ -28,6 +29,7 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.list.DefaultListModel;
@@ -42,9 +44,9 @@ import java.util.Date;
 
 /**
  *
+ * @author LENOVO
  */
-public final class ReservationList {
-
+public class ReservationGUI extends SideMenuBaseForm{
     private Form form;
     private MultiButton mb;
     private Container container;
@@ -64,7 +66,20 @@ public final class ReservationList {
     ReservationService rs = new ReservationService();
     final DefaultListModel<String> options = new DefaultListModel<>();
 
-    public ReservationList()  {
+    public ReservationGUI(Resources res)  {
+        super(BoxLayout.y());
+        Toolbar tb = getToolbar();
+        tb.setTitle("Reservation");
+          
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
+        Container titleCmp = BoxLayout.encloseY(
+                FlowLayout.encloseIn(menuButton),
+                GridLayout.encloseIn(2)
+        );
         form = new Form("Reservation List", new BoxLayout(BoxLayout.Y_AXIS));
         theme_1 = UIManager.initFirstTheme("/theme_1");
         reservations = rs.listReservation();
@@ -73,59 +88,13 @@ public final class ReservationList {
         final ArrayList<Reservation> reservation = reservations;
         ArrayList<Integer> ids = new ArrayList<>();
 
-        Form hi = new Form("Search", BoxLayout.y());
-        // form.add(new InfiniteProgress());
-        Toolbar.setGlobalToolbar(true);
-        Display.getInstance().scheduleBackgroundTask(() -> {
-            // this will take a while...
-            Display.getInstance().callSerially(() -> {
-                form.removeAll();
-                for (Reservation c : reservations) {
+         for (Reservation e : reservations) {
 
-                    MultiButton m = new MultiButton();
-                    Date oldstring = c.getDateReservation();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                    String curDate = dateFormat.format(oldstring);
-                    System.out.println("cc" + curDate);
-                    m.setTextLine1("Date: " + curDate.toString());
-                    m.setTextLine2("Number of persons: " + Integer.toString(c.getNbPerson()));
-                    m.setTextLine3("Number of table: " + Integer.toString(c.getNbTable()));
-                  
-                       
-                    form.add(m);
-                }
+            add(createContainer(e));
+            
+        }
 
-                form.revalidate();
-            });
-        });
-
-        form.getToolbar().addSearchCommand(e -> {
-            String text = (String) e.getSource();
-            if (text == null || text.length() == 0) {
-                // clear search
-                for (Component cmp : form.getContentPane()) {
-                    cmp.setHidden(false);
-                    cmp.setVisible(true);
-                }
-                form.getContentPane().animateLayout(150);
-            } else {
-                text = text.toLowerCase();
-                for (Component cmp : form.getContentPane()) {
-                    MultiButton mb = (MultiButton) cmp;
-                    String line1 = mb.getTextLine1();
-                    String line2 = mb.getTextLine2();
-                    String line3 = mb.getTextLine3();
-                    boolean show = line1 != null && line1.toLowerCase().indexOf(text) > -1
-                            || line2 != null && line2.toLowerCase().indexOf(text) > -1
-                            || line3 != null && line3.toLowerCase().indexOf(text) > -1;
-                    mb.setHidden(!show);
-                    mb.setVisible(show);
-                }
-                form.getContentPane().animateLayout(150);
-            }
-        }, 4);
-
-        form.getToolbar().addCommandToLeftBar("", FontImage.createMaterial(FontImage.MATERIAL_ADD, style), e -> {
+        getToolbar().addCommandToLeftBar("", FontImage.createMaterial(FontImage.MATERIAL_ADD, style), e -> {
             InteractionDialog dlg = new InteractionDialog("");
             dlg.setLayout(new BorderLayout(BorderLayout.CENTER_BEHAVIOR_CENTER));
             Button ok = new Button("OK");
@@ -240,7 +209,7 @@ public final class ReservationList {
 
                     dlg.dispose();
                 }
-                new ReservationList();
+                new ReservationGUI(res);
 
             });
 
@@ -267,16 +236,29 @@ public final class ReservationList {
             dlg.getAllStyles().setBgColor(0xffffff);
             dlg.show(0, 0, 0, 0);
         });
-        form.show();
-    }
+         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
+        fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
+        //fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
+        //tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
+        tb.setTitleComponent(titleCmp);
 
+        setupSideMenu(res);
+        
+    }
+    
+     
+
+    
     public Container createContainer(Reservation e) {
 
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
-
+        Label more = new Label(FontImage.createMaterial(FontImage.MATERIAL_MORE, style));
+        
+     
+        
         delete.addPointerPressedListener((evt) -> {
             rs.delReservation(e);
-            new ReservationList();
+            new ReservationGUIlist();
         });
 
         Label nbTable = new Label("Number of table = " + e.getNbTable(), "Container");
@@ -293,7 +275,7 @@ public final class ReservationList {
                 nbTable,
                 sdate,
                 nbPerson,
-                GridLayout.encloseIn(2, delete));
+                GridLayout.encloseIn(2, delete,more));
         Style boxStyle = box.getUnselectedStyle();
         boxStyle.setBgTransparency(255);
         boxStyle.setBgColor(0xeeeeee);
@@ -334,5 +316,9 @@ public final class ReservationList {
         s.setMargin(Component.BOTTOM, 3);
     }
 
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
+    }
 
 }
