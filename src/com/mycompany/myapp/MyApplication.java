@@ -56,18 +56,9 @@ public class MyApplication {
         p.setId_promotion(1);
         fs.insertPromotionInSQLiteDB(p);
         fs.closeDB();
-        
-        
+
         LoginForm l = new LoginForm(theme);
         l.show();
-
-      
-      
-        
-        
-       
-
-   
 
     }
 

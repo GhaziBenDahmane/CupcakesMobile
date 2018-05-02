@@ -28,6 +28,9 @@ import com.codename1.ui.validation.GroupConstraint;
 import com.codename1.ui.validation.LengthConstraint;
 import com.codename1.ui.validation.RegexConstraint;
 import com.codename1.ui.validation.Validator;
+import com.mycompany.myapp.MyApplication;
+import java.io.IOException;
+
 
 /**
  *
@@ -61,6 +64,7 @@ public class PayementGUI {
         val.addComponent(new Label("E-Mail"));
         TextField email = new TextField();
         email.setConstraint(TextArea.EMAILADDR);
+        email.setText(MyApplication.currentUser.getEmail());
         val.addComponent(email);
 
         val.addComponent(new Label("Credit Card"));
@@ -122,8 +126,12 @@ public class PayementGUI {
             public void actionPerformed(ActionEvent evt) {
                 PaymentService ps = new PaymentService();
                 ps.payemnt(amount, month.getText() + "/" + year.getText(), num1.getText() + num2.getText() + num3.getText() + num4.getText());
-                CartGUI cghui = new CartGUI();
-                cghui.show();
+                try {
+                    ProductGUI p =new ProductGUI();
+                    p.show();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
 
             }
         });
@@ -171,7 +179,7 @@ public class PayementGUI {
         this.val = val;
     }
 
-    public void setDesign(Style s) {
+    public final void setDesign(Style s) {
         Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
         s.setBorder(RoundBorder.create().
                 rectangle(true).

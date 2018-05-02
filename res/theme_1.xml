@@ -2,10 +2,13 @@
 
 <resource majorVersion="1" minorVersion="9" useXmlUI="false">
     <image name="BackgroundRect.png" type="multi"  />
+    <image name="cupcake.png"  />
+    <image name="cups.png"  />
     <image name="duke.png" type="multi"  />
     <image name="gradient-overlay.png"  />
     <image name="login-background.jpg"  />
     <image name="notes.png" type="multi"  />
+    <image name="profile.jpg"  />
     <image name="round-mask.png" type="multi"  />
     <image name="selected-walkthru.png" type="multi"  />
     <image name="sidemenu-top.png" type="multi"  />

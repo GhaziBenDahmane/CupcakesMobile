@@ -62,11 +62,8 @@ public class EventForm extends SideMenuBaseForm {
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
 
         ArrayList<Event> events = es.listEvent();
-        final DefaultListModel<String> options = new DefaultListModel<>();
-        final Form f = new Form("Events");
-        final ArrayList<Event> event = events;
-        ArrayList<Integer> ids = new ArrayList<>();
-
+        
+        
         Container titleCmp = BoxLayout.encloseY(
                 BoxLayout.encloseY(
                         new Label("Event List", "Title")
@@ -244,7 +241,7 @@ public class EventForm extends SideMenuBaseForm {
         new StatsForm(res).show();
     }
 
-    public void setDesign(Style s) {
+    public final void setDesign(Style s) {
         Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
         s.setBorder(RoundBorder.create().
                 rectangle(true).
