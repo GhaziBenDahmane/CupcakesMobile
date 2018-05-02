@@ -17,10 +17,10 @@ import Service.FavouriteService;
 import Service.RatingService;
 import Service.ScanCodeService;
 import com.codename1.components.MultiButton;
-import com.codename1.components.ToastBar;
 import com.codename1.io.Storage;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
@@ -28,7 +28,9 @@ import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Image;
 import com.codename1.ui.Slider;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.SwipeableContainer;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
@@ -37,11 +39,12 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.list.DefaultListModel;
 import com.codename1.ui.plaf.Border;
+import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import com.codename1.util.EasyThread;
 import com.codename1.util.MathUtil;
+import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -49,9 +52,8 @@ import java.util.ArrayList;
  *
  * @author Arshavin
  */
-public final class ProductGUI {
+public final class ProductGUI extends SideMenuBaseForm {
 
-    private Form form;
     private MultiButton mb;
     private Button max_min_price;
     private Container container;
@@ -74,8 +76,16 @@ public final class ProductGUI {
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
 
     public ProductGUI() throws IOException {
-        form = new Form("Products");
-        theme = UIManager.initFirstTheme("/theme");
+        super(BoxLayout.y());
+        Toolbar tb = getToolbar();
+        tb.setTitle("Product");
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
+        //form = new Form("Products");
+        theme = UIManager.initFirstTheme("/theme_1");
         mb = new MultiButton();
         mb.setWidth(Display.getInstance().getDisplayWidth());
 
@@ -127,13 +137,13 @@ public final class ProductGUI {
 
         search.setMinimumElementsShownInPopup(4);
         f.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
-            form.show();
+            show();
             f.removeAll();
             search.clear();
             search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
 
         });
-        Button code = new Button("code");
+        Button code = new Button("Find By Barcode");
         code.addActionListener(new ActionListener() {
 
             @Override
@@ -143,36 +153,37 @@ public final class ProductGUI {
                 scs.ScanBarCode();
 
                 product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
-                
+
                 f.add(createRankWidget(product));
                 f.show();
             }
         });
-        
-       /* form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
+        /* form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), new ActionListener() {
+
+         public void actionPerformed(ActionEvent e) {
                 
-                    ScanCodeService scs = new ScanCodeService();
-                    Product product;
-                    scs.ScanBarCode();
-                    product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
+         ScanCodeService scs = new ScanCodeService();
+         Product product;
+         scs.ScanBarCode();
+         product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
                    
-                    f.add(createRankWidget(product));
-                    f.show();
+         f.add(createRankWidget(product));
+         f.show();
                 
-            }
-        });*/
-        Container co = new Container(BoxLayout.x());
+         }
+         });*/
+        Container co = new Container(BoxLayout.y());
 
         co.add(search);
         co.add(code);
 
-        form.add(co);
+        add(co);
 
         for (Product product : products) {
-            form.add(createRankWidget(product));
+            add(createRankWidget(product));
         }
+        setupSideMenu(theme);
 
     }
 
@@ -189,7 +200,7 @@ public final class ProductGUI {
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-
+        setDesign(mb.getAllStyles());
         price = (p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount()));
         mb.setTextLine4(price.toString() + " " + Storage.getInstance().readObject("currency"));
 
@@ -244,7 +255,7 @@ public final class ProductGUI {
                 cart.setProduct(p);
 
                 ArrayList<Cart> carts = new ArrayList<>();
-                carts = cs.SelectCartOfUser(1);
+                carts = cs.SelectCartOfUser(MyApplication.currentUser.getId());
 
                 if (isProductInCart(carts, p)) {
                     cs.addProductInCart(cart);
@@ -263,14 +274,6 @@ public final class ProductGUI {
 
         return new SwipeableContainer(FlowLayout.encloseCenterMiddle(createStarRankSlider(p)),
                 c1, mb);
-    }
-
-    public Form getForm() {
-        return form;
-    }
-
-    public void setForm(Form form) {
-        this.form = form;
     }
 
     public Container getContainer() {
@@ -310,11 +313,11 @@ public final class ProductGUI {
             Rating newRating = new Rating(starRank.getProgress());
             newRating.setProducts(p);
             if (Storage.getInstance().readObject("rate") == "false") {
-                rs.addStars(newRating, 1);
+                rs.addStars(newRating, MyApplication.currentUser.getId());
                 hasRated = true;
                 Storage.getInstance().writeObject("rate", "true");
             } else {
-                rs.UpdateStars(newRating, 1);
+                rs.UpdateStars(newRating, MyApplication.currentUser.getId());
             }
             Rating r = rs.SelectRatingByProduct(p.getId());
             int d = MathUtil.round(r.getRate().floatValue() * 100);
@@ -358,6 +361,23 @@ public final class ProductGUI {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
+    }
+
+    public void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(RoundBorder.create().
+                rectangle(true).
+                color(0x3f4996).
+                strokeColor(0).
+                strokeOpacity(120).
+                stroke(borderStroke));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
     }
 
 }

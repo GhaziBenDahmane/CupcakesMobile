@@ -36,7 +36,7 @@ public class MyApplication {
     private Resources theme;
 
     public void init(Object context) {
-        theme = UIManager.initFirstTheme("/theme");
+        theme = UIManager.initFirstTheme("/theme_1");
 
         // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);
@@ -72,18 +72,13 @@ public class MyApplication {
         p.setId_promotion(1);
         fs.insertPromotionInSQLiteDB(p);
         fs.closeDB();
+        
+        
+        LoginForm l = new LoginForm(theme);
+        l.show();
 
-        ProductGUI pp;
-        try {
-            pp = new ProductGUI();
-            pp.getForm().show();
-        } catch (IOException ex) {
-            System.out.println("log" + ex.getMessage());
-
-        }
-       // CartGUI c=new CartGUI();
-       // c.getForm().show();
-       
+      
+      
         
         
        

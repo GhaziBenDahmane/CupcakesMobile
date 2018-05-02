@@ -15,6 +15,7 @@ import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.io.Storage;
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -25,6 +26,7 @@ import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.Slider;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.SwipeableContainer;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
@@ -33,10 +35,13 @@ import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Border;
+import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.MathUtil;
+import com.mycompany.myapp.MyApplication;
+import static gui.ProductGUI.hasRated;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -45,7 +50,7 @@ import java.util.ArrayList;
  * @author Arshavin
  */
 public class FavouriteGUI {
-
+    
     private Form form;
     private MultiButton mb;
     private Button max_min_price;
@@ -54,9 +59,9 @@ public class FavouriteGUI {
     private Double price;
     private Resources theme;
     public static int id_cart = 0;
-
+    
     private static final String PATH = "http://192.168.0.100:10000/picture/";
-
+    
     Style s = UIManager.getInstance().getComponentStyle("Button");
     Style style = UIManager.getInstance().getComponentStyle("Label");
     FontImage p = FontImage.createMaterial(FontImage.MATERIAL_PORTRAIT, s);
@@ -65,7 +70,7 @@ public class FavouriteGUI {
     Font mediumPlainMonospaceFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_MEDIUM);
     Font largePlainMonospaceFont = Font.createSystemFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE);
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
-
+    
     public FavouriteGUI() {
         form = new Form("Favourite");
         mb = new MultiButton();
@@ -77,18 +82,18 @@ public class FavouriteGUI {
             ProductGUI pp;
             try {
                 pp = new ProductGUI();
-                pp.getForm().show();
+                pp.show();
             } catch (IOException ex) {
                 System.out.println("log" + ex.getMessage());
             }
-
+            
         });
         products = fs.SelectProductFromSQLiteDB();
         for (Product product : products) {
             form.add(createFavouriteWidget(product));
         }
     }
-
+    
     public SwipeableContainer createFavouriteWidget(Product p) {
         mb = new MultiButton();
         mb.setUIID("Button");
@@ -98,18 +103,19 @@ public class FavouriteGUI {
         mb.setUIIDLine2("Label");
         mb.setUIIDLine3("Badge");
         mb.setUIIDLine4("TouchCommand");
-
+        setDesign(mb.getAllStyles());
+        
         mb.setTextLine1(p.getName());
         mb.setTextLine2(p.getType());
         mb.setTextLine3(p.getDescription());
-
+        
         price = (p.getPrice() - (p.getPrice() * p.getPromotion().getDiscount()));
         mb.setTextLine4(price.toString() + " " + Storage.getInstance().readObject("currency"));
-
+        
         URLImage i = URLImage.createToStorage(placeholder, p.getImage(),
                 PATH + p.getImage());
         image = (Image) i;
-
+        
         mb.setIcon(image);
         Container c1 = new Container(BoxLayout.y());
         Button addButton = new Button();
@@ -119,33 +125,33 @@ public class FavouriteGUI {
         removeFavourite.setIcon(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
         settings.setIcon(FontImage.createMaterial(FontImage.MATERIAL_SETTINGS, style));
         c1.addAll(addButton, removeFavourite, settings);
-
+        
         settings.addActionListener(new ActionListener() {
-
+            
             @Override
             public void actionPerformed(ActionEvent evt) {
                 CurrencySettingsGUI ccs = new CurrencySettingsGUI();
                 ccs.getForm().show();
             }
         });
-
+        
         removeFavourite.addActionListener(new ActionListener() {
-
+            
             @Override
             public void actionPerformed(ActionEvent evt) {
                 Dialog ip = new InfiniteProgress().showInifiniteBlocking();
                 form.removeAll();
                 FavouriteService fs = new FavouriteService();
                 fs.deleteProductFromFavouriteInSQLiteDB(p.getId());
-
+                
                 ArrayList<Product> products = fs.SelectProductFromSQLiteDB();
                 if (!products.isEmpty()) {
                     for (Product pro : products) {
-
+                        
                         form.add(createFavouriteWidget(pro));
-
+                        
                     }
-
+                    
                     form.add(container);
                 } else {
                     form.add(new Label("Favourite list is empty !"));
@@ -155,9 +161,9 @@ public class FavouriteGUI {
                 ip.dispose();
             }
         });
-
+        
         addButton.addActionListener(new ActionListener() {
-
+            
             @Override
             public void actionPerformed(ActionEvent evt) {
                 CartsService cs = new CartsService();
@@ -165,13 +171,13 @@ public class FavouriteGUI {
                 cart.setId_cart(id_cart);
                 id_cart++;
                 cart.setProduct(p);
-
+                
                 ArrayList<Cart> carts = new ArrayList<>();
-                carts = cs.SelectCartOfUser(1);
-
+                carts = cs.SelectCartOfUser(MyApplication.currentUser.getId());
+                
                 if (isProductInCart(carts, p)) {
                     cs.addProductInCart(cart);
-
+                    
                     if (cs.isIsCartAdded()) {
                         Dialog.show("Succes", "The product is added in your cart.", "OK", null);
                     } else {
@@ -180,34 +186,34 @@ public class FavouriteGUI {
                 } else {
                     Dialog.show("Warning", "Product exist in your cart.", "OK", null);
                 }
-
+                
             }
         });
-
+        
         return new SwipeableContainer(FlowLayout.encloseCenterMiddle(createStarRankSlider(p)),
                 c1, mb);
     }
-
+    
     public Form getForm() {
         return form;
     }
-
+    
     public void setForm(Form form) {
         this.form = form;
     }
-
+    
     public Container getContainer() {
         return container;
     }
-
+    
     public void setContainer(Container container) {
         this.container = container;
     }
-
+    
     private Container createStarRankSlider(Product p) {
         Container c = new Container(BoxLayout.y());
         Label rate = new Label("Rate");
-
+        
         Slider starRank = new Slider();
         starRank.setEditable(true);
         starRank.setMinValue(1);
@@ -232,7 +238,13 @@ public class FavouriteGUI {
             System.out.println(starRank.getProgress());
             Rating newRating = new Rating(starRank.getProgress());
             newRating.setProducts(p);
-            rs.addStars(newRating, 1);
+            if (Storage.getInstance().readObject("rate") == "false") {
+                rs.addStars(newRating, MyApplication.currentUser.getId());
+                hasRated = true;
+                Storage.getInstance().writeObject("rate", "true");
+            } else {
+                rs.UpdateStars(newRating, MyApplication.currentUser.getId());
+            }
             Rating r = rs.SelectRatingByProduct(p.getId());
             int d = MathUtil.round(r.getRate().floatValue() * 100);
             Integer l = (Integer) d;
@@ -245,20 +257,20 @@ public class FavouriteGUI {
         Double q = l.doubleValue() / 100;
         rate.setText("Rate : " + q + "/5.0" + " (" + rating.getVotes().toString() + " votes)");
         rate.getAllStyles().setFont(mediumPlainMonospaceFont);
-
+        
         c.add(starRank);
         c.add(rate);
-
+        
         return c;
     }
-
+    
     private void initStarRankStyle(Style s, Image star) {
         s.setBackgroundType(Style.BACKGROUND_IMAGE_TILE_BOTH);
         s.setBorder(Border.createEmpty());
         s.setBgImage(star);
         s.setBgTransparency(0);
     }
-
+    
     private boolean isProductInCart(ArrayList<Cart> carts, Product product) {
         for (Cart cart : carts) {
             if (cart.getProduct().getId() == product.getId()) {
@@ -267,5 +279,17 @@ public class FavouriteGUI {
         }
         return true;
     }
-
+    
+    public void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(RoundBorder.create().
+                rectangle(true).
+                color(0x3f4996).
+                strokeColor(0).
+                strokeOpacity(120).
+                stroke(borderStroke));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
+    }
+    
 }
