@@ -50,7 +50,7 @@ public abstract class SideMenuBaseForm extends Form {
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
 
-        getToolbar().addMaterialCommandToSideMenu("  Actualities", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Actualities", FontImage.MATERIAL_DASHBOARD, e -> new ActualityGUI(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Training", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
         getToolbar().addMaterialCommandToSideMenu("  Products", FontImage.MATERIAL_PRESENT_TO_ALL, e -> {
             try {

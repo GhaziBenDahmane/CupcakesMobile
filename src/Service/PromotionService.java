@@ -59,7 +59,7 @@ public class PromotionService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/promotion/listOnePromo");
+        con.setUrl("http://192.168.0.101:8000/promotion/listOnePromo");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -89,7 +89,7 @@ public class PromotionService {
     
       public Promotion SelectOnePromotion() {
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://127.0.0.1:8000/promotion/listOnePromo");
+        con.setUrl("http://192.168.0.101:8000/promotion/listOnePromo");
         Promotion promotion = new Promotion();
 
         con.addResponseListener((NetworkEvent evt) -> {

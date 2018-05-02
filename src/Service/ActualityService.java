@@ -29,7 +29,7 @@ public class ActualityService {
 
     public Actuality SelectOneActuality() {
         ConnectionRequest con = new ConnectionRequest();
-        con.setUrl("http://127.0.0.1:8000/bloglist");
+        con.setUrl("http://192.168.0.101:8000/bloglist");
         Actuality a = new Actuality();
         con.addResponseListener((NetworkEvent evt) -> {
             //listTasks = getListTask(new String(con.getResponseData()));
@@ -63,14 +63,31 @@ public class ActualityService {
         }
         return null;
     }
+public void delAct(int id) {
 
+        ConnectionRequest con = new ConnectionRequest();
+        
+        con.setUrl("http://192.168.0.101:8000/bloglist/delete/"+id);
+        con.addResponseListener((e) -> {
+            String str = new String(con.getResponseData());
+            System.out.println(str);
+//            if (str.trim().equalsIgnoreCase("OK")) {
+//                f2.setTitle(tlogin.getText());
+//             f2.show();
+//            }
+//            else{
+//            Dialog.show("error", "login ou pwd invalid", "ok", null);
+//            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
     public ArrayList<Actuality> SelectAllActuality() {
 
         ArrayList<Actuality> listPromotion = new ArrayList<>();
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/bloglist");
+        con.setUrl("http://192.168.0.101:8000/bloglist");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -95,5 +112,39 @@ Actuality a = new Actuality();
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
         return listPromotion;
+    }
+    public ArrayList<Actuality> searchActuality(String key) {
+
+        ArrayList<Actuality> listActualities= new ArrayList<>();
+        ConnectionRequest con = new ConnectionRequest();
+        con.setHttpMethod("GET");
+        con.setPost(true);
+        con.setUrl("http://192.168.0.101:8000/bloglist/search" + key);
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                //listTasks = getListTask(new String(con.getResponseData()));
+                JSONParser jsonp = new JSONParser();
+                try {
+                    Map<String, Object> actualities = jsonp.parseJSON(new CharArrayReader(new String(con.getResponseData()).toCharArray()));
+                    System.out.println(actualities);
+
+                    List<Map<String, Object>> list = (List<Map<String, Object>>) actualities.get("root");
+                    for (Map<String, Object> obj : list) {
+
+             Actuality actuality= new Actuality();
+                   float id = Float.parseFloat(obj.get("id").toString());
+                       
+                        actuality.setTitle(obj.get("title").toString());
+                        actuality.setContent(obj.get("content").toString());
+                        
+                        listActualities.add(actuality);
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        return listActualities;
     }
 }
