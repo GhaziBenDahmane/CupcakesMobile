@@ -23,7 +23,16 @@ public class Event {
     private int nbTable;
     private int band;
     private String status;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
     private double cost;
+    private String user;
 
     public Event() {
     }

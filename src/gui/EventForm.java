@@ -1,8 +1,10 @@
 package gui;
 
 import Entity.Event;
+import Entity.Participant;
 import Service.ControleSaisie;
 import Service.EventService;
+import Service.ParticipantService;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.MultiButton;
@@ -36,6 +38,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.MyApplication;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -113,7 +116,7 @@ public class EventForm extends SideMenuBaseForm {
                     showDialog("Number of person must be between 1 and 99");
                 } else if (!cs.isNumber(nbTable.getText())) {
                     showDialog("Number of table must be between 1 and 99");
- 
+
                 } else if (!cs.isValidDate(sDate.getDate())) {
                     showDialog("Please enter correct date");
 
@@ -129,6 +132,7 @@ public class EventForm extends SideMenuBaseForm {
                             0.0)
                     );
                     dlg.dispose();
+                     new EventForm(res).show();
                 }
             });
 
@@ -172,20 +176,37 @@ public class EventForm extends SideMenuBaseForm {
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE_OUTLINE, style));
 
         delete.addPointerPressedListener((evt) -> {
-            
-           
-            
+
             showConfirm((ex) -> {
-                 es.delEvent(e);
-            new EventForm(theme).show();
+                es.delEvent(e);
+                new EventForm(theme).show();
             });
-            
+
         });
 
         Label participants = new Label(FontImage.createMaterial(FontImage.MATERIAL_GROUP_ADD, style));
         participants.getAllStyles().setAlignment(Component.RIGHT);
         participants.addPointerPressedListener((evt) -> {
-            new ParticipantForm(theme, e).show();
+
+            if (e.getUser().equals(MyApplication.currentUser.getUsername())) {
+                new ParticipantForm(theme, e).show();
+            } else {
+
+                showParticipate((ee) -> {
+                    ParticipantService ps = new ParticipantService();
+                    ArrayList<Participant> ls = ps.listParticipant(e.getId());
+                    boolean exist = false;
+                    for (Participant p : ls) {
+                        if (p.getUser_id().toString().equals( MyApplication.currentUser.getUsername())) {
+                            showDialog("You are at list");
+                            exist=true;
+                        }
+                    }
+                    ps.addParticipant(e, MyApplication.currentUser.getId());
+                    new EventForm(theme).show();
+                });
+
+            }
 
         });
         participants.getStyle().setAlignment(RIGHT);
@@ -264,13 +285,12 @@ public class EventForm extends SideMenuBaseForm {
         dlg.add(grayLabel);
 
         Button ok = new Button(new Command("OK"));
-
+       
         dlg.add(ok);
         dlg.showDialog();
 
     }
-    
-    
+
     public static void showConfirm(ActionListener successCallBack) {
         Dialog dlg = new Dialog("");
         Style dlgStyle = dlg.getDialogStyle();
@@ -286,6 +306,45 @@ public class EventForm extends SideMenuBaseForm {
         blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
         dlg.add(blueLabel);
         TextArea ta = new TextArea("Are you sure?");
+        ta.setEditable(false);
+        ta.setUIID("DialogBody");
+        ta.getAllStyles().setFgColor(0);
+        dlg.add(ta);
+
+        Label grayLabel = new Label();
+        grayLabel.setShowEvenIfBlank(true);
+        grayLabel.getUnselectedStyle().setBgColor(0xcccccc);
+        grayLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        grayLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(grayLabel);
+
+        Button ok = new Button(new Command("Confirm"));
+        Button cancel = new Button(new Command("Cancel"));
+        cancel.addActionListener(l -> {
+            dlg.dispose();
+        });
+        ok.addActionListener(successCallBack);
+        dlg.add(ok);
+        dlg.add(cancel);
+        dlg.showDialog();
+
+    }
+
+    public static void showParticipate(ActionListener successCallBack) {
+        Dialog dlg = new Dialog("");
+        Style dlgStyle = dlg.getDialogStyle();
+        dlgStyle.setBorder(Border.createEmpty());
+        dlgStyle.setBgTransparency(255);
+        dlgStyle.setBgColor(0xffffff);
+
+        dlg.setLayout(BoxLayout.y());
+        Label blueLabel = new Label();
+        blueLabel.setShowEvenIfBlank(true);
+        blueLabel.getUnselectedStyle().setBgColor(0xff);
+        blueLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(blueLabel);
+        TextArea ta = new TextArea("Are you sure, you will participate to this event?");
         ta.setEditable(false);
         ta.setUIID("DialogBody");
         ta.getAllStyles().setFgColor(0);
