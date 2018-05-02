@@ -11,7 +11,6 @@ import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 
-
 public abstract class SideMenuBaseForm extends Form {
 
     public SideMenuBaseForm(String title, Layout contentPaneLayout) {
@@ -41,7 +40,7 @@ public abstract class SideMenuBaseForm extends Form {
         Image mask = res.getImage("round-mask.png");
         mask = mask.scaledHeight(mask.getHeight() / 4 * 3);
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
-        Label profilePicLabel = new Label("  Jennifer Wilson", profilePic, "SideMenuTitle");
+        Label profilePicLabel = new Label("  " + MyApplication.currentUser.getUsername(), profilePic, "SideMenuTitle");
         profilePicLabel.setMask(mask.createMask());
         profilePicLabel.addPointerPressedListener((evt) -> {
             new ProfileForm(res).show();
