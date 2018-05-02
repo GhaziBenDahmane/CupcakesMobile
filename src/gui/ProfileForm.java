@@ -132,7 +132,7 @@ public class ProfileForm extends SideMenuBaseForm {
         add(FlowLayout.encloseIn(phone));
 
         MultiButton photo = new MultiButton("Change Picture");
-        photo.setEmblem(arrowDown);
+        photo.setEmblem(FontImage.createMaterial(FontImage.MATERIAL_PHOTO_CAMERA, "Label", 3));
         photo.setUIID("Container");
         photo.setUIIDLine1("TodayEntry");
         photo.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
