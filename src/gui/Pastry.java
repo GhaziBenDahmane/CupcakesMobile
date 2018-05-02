@@ -104,7 +104,7 @@ public class Pastry extends SideMenuBaseForm {
                 BorderLayout.south(
                         FlowLayout.encloseBottom()
                 )
-        );*/
+        );
 
         hi.add(BorderLayout.CENTER, root);
 

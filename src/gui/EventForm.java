@@ -113,7 +113,7 @@ public class EventForm extends SideMenuBaseForm {
                     showDialog("Number of person must be between 1 and 99");
                 } else if (!cs.isNumber(nbTable.getText())) {
                     showDialog("Number of table must be between 1 and 99");
-
+ 
                 } else if (!cs.isValidDate(sDate.getDate())) {
                     showDialog("Please enter correct date");
 
