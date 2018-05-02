@@ -1,6 +1,9 @@
 package com.mycompany.myapp;
 
+import Entity.Promotion;
 import Entity.User;
+import Service.FavouriteService;
+import com.codename1.io.Storage;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -38,6 +41,33 @@ public class MyApplication {
             return;
         }
         new LoginForm(theme).show();
+        //  new EventForm(theme).show();
+        /*           try {
+            FavouriteService.db.delete("Cupcake");
+        } catch (IOException ex) {
+        }*/
+        Storage.getInstance().writeObject("currency", "TND");
+        Storage.getInstance().writeObject("rate", "false");
+        FavouriteService fs = new FavouriteService();
+
+        fs.createSQLiteDB();
+        Promotion p = new Promotion();
+        p.setDiscount(0.1);
+        p.setId_promotion(1);
+        fs.insertPromotionInSQLiteDB(p);
+        fs.closeDB();
+        
+        
+        LoginForm l = new LoginForm(theme);
+        l.show();
+
+      
+      
+        
+        
+       
+
+   
 
     }
 

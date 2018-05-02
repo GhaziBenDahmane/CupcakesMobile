@@ -9,6 +9,8 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.util.Resources;
 import com.mycompany.myapp.MyApplication;
+import java.io.IOException;
+
 
 public abstract class SideMenuBaseForm extends Form {
 
@@ -51,7 +53,14 @@ public abstract class SideMenuBaseForm extends Form {
 
         getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Training", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Product", FontImage.MATERIAL_ACCESS_TIME, e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Product", FontImage.MATERIAL_ACCESS_TIME, e -> {
+            try {
+                new ProductGUI().show();
+            } catch (IOException ex) {
+            }
+        });
+        getToolbar().addMaterialCommandToSideMenu("  Cart", FontImage.MATERIAL_SETTINGS, e -> new CartGUI().show());
+        getToolbar().addMaterialCommandToSideMenu("  Promotion", FontImage.MATERIAL_SETTINGS, e -> new PromotionForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Promotion", FontImage.MATERIAL_SETTINGS, e -> new PromotionForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Claims", FontImage.MATERIAL_EXIT_TO_APP, e -> new ClaimForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Event", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());

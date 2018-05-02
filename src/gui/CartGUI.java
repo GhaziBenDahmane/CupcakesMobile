@@ -11,37 +11,44 @@ import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.io.Storage;
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
-import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.SwipeableContainer;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
+import com.codename1.ui.util.Resources;
 import com.codename1.util.MathUtil;
+import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 import java.util.ArrayList;
+import javafx.scene.control.ProgressBar;
 
 /**
  *
  * @author Arshavin
  */
-public final class CartGUI {
+public final class CartGUI extends SideMenuBaseForm{
 
-    private Form form;
+    
     private final Container container;
     private MultiButton mb;
     private Image image;
+    private Resources theme;
     private static final String PATH = "http://192.168.0.100:9999/picture/";
     private Double price;
     private Integer ch;
@@ -61,26 +68,31 @@ public final class CartGUI {
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
 
     public CartGUI() {
-        form = new Form("Cart", BoxLayout.y());
+         super(BoxLayout.y());
+        Toolbar tb = getToolbar();
+        tb.setTitle("Cart");
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
+        theme = UIManager.initFirstTheme("/theme_1");
         Label total = new Label("Total :");
         Label empty = new Label("Your cart is empty");
         Button purchase = new Button("Purchase");
         container = new Container(BoxLayout.x());
         purchasePrice = new Label();
 
-
-        carts = cs.SelectCartOfUser(1);
-        purchasePrice.getAllStyles().setFgColor(0x0000ff);
-
-        //carts = cs.SelectCartOfUser();
-        //purchasePrice.getAllStyles().setFgColor(Color.BLUE.getIntArgbPre());
+        carts = cs.SelectCartOfUser(MyApplication.currentUser.getId());
+        purchasePrice.getAllStyles().setFgColor(0x0000ff
+        );
         purchasePrice.setAutoSizeMode(true);
 
-        form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+           getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
             ProductGUI pp;
             try {
                 pp = new ProductGUI();
-                pp.getForm().show();
+                pp.show();
             } catch (IOException ex) {
                 System.out.println("log" + ex.getMessage());
             }
@@ -95,23 +107,24 @@ public final class CartGUI {
 
             for (Cart c : carts) {
 
-                form.add(createCartWidget(c));
+                add(createCartWidget(c));
 
             }
         } else {
             purchasePrice.setText("0.0");
-            form.add(empty);
+            add(empty);
         }
         purchase.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
                 PayementGUI pgui = new PayementGUI(purchasePrice.getText());
-                t=new Float(0);
+                t = new Float(0);
                 pgui.getVal().show();
             }
         });
-        form.add(container);
+        add(container);
+        setupSideMenu(theme);
 
     }
 
@@ -125,6 +138,7 @@ public final class CartGUI {
         mb.setUIIDLine4("TouchCommand");
         mb.setWidth(Display.getInstance().getDisplayWidth());
         mb.setX(200);
+        setDesign(mb.getAllStyles());
 
         mb.setTextLine1(c.getProduct().getName());
         price = (c.getProduct().getPrice() - (c.getProduct().getPrice() * c.getProduct().getPromotion().getDiscount()));
@@ -169,10 +183,10 @@ public final class CartGUI {
             public void actionPerformed(ActionEvent evt) {
 
                 Dialog ip = new InfiniteProgress().showInifiniteBlocking();
-                form.removeAll();
+                removeAll();
                 cs.deleteFromCart(c.getId_cart());
 
-                carts = cs.SelectCartOfUser(1);
+                carts = cs.SelectCartOfUser(MyApplication.currentUser.getId());
 
                 isRemoved = true;
                 System.out.println(t);
@@ -181,14 +195,14 @@ public final class CartGUI {
                 if (!carts.isEmpty()) {
                     for (Cart c : carts) {
                         purchasePrice.setText(t.toString());
-                        form.add(createCartWidget(c));
+                        add(createCartWidget(c));
 
                     }
                 } else {
-                    form.add(new Label("Your cart is empty"));
+                    add(new Label("Your cart is empty"));
                     purchasePrice.setText("0.0");
                 }
-                form.add(container);
+                add(container);
                 isRemoved = false;
                 //form.revalidate();
 
@@ -261,12 +275,23 @@ public final class CartGUI {
         return c;
     }
 
-    public Form getForm() {
-        return form;
-    }
+   
 
-    public void setForm(Form form) {
-        this.form = form;
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
+    }
+     
+    public void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(RoundBorder.create().
+                rectangle(true).
+                color(0x3f4996).
+                strokeColor(0).
+                strokeOpacity(120).
+                stroke(borderStroke));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
     }
 
 }

@@ -75,7 +75,7 @@ public class CurrencySettingsGUI {
         form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
             try {
                 ProductGUI p = new ProductGUI();
-                p.getForm().show();
+                p.show();
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }

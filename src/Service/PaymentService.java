@@ -8,6 +8,7 @@ package Service;
 import com.codename1.components.InfiniteProgress;
 import com.codename1.io.rest.Rest;
 import com.codename1.ui.Dialog;
+import com.mycompany.myapp.MyApplication;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ public class PaymentService {
         ip.dispose();
         System.out.println(responseData);
         CartsService cs = new CartsService();
-        cs.deleteAllProductsFromCart(1);
+        cs.deleteAllProductsFromCart(MyApplication.currentUser.getId());
         Dialog.show("Succes", "Thank you to buy our products! Please Rate our Products ", "OK", null);
 
     }

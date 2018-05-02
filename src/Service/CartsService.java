@@ -14,6 +14,7 @@ import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.events.ActionListener;
+import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class CartsService {
 
     public void addProductInCart(Cart cart) {
         ConnectionRequest con = new ConnectionRequest();
-        String Url = "http://192.168.0.100:9999/WebService/Product/AddToCart.php?product=" + cart.getProduct().getId() + "&user=1";
+        String Url = "http://192.168.0.100:9999/WebService/Product/AddToCart.php?product=" + cart.getProduct().getId() + "&user="+ MyApplication.currentUser.getId();
 
         con.setUrl(Url);
 
