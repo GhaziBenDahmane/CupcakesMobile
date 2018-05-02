@@ -1,13 +1,16 @@
 package gui;
 
 import Entity.Event;
+import Service.ControleSaisie;
 import Service.EventService;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.InteractionDialog;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -18,6 +21,7 @@ import com.codename1.ui.Stroke;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
@@ -25,12 +29,14 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.list.DefaultListModel;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.RoundBorder;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.spinner.Picker;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class EventForm extends SideMenuBaseForm {
@@ -38,11 +44,14 @@ public class EventForm extends SideMenuBaseForm {
     EventService es = new EventService();
     private int id;
     Style style = UIManager.getInstance().getComponentStyle("Label");
+    private Resources theme;
+    ControleSaisie cs = new ControleSaisie();
 
     public EventForm(Resources res) {
         super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitle("Event");
+        theme = res;
 
         Button menuButton = new Button("");
         menuButton.setUIID("Title");
@@ -53,13 +62,11 @@ public class EventForm extends SideMenuBaseForm {
         
         
         Container titleCmp = BoxLayout.encloseY(
-                FlowLayout.encloseIn(menuButton),
-                GridLayout.encloseIn(2)
+                BoxLayout.encloseY(
+                        new Label("Event List", "Title")
+                ),
+                FlowLayout.encloseIn(menuButton)
         );
-
-        Label l = new Label("Event", "TodayTitle");
-        l.getStyle().setAlignment(CENTER);
-        add(l);
 
         for (Event e : events) {
 
@@ -93,19 +100,33 @@ public class EventForm extends SideMenuBaseForm {
             sDate.setType(Display.PICKER_TYPE_DATE);
             TextField nbTable = new TextField("", "Number of table", 20, TextArea.ANY);
             ok.addActionListener((evt) -> {
-                es.addEvent(new Event(id + 1,
-                        title.getText(),
-                        Integer.parseInt(nbPerson.getText()),
-                        sDate.getDate(),
-                        sDate.getDate(),
-                        Integer.parseInt(nbTable.getText()),
-                        Integer.parseInt(nbTable.getText()),
-                        "Pending",
-                        0.0)
-                );
-                dlg.dispose();
-                new EventList();
 
+                if (title.getText().equals("") || nbPerson.getText().equals("") || nbTable.getText().equals("")) {
+
+                    showDialog("Please enter the following input");
+
+                } else if (!cs.isNumber(nbPerson.getText())) {
+
+                    showDialog("Number of person must be between 1 and 99");
+                } else if (!cs.isNumber(nbTable.getText())) {
+                    showDialog("Number of table must be between 1 and 99");
+ 
+                } else if (!cs.isValidDate(sDate.getDate())) {
+                    showDialog("Please enter correct date");
+
+                } else {
+                    es.addEvent(new Event(id + 1,
+                            title.getText(),
+                            Integer.parseInt(nbPerson.getText()),
+                            sDate.getDate(),
+                            sDate.getDate(),
+                            Integer.parseInt(nbTable.getText()),
+                            Integer.parseInt(nbTable.getText()),
+                            "Pending",
+                            0.0)
+                    );
+                    dlg.dispose();
+                }
             });
 
             setDesign(title.getAllStyles());
@@ -137,37 +158,10 @@ public class EventForm extends SideMenuBaseForm {
 
         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
         fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
-        //fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
-        //tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
+
         tb.setTitleComponent(titleCmp);
 
-        setupSideMenu(res);
-    }
-
-    private void addButtonBottom(Image arrowDown, String text, int color, boolean first) {
-        MultiButton finishLandingPage = new MultiButton(text);
-        finishLandingPage.setEmblem(arrowDown);
-        finishLandingPage.setUIID("Container");
-        finishLandingPage.setUIIDLine1("TodayEntry");
-        finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
-        finishLandingPage.setIconUIID("Container");
-        add(FlowLayout.encloseIn(finishLandingPage));
-    }
-
-    private Image createCircleLine(int color, int height, boolean first) {
-        Image img = Image.createImage(height, height, 0);
-        Graphics g = img.getGraphics();
-        g.setAntiAliased(true);
-        g.setColor(0xcccccc);
-        int y = 0;
-        if (first) {
-            y = height / 6 + 1;
-        }
-        g.drawLine(height / 2, y, height / 2, height);
-        g.drawLine(height / 2 - 1, y, height / 2 - 1, height);
-        g.setColor(color);
-        g.fillArc(height / 2 - height / 4, height / 6, height / 2, height / 2, 0, 360);
-        return img;
+        setupSideMenu(theme);
     }
 
     public Container createContainer(Event e) {
@@ -175,24 +169,30 @@ public class EventForm extends SideMenuBaseForm {
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE_OUTLINE, style));
 
         delete.addPointerPressedListener((evt) -> {
-            es.delEvent(e);
-            new EventList();
+            
+           
+            
+            showConfirm((ex) -> {
+                 es.delEvent(e);
+            new EventForm(theme).show();
+            });
+            
         });
 
         Label participants = new Label(FontImage.createMaterial(FontImage.MATERIAL_GROUP_ADD, style));
         participants.getAllStyles().setAlignment(Component.RIGHT);
         participants.addPointerPressedListener((evt) -> {
-            new ParticipantList(e.getId());
+            new ParticipantForm(theme, e).show();
+
         });
         participants.getStyle().setAlignment(RIGHT);
         Label title = new Label("" + e.getTitle());
         Label status = new Label("" + e.getStatus());
 
-        String date = e.getEndDate().toString();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(e.getEndDate());
         Label sdate = new Label(" " + date);
 
         Label nbPerson = new Label("" + e.getNbPerson());
-
         Container box = TableLayout.encloseIn(2,
                 new Label("Title"),
                 title,
@@ -200,12 +200,12 @@ public class EventForm extends SideMenuBaseForm {
                 status,
                 new Label("Starting Date"),
                 sdate,
-                new Label("Number of Person"),
+                new Label("Number of Places"),
                 nbPerson,
                 GridLayout.encloseIn(2, delete, participants));
         Style boxStyle = box.getUnselectedStyle();
         boxStyle.setBgTransparency(255);
-        boxStyle.setBgColor(0xeeeeee);
+        boxStyle.setBgColor(0xC3BEBE);
         boxStyle.setMarginUnit(Style.UNIT_TYPE_DIPS);
         boxStyle.setPaddingUnit(Style.UNIT_TYPE_DIPS);
         boxStyle.setMargin(1, 1, 1, 1);
@@ -224,11 +224,86 @@ public class EventForm extends SideMenuBaseForm {
         Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
         s.setBorder(RoundBorder.create().
                 rectangle(true).
-                color(0xffffff).
+                color(0xD0D0D0).
                 strokeColor(0).
                 strokeOpacity(120).
                 stroke(borderStroke));
         s.setMarginUnit(Style.UNIT_TYPE_DIPS);
         s.setMargin(Component.BOTTOM, 3);
+    }
+
+    public void showDialog(String msg) {
+
+        Dialog dlg = new Dialog("");
+        Style dlgStyle = dlg.getDialogStyle();
+        dlgStyle.setBorder(Border.createEmpty());
+        dlgStyle.setBgTransparency(255);
+        dlgStyle.setBgColor(0xffffff);
+
+        dlg.setLayout(BoxLayout.y());
+        Label blueLabel = new Label();
+        blueLabel.setShowEvenIfBlank(true);
+        blueLabel.getUnselectedStyle().setBgColor(0xff);
+        blueLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(blueLabel);
+        TextArea ta = new TextArea(msg);
+        ta.setEditable(false);
+        ta.setUIID("DialogBody");
+        ta.getAllStyles().setFgColor(0);
+        dlg.add(ta);
+
+        Label grayLabel = new Label();
+        grayLabel.setShowEvenIfBlank(true);
+        grayLabel.getUnselectedStyle().setBgColor(0xcccccc);
+        grayLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        grayLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(grayLabel);
+
+        Button ok = new Button(new Command("OK"));
+
+        dlg.add(ok);
+        dlg.showDialog();
+
+    }
+    
+    
+    public static void showConfirm(ActionListener successCallBack) {
+        Dialog dlg = new Dialog("");
+        Style dlgStyle = dlg.getDialogStyle();
+        dlgStyle.setBorder(Border.createEmpty());
+        dlgStyle.setBgTransparency(255);
+        dlgStyle.setBgColor(0xffffff);
+
+        dlg.setLayout(BoxLayout.y());
+        Label blueLabel = new Label();
+        blueLabel.setShowEvenIfBlank(true);
+        blueLabel.getUnselectedStyle().setBgColor(0xff);
+        blueLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(blueLabel);
+        TextArea ta = new TextArea("Are you sure?");
+        ta.setEditable(false);
+        ta.setUIID("DialogBody");
+        ta.getAllStyles().setFgColor(0);
+        dlg.add(ta);
+
+        Label grayLabel = new Label();
+        grayLabel.setShowEvenIfBlank(true);
+        grayLabel.getUnselectedStyle().setBgColor(0xcccccc);
+        grayLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        grayLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(grayLabel);
+
+        Button ok = new Button(new Command("Confirm"));
+        Button cancel = new Button(new Command("Cancel"));
+        cancel.addActionListener(l -> {
+            dlg.dispose();
+        });
+        ok.addActionListener(successCallBack);
+        dlg.add(ok);
+        dlg.add(cancel);
+        dlg.showDialog();
+
     }
 }

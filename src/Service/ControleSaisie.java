@@ -43,46 +43,7 @@ public class ControleSaisie {
 
      }
 
-    /*      public static boolean isUsername(String text) {
-
-
-
-        if (text.matches("^[A-Za-z0-9]+$+") ) {
-
-            return true;
-
-        } 
-
-            return false;
-
-    }
-
-          public static boolean DateNullCS(String date){
-
-            if(date == ""){
-
-                return true ;
-
-            }
-
-              return false;
-
-          }
-
-      public static boolean adresse(String text) {
-
-
-
-        if (text.matches("^[A-Z a-z 0-9]+$")) {
-
-            return true;
-
-        }
-
-            return false;
-
-    }*/
-     
+   
      public static boolean isValidDate(Date date) {
 
         return date.getTime() >= new Date().getTime();
@@ -126,11 +87,9 @@ public class ControleSaisie {
 
     }
 
-           /*       public static boolean isTel(String text) {
+         public static boolean isNumber(String text) {
 
-
-
-        if (text.matches("^[0-9]+$")&& text.length()==8) {
+        if (Integer.parseInt(text) > 0 && Integer.parseInt(text) < 100) {
 
             return true;
 
@@ -141,35 +100,5 @@ public class ControleSaisie {
         }
 
     }
-
-
-
-     private static final String EMAIL_PATTERN
-
-            = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-
-            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
-                      private static Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-
-                          private static final String pwd=  "^[A-Za-z0-9]+$";
-
-                                private static Pattern pattern1 = Pattern.compile(pwd);
-
-     public static boolean valiemail(final String hex) {
-
-        matcher = pattern.matcher(hex);
-
-        return matcher.matches();
-
-    }
-
-      public static boolean validPasswor(final String hex) {
-
-        matcher = pattern1.matcher(hex);
-
-        return matcher.matches();
-
-    } */
     
 }

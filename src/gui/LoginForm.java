@@ -22,8 +22,7 @@ public class LoginForm extends Form {
         super(new BorderLayout(BorderLayout.CENTER_BEHAVIOR_CENTER_ABSOLUTE));
         setUIID("LoginForm");
         Container welcome = FlowLayout.encloseCenter(
-                new Label("Welcome, ", "WelcomeWhite"),
-                new Label("Jennifer", "WelcomeBlue")
+                new Label("Welcome, ", "WelcomeBlue")
         );
 
         getTitleArea().setUIID("Container");

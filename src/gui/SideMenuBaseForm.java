@@ -51,9 +51,9 @@ public abstract class SideMenuBaseForm extends Form {
 
         getToolbar().addComponentToSideMenu(sidemenuTop);
 
-        getToolbar().addMaterialCommandToSideMenu("  Actuality", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Actualities", FontImage.MATERIAL_DASHBOARD, e -> new ActualityForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Training", FontImage.MATERIAL_TRENDING_UP, e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Product", FontImage.MATERIAL_PRESENT_TO_ALL, e -> {
+        getToolbar().addMaterialCommandToSideMenu("  Products", FontImage.MATERIAL_PRESENT_TO_ALL, e -> {
             try {
                 new ProductGUI().show();
             } catch (IOException ex) {
@@ -62,10 +62,11 @@ public abstract class SideMenuBaseForm extends Form {
         getToolbar().addMaterialCommandToSideMenu("  Cart", FontImage.MATERIAL_ADD_SHOPPING_CART, e -> new CartGUI().show());
         getToolbar().addMaterialCommandToSideMenu("  Promotion", FontImage.MATERIAL_SETTINGS, e -> new PromotionForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Claims", FontImage.MATERIAL_EXIT_TO_APP, e -> new ClaimForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Event", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Pastries", FontImage.MATERIAL_EXIT_TO_APP, e -> new RegisterForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Reservation", FontImage.MATERIAL_EXIT_TO_APP, e -> new ReservationGUI(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Events", FontImage.MATERIAL_EXIT_TO_APP, e -> new EventForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Pastries", FontImage.MATERIAL_EXIT_TO_APP, e -> { new Pastry().start(res);});
+        getToolbar().addMaterialCommandToSideMenu("  Reservations", FontImage.MATERIAL_EXIT_TO_APP, e -> new ReservationGUI(res).show());
     }
 
     protected abstract void showOtherForm(Resources res);
+     
 }

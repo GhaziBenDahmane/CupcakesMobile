@@ -14,6 +14,7 @@ import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
+import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
 import com.codename1.util.regex.RE;
 import com.mycompany.myapp.MyApplication;
@@ -75,7 +76,8 @@ public class ProfileForm extends SideMenuBaseForm {
         username.setIconUIID("Container");
         username.addActionListener(x -> {
             String ret = Utils.requestChange(TextField.ANY, MyApplication.currentUser.getUsername());
-            if (ret == null || ret.isEmpty() || ret.trim().length() < 2) {
+            if (ret == null) {
+            } else if (ret.isEmpty() || ret.trim().length() < 2) {
                 Utils.showDialog("Invalid Username");
             } else {
                 MyApplication.currentUser.setUsername(ret);
@@ -92,7 +94,8 @@ public class ProfileForm extends SideMenuBaseForm {
         email.setIconUIID("Container");
         email.addActionListener(x -> {
             String ret = Utils.requestChange(TextField.EMAILADDR, MyApplication.currentUser.getEmail());
-            if (ret == null || ret.isEmpty() || !r.match(ret)) {
+            if (ret == null) {
+            } else if (ret.isEmpty() || !r.match(ret)) {
                 Utils.showDialog("Invalid Email");
             } else {
                 MyApplication.currentUser.setEmail(ret);
@@ -109,7 +112,8 @@ public class ProfileForm extends SideMenuBaseForm {
         phone.setIconUIID("Container");
         phone.addActionListener(x -> {
             String ret = Utils.requestChange(TextField.NUMERIC, MyApplication.currentUser.getPhone() != null ? "" + MyApplication.currentUser.getPhone() : "");
-            if (ret == null || ret.isEmpty() || ret.length() != 8 || !intMatcher.match(ret)) {
+            if (ret == null) {
+            } else if (ret.isEmpty() || ret.length() != 8 || !intMatcher.match(ret)) {
                 Utils.showDialog("Invalid phone number");
             } else {
                 MyApplication.currentUser.setPhone(ret);
@@ -128,6 +132,7 @@ public class ProfileForm extends SideMenuBaseForm {
         photo.addActionListener(x -> {
             UserService.changePicture();
         });
+        add(FlowLayout.encloseIn(photo));
 
         MultiButton password = new MultiButton("Change Password");
         password.setEmblem(arrowDown);
@@ -137,13 +142,15 @@ public class ProfileForm extends SideMenuBaseForm {
         password.setIconUIID("Container");
         password.addActionListener(x -> {
             String ret = Utils.requestChangePassword();
-            if (ret == null || ret.isEmpty()) {
+            if (ret == null) {
+            } else if (ret.isEmpty()) {
                 Utils.showDialog("Invalid Password");
             } else {
                 UserService.changePassword(MyApplication.currentUser, ret);
             }
 
         });
+
         add(FlowLayout.encloseIn(password));
 
         setupSideMenu(res);
@@ -156,7 +163,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(FlowLayout.encloseIn(finishLandingPage));
+        add(TableLayout.encloseIn(2,finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -179,4 +186,6 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
+    
+    
 }
