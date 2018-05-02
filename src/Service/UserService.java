@@ -81,6 +81,43 @@ public class UserService {
                 .getResponseData();
     }
 
+    public static void changePassword(User u, String password) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("password", password)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changeEmail(User u, String email) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("email", email)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changeUserName(User u, String username) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("username", username)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changePhone(User u, String phone) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("phone", phone)
+                .getAsJsonMap()
+                .getResponseData();
+        System.out.println(responseData);
+    }
+
     public static User get(String username) {
         String url = API_PATH + "users/" + username;
         Map responseData = Rest.get(url)

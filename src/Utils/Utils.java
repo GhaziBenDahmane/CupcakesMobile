@@ -8,11 +8,15 @@ package Utils;
 import com.codename1.io.rest.Rest;
 import com.codename1.ui.Button;
 import com.codename1.ui.Command;
+import com.codename1.ui.Component;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Label;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.util.Base64;
@@ -27,6 +31,8 @@ import java.util.Map;
  * @author ding
  */
 public class Utils {
+
+    static String newValue = null;
 
     public static byte[] getBytesFromInputStream(InputStream is) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -93,9 +99,10 @@ public class Utils {
         cancel.addActionListener(l -> {
             dlg.dispose();
         });
+        dlg.add(cancel);
+
         ok.addActionListener(successCallBack);
         dlg.add(ok);
-        dlg.add(cancel);
         dlg.showDialog();
 
     }
@@ -133,5 +140,111 @@ public class Utils {
         dlg.add(ok);
         dlg.showDialog();
 
+    }
+
+    public static String requestChange(int type, String defaultValue) {
+
+        Dialog dlg = new Dialog("");
+        Style dlgStyle = dlg.getDialogStyle();
+        dlgStyle.setBorder(Border.createEmpty());
+        dlgStyle.setBgTransparency(255);
+        dlgStyle.setBgColor(0xffffff);
+
+        dlg.setLayout(BoxLayout.y());
+        Label blueLabel = new Label();
+        blueLabel.setShowEvenIfBlank(true);
+        blueLabel.getUnselectedStyle().setBgColor(0xff);
+        blueLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(blueLabel);
+        TextField popupBody = new TextField(defaultValue, "", 20, type);
+        popupBody.setUIID("DialogBody");
+        popupBody.getAllStyles().setFgColor(0);
+        setDesign(popupBody.getAllStyles());
+
+        dlg.add(popupBody);
+
+        Label grayLabel = new Label();
+        grayLabel.setShowEvenIfBlank(true);
+        grayLabel.getUnselectedStyle().setBgColor(0xcccccc);
+        grayLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        grayLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(grayLabel);
+
+        Button ok = new Button(new Command("OK"));
+        Button cancel = new Button(new Command("Cancel"));
+        ok.addActionListener(x -> {
+            newValue = popupBody.getText();
+            dlg.dispose();
+
+        });
+        cancel.addActionListener(l -> {
+            newValue = null;
+            dlg.dispose();
+        });
+        dlg.add(GridLayout.encloseIn(2, cancel, ok));
+        dlg.showDialog();
+        return newValue;
+    }
+
+    public static String requestChangePassword() {
+        Dialog dlg = new Dialog("");
+        Style dlgStyle = dlg.getDialogStyle();
+        dlgStyle.setBorder(Border.createEmpty());
+        dlgStyle.setBgTransparency(255);
+        dlgStyle.setBgColor(0xffffff);
+
+        dlg.setLayout(BoxLayout.y());
+        Label blueLabel = new Label();
+        blueLabel.setShowEvenIfBlank(true);
+        blueLabel.getUnselectedStyle().setBgColor(0xff);
+        blueLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        blueLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(blueLabel);
+        TextField popupBody = new TextField("", "enter password", 20, TextField.PASSWORD);
+        popupBody.setUIID("DialogBody");
+        popupBody.getAllStyles().setFgColor(0);
+        setDesign(popupBody.getAllStyles());
+        TextField popupBody2 = new TextField("", "enter password", 20, TextField.PASSWORD);
+        popupBody.setUIID("DialogBody");
+        popupBody.getAllStyles().setFgColor(0);
+        setDesign(popupBody.getAllStyles());
+        dlg.add(popupBody);
+        dlg.add(popupBody2);
+
+        Label grayLabel = new Label();
+        grayLabel.setShowEvenIfBlank(true);
+        grayLabel.getUnselectedStyle().setBgColor(0xcccccc);
+        grayLabel.getUnselectedStyle().setPadding(1, 1, 1, 1);
+        grayLabel.getUnselectedStyle().setPaddingUnit(Style.UNIT_TYPE_PIXELS);
+        dlg.add(grayLabel);
+
+        Button ok = new Button(new Command("OK"));
+        Button cancel = new Button(new Command("Cancel"));
+        ok.addActionListener(x -> {
+            if (popupBody.getText() == null ? popupBody2.getText() != null : !popupBody.getText().equals(popupBody2.getText())) {
+                Utils.showDialog("Not the same password ");
+
+            } else {
+
+                newValue = popupBody.getText();
+                dlg.dispose();
+            }
+
+        });
+        cancel.addActionListener(l -> {
+            newValue = null;
+            dlg.dispose();
+        });
+        dlg.add(GridLayout.encloseIn(2, cancel, ok));
+        dlg.showDialog();
+        return newValue;
+    }
+
+    public static void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(Border.createLineBorder(1));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
     }
 }

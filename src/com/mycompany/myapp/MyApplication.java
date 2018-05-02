@@ -2,11 +2,8 @@ package com.mycompany.myapp;
 
 import Entity.Promotion;
 import Entity.User;
-
 import Service.FavouriteService;
-import Service.PaymentService;
 import com.codename1.io.Storage;
-
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
@@ -14,13 +11,6 @@ import com.codename1.ui.Image;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import gui.CartGUI;
-import gui.EventForm;
-import gui.LoginForm;
-import gui.PayementGUI;
-import gui.ProductGUI;
-import gui.WalkthruForm;
-import java.io.IOException;
 import gui.LoginForm;
 
 /**
@@ -50,15 +40,9 @@ public class MyApplication {
             current.show();
             return;
         }
-
-             //   new WalkthruForm(theme).show();
-              //  new EventForm(theme).show();
-              /*  try {
-=======
         new LoginForm(theme).show();
         //  new EventForm(theme).show();
         /*           try {
->>>>>>> 6d76a068621432c68e8c316e77120c6e6c6d500f
             FavouriteService.db.delete("Cupcake");
         } catch (IOException ex) {
         }*/
@@ -83,8 +67,7 @@ public class MyApplication {
         
        
 
-    
-
+   
 
     }
 

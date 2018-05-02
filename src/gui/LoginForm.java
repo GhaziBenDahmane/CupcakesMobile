@@ -35,7 +35,7 @@ public class LoginForm extends Form {
         profilePicLabel.setMask(mask.createMask());
 
         TextField login = new TextField("", "Login", 20, TextField.EMAILADDR);
-        TextField password = new TextField("password", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         login.getAllStyles().setMargin(LEFT, 0);
         password.getAllStyles().setMargin(LEFT, 0);
         Label loginIcon = new Label("", "TextField");
@@ -80,9 +80,9 @@ public class LoginForm extends Form {
                 profilePicLabel,
                 spaceLabel,
                 BorderLayout.center(login).
-                        add(BorderLayout.WEST, loginIcon),
+                add(BorderLayout.WEST, loginIcon),
                 BorderLayout.center(password).
-                        add(BorderLayout.WEST, passwordIcon),
+                add(BorderLayout.WEST, passwordIcon),
                 loginButton,
                 createNewAccount
         );
