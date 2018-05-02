@@ -13,7 +13,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
-import com.codename1.ui.plaf.Style;
+import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
 
 public class ProfileForm extends SideMenuBaseForm {
@@ -56,7 +56,6 @@ public class ProfileForm extends SideMenuBaseForm {
         );
 
         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
-        fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
         fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
         tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
 
@@ -78,7 +77,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(FlowLayout.encloseIn(finishLandingPage));
+        add(TableLayout.encloseIn(2,finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -101,4 +100,6 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
+    
+    
 }
