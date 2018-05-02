@@ -99,10 +99,10 @@ public class Utils {
         cancel.addActionListener(l -> {
             dlg.dispose();
         });
-        dlg.add(cancel);
 
         ok.addActionListener(successCallBack);
-        dlg.add(ok);
+        dlg.add(GridLayout.encloseIn(2, cancel, ok));
+
         dlg.showDialog();
 
     }
