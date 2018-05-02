@@ -53,7 +53,7 @@ public final class CartGUI extends SideMenuBaseForm{
     private Double price;
     private Integer ch;
     private final Label purchasePrice;
-    public static Float t = new Float(0.0);
+    public static Float t ;
     private final CartsService cs = new CartsService();
     private ArrayList<Cart> carts = new ArrayList<>();
     boolean isRemoved = false;
@@ -68,6 +68,7 @@ public final class CartGUI extends SideMenuBaseForm{
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
 
     public CartGUI() {
+        
          super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitle("Cart");
@@ -77,6 +78,7 @@ public final class CartGUI extends SideMenuBaseForm{
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
         theme = UIManager.initFirstTheme("/theme_1");
+        t = new Float(0.0);
         Label total = new Label("Total :");
         Label empty = new Label("Your cart is empty");
         Button purchase = new Button("Purchase");

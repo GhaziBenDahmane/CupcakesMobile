@@ -16,10 +16,12 @@ import Service.CartsService;
 import Service.FavouriteService;
 import Service.RatingService;
 import Service.ScanCodeService;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.io.Storage;
 import com.codename1.ui.AutoCompleteTextField;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Component;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
@@ -84,7 +86,6 @@ public final class ProductGUI extends SideMenuBaseForm {
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
-        //form = new Form("Products");
         theme = UIManager.initFirstTheme("/theme_1");
         mb = new MultiButton();
         mb.setWidth(Display.getInstance().getDisplayWidth());
@@ -99,6 +100,7 @@ public final class ProductGUI extends SideMenuBaseForm {
 
         max_min_price = new Button();
         max_min_price.setIcon(FontImage.createMaterial(FontImage.MATERIAL_ACCOUNT_BALANCE_WALLET, style));
+        
 
         search = new AutoCompleteTextField(options) {
             @Override
@@ -122,6 +124,7 @@ public final class ProductGUI extends SideMenuBaseForm {
             }
 
         };
+        setDesign(search.getAllStyles());
 
         search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
         search.addListListener((ActionListener) (ActionEvent evt) -> {
@@ -150,13 +153,25 @@ public final class ProductGUI extends SideMenuBaseForm {
             public void actionPerformed(ActionEvent evt) {
                 ScanCodeService scs = new ScanCodeService();
                 Product product;
-                scs.ScanBarCode();
-
-                product = scs.findProducts(Integer.parseInt(ScanCodeService.code));
-
-                f.add(createRankWidget(product));
-                f.show();
+              //  Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+                try {
+                    scs.ScanBarCode();
+                    
+                } catch (NullPointerException ex) {
+                    Dialog.show("Warning", "Null", "ok", null);
+                    
+                }
+               
+                Dialog.show("Information", "Barcode "+ScanCodeService.code+" dosen't exist in our dataBase", "Ok", null);
+                // product = scs.findProducts(123456);
+                 
+               // f.add(createRankWidget(product));
+               // f.show();
+               
             }
+                
+               // product = scs.findProducts(123456);
+                 
         });
 
         /* form.getToolbar().addCommandToRightBar("", theme.getImage("code.png"), new ActionListener() {
@@ -240,7 +255,7 @@ public final class ProductGUI extends SideMenuBaseForm {
                     Dialog.show("Warning", "Product already exist in Favourites.", "OK", null);
                 }
                 FavouriteGUI cg = new FavouriteGUI();
-                cg.getForm().show();
+                cg.show();
             }
         });
 

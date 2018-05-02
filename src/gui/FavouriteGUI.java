@@ -28,6 +28,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.Slider;
 import com.codename1.ui.Stroke;
 import com.codename1.ui.SwipeableContainer;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
@@ -49,15 +50,14 @@ import java.util.ArrayList;
  *
  * @author Arshavin
  */
-public class FavouriteGUI {
+public class FavouriteGUI extends SideMenuBaseForm {
     
-    private Form form;
+
     private MultiButton mb;
-    private Button max_min_price;
     private Container container;
     private Image image;
     private Double price;
-    private Resources theme;
+    private final Resources theme;
     public static int id_cart = 0;
     
     private static final String PATH = "http://192.168.0.100:10000/picture/";
@@ -72,13 +72,23 @@ public class FavouriteGUI {
     Font smallUnderlineMonospaceFont = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_UNDERLINED, Font.SIZE_SMALL);
     
     public FavouriteGUI() {
-        form = new Form("Favourite");
+         super(BoxLayout.y());
+        Toolbar tb = getToolbar();
+        tb.setTitle("Favourite");
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
+        //form = new Form("Products");
+        theme = UIManager.initFirstTheme("/theme_1");
+        
         mb = new MultiButton();
         mb.setWidth(Display.getInstance().getDisplayWidth());
         ArrayList<Product> products = new ArrayList<>();
         FavouriteService fs = new FavouriteService();
         fs.createSQLiteDB();
-        form.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
+        getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
             ProductGUI pp;
             try {
                 pp = new ProductGUI();
@@ -90,8 +100,10 @@ public class FavouriteGUI {
         });
         products = fs.SelectProductFromSQLiteDB();
         for (Product product : products) {
-            form.add(createFavouriteWidget(product));
+            add(createFavouriteWidget(product));
         }
+                setupSideMenu(theme);
+
     }
     
     public SwipeableContainer createFavouriteWidget(Product p) {
@@ -140,7 +152,7 @@ public class FavouriteGUI {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 Dialog ip = new InfiniteProgress().showInifiniteBlocking();
-                form.removeAll();
+                removeAll();
                 FavouriteService fs = new FavouriteService();
                 fs.deleteProductFromFavouriteInSQLiteDB(p.getId());
                 
@@ -148,13 +160,13 @@ public class FavouriteGUI {
                 if (!products.isEmpty()) {
                     for (Product pro : products) {
                         
-                        form.add(createFavouriteWidget(pro));
+                        add(createFavouriteWidget(pro));
                         
                     }
                     
-                    form.add(container);
+                    add(container);
                 } else {
-                    form.add(new Label("Favourite list is empty !"));
+                   add(new Label("Favourite list is empty !"));
                 }
                 //form.revalidate();
 
@@ -194,13 +206,7 @@ public class FavouriteGUI {
                 c1, mb);
     }
     
-    public Form getForm() {
-        return form;
-    }
-    
-    public void setForm(Form form) {
-        this.form = form;
-    }
+   
     
     public Container getContainer() {
         return container;
@@ -290,6 +296,11 @@ public class FavouriteGUI {
                 stroke(borderStroke));
         s.setMarginUnit(Style.UNIT_TYPE_DIPS);
         s.setMargin(Component.BOTTOM, 3);
+    }
+
+    @Override
+    protected void showOtherForm(Resources res) {
+        new StatsForm(res).show();
     }
     
 }
