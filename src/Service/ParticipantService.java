@@ -5,6 +5,7 @@
  */
 package Service;
 
+import Entity.Event;
 import Entity.Participant;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
@@ -26,8 +27,12 @@ import java.util.Map;
  */
 public class ParticipantService {
 
-    public void addParticipant() {
-
+    public void addParticipant(Event e ,int user) {
+        ConnectionRequest con = new ConnectionRequest();
+        con.setHttpMethod("GET");
+        con.setPost(true);
+        con.setUrl("http://192.168.0.101:8000/participants/add?id_user=" + user + "&id_event=" +e.getId());
+        NetworkManager.getInstance().addToQueueAndWait(con);
     }
 
     public void delParticipant() {
@@ -40,7 +45,7 @@ public class ParticipantService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/participants/list/" + id_event);
+        con.setUrl("http://192.168.0.101:8000/participants/list/" + id_event);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -67,16 +72,14 @@ public class ParticipantService {
         NetworkManager.getInstance().addToQueueAndWait(con);
         return listParticipants;
     }
-    
-    
-    
-     public ArrayList<Participant> searchParticipant(String key) {
+
+    public ArrayList<Participant> searchParticipant(String key) {
 
         ArrayList<Participant> listParticipants = new ArrayList<>();
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/participants/listAll/" + key);
+        con.setUrl("http://192.168.0.101:8000/participants/listAll/" + key);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -90,8 +93,8 @@ public class ParticipantService {
                     for (Map<String, Object> obj : list) {
 
                         Participant participant = new Participant();
-                   float id = Float.parseFloat(obj.get("id").toString());
-                        
+                        float id = Float.parseFloat(obj.get("id").toString());
+
                         participant.setId((int) id);
                         participant.setUser_id(obj.get("username").toString());
                         listParticipants.add(participant);

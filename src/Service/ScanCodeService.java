@@ -27,7 +27,6 @@ import java.util.Map;
  */
 public class ScanCodeService {
 
-    private Product product;
     public static String code ="";
 
     public void ScanBarCode() {
@@ -36,7 +35,6 @@ public class ScanCodeService {
             ToastBar.showErrorMessage("CodeScanner not supported on this platform");
 
         } 
-            ToastBar.showErrorMessage("CodeScanner not supported on this platform");
 
             CodeScanner.getInstance().scanBarCode(new ScanResult() {
 
@@ -63,7 +61,7 @@ public class ScanCodeService {
        
     }
 
-    public Product findProducts(int barcode) {
+    public Product findProducts(long barcode) {
 
         Product product = new Product();
         ConnectionRequest con = new ConnectionRequest();

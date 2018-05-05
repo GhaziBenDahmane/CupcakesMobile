@@ -25,6 +25,7 @@ public class UserService {
 
     //public final static String API_URL = "http://localhost/PiWeb/web/app_dev.php";
     public final static String API_PATH = MyApplication.API_URL + "/api/";
+    public static String confirmation;
 
     public static boolean login(String username, String password) {
         String loginUrl = MyApplication.API_URL + "/oauth/v2/token";
@@ -62,6 +63,7 @@ public class UserService {
                     .getAsJsonMap()
                     .getResponseData();
             MyApplication.currentUser = mapToUser(responseData);
+
             return true;
         } catch (Exception e) {
             return false;
@@ -81,6 +83,43 @@ public class UserService {
                 .getResponseData();
     }
 
+    public static void changePassword(User u, String password) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("password", password)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changeEmail(User u, String email) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("email", email)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changeUserName(User u, String username) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("username", username)
+                .getAsJsonMap()
+                .getResponseData();
+    }
+
+    public static void changePhone(User u, String phone) {
+        String url = API_PATH + "user";
+        Map responseData = Rest.put(url)
+                .queryParam("id", "" + u.getId())
+                .queryParam("phone", "+216" + phone)
+                .getAsJsonMap()
+                .getResponseData();
+        System.out.println(responseData);
+    }
+
     public static User get(String username) {
         String url = API_PATH + "users/" + username;
         Map responseData = Rest.get(url)
@@ -89,7 +128,7 @@ public class UserService {
         return mapToUser(responseData);
     }
 
-    public static void changePicture() {
+    public static boolean changePicture() {
         String fileName = Capture.capturePhoto();
         try {
             if (fileName != null) {
@@ -100,9 +139,12 @@ public class UserService {
                 MyApplication.currentUser.setPhotoprofil(url);
                 update(MyApplication.currentUser);
                 MyApplication.userPicture = Image.createImage(bytesFromInputStream, 0, bytesFromInputStream.length);
-
+                return true;
+            } else {
+                return false;
             }
         } catch (Exception e) {
+            return false;
 
         }
 

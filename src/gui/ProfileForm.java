@@ -1,27 +1,38 @@
 package gui;
 
 import Service.UserService;
-import com.codename1.components.FloatingActionButton;
+import Utils.Utils;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
-import com.codename1.ui.layouts.GridLayout;
-import com.codename1.ui.plaf.Style;
+import com.codename1.ui.plaf.UIManager;
+import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
+import com.codename1.util.regex.RE;
 import com.mycompany.myapp.MyApplication;
 
 public class ProfileForm extends SideMenuBaseForm {
 
+    public static String newUserName;
+    public static String newEmail;
+    public static String newPhone;
+
     public ProfileForm(Resources res) {
         super(BoxLayout.y());
+        RE intMatcher = new RE("\\d+");
+        RE r = new RE("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$");
+
         Toolbar tb = getToolbar();
         tb.setTitleCentered(false);
         Image profilePic;
@@ -32,7 +43,6 @@ public class ProfileForm extends SideMenuBaseForm {
             profilePic = res.getImage("user-picture.jpg");
 
         }
-        System.out.println(profilePic);
         Image mask = res.getImage("round-mask.png");
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePicTitle");
@@ -45,17 +55,6 @@ public class ProfileForm extends SideMenuBaseForm {
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
 
-        Container remainingTasks = BoxLayout.encloseY(
-                new Label("12", "CenterTitle"),
-                new Label("remaining tasks", "CenterSubTitle")
-        );
-        remainingTasks.setUIID("RemainingTasks");
-        Container completedTasks = BoxLayout.encloseY(
-                new Label("32", "CenterTitle"),
-                new Label("completed tasks", "CenterSubTitle")
-        );
-        completedTasks.setUIID("CompletedTasks");
-
         Container titleCmp = BoxLayout.encloseY(
                 FlowLayout.encloseIn(menuButton),
                 BorderLayout.centerAbsolute(
@@ -63,23 +62,115 @@ public class ProfileForm extends SideMenuBaseForm {
                                 new Label(MyApplication.currentUser.getUsername(), "Title"),
                                 new Label(MyApplication.currentUser.getEmail(), "SubTitle")
                         )
-                ).add(BorderLayout.WEST, profilePicLabel),
-                GridLayout.encloseIn(2, remainingTasks, completedTasks)
+                ).add(BorderLayout.WEST, profilePicLabel)
         );
 
-        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
-        fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
-        fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
-        tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
+        tb.setTitleComponent(titleCmp);
 
         add(new Label("Today", "TodayTitle"));
 
-        FontImage arrowDown = FontImage.createMaterial(FontImage.MATERIAL_KEYBOARD_ARROW_DOWN, "Label", 3);
+        FontImage arrowDown = FontImage.createMaterial(FontImage.MATERIAL_EDIT, "Label", 3);
 
-        addButtonBottom(arrowDown, "Finish landing page concept", 0xd997f1, true);
-        addButtonBottom(arrowDown, "Design app illustrations", 0x5ae29d, false);
-        addButtonBottom(arrowDown, "Javascript training ", 0x4dc2ff, false);
-        addButtonBottom(arrowDown, "Surprise Party for Matt", 0xffc06f, false);
+        MultiButton username = new MultiButton("Name:    " + MyApplication.currentUser.getUsername());
+        username.setEmblem(arrowDown);
+        username.setUIID("Container");
+        username.setUIIDLine1("TodayEntry");
+        username.setIcon(createCircleLine(0xd997f1, username.getPreferredH(), true));
+        username.setIconUIID("Container");
+        username.addActionListener(x -> {
+            String ret = Utils.requestChange(TextField.ANY, MyApplication.currentUser.getUsername());
+            if (ret == null) {
+            } else if (ret.isEmpty() || ret.trim().length() < 2) {
+                Utils.showDialog("Invalid Username");
+            } else {
+                MyApplication.currentUser.setUsername(ret);
+                UserService.changeUserName(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+            }
+        });
+        add(FlowLayout.encloseIn(username));
+
+        MultiButton email = new MultiButton("Email:    " + MyApplication.currentUser.getEmail());
+        email.setEmblem(arrowDown);
+        email.setUIID("Container");
+        email.setUIIDLine1("TodayEntry");
+        email.setIcon(createCircleLine(0x5ae29d, email.getPreferredH(), false));
+        email.setIconUIID("Container");
+        email.addActionListener(x -> {
+            String ret = Utils.requestChange(TextField.EMAILADDR, MyApplication.currentUser.getEmail());
+            if (ret == null) {
+            } else if (ret.isEmpty() || !r.match(ret)) {
+                Utils.showDialog("Invalid Email");
+            } else {
+                MyApplication.currentUser.setEmail(ret);
+                UserService.changeEmail(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
+            }
+        });
+        add(FlowLayout.encloseIn(email));
+
+        MultiButton phone = new MultiButton("Phone:    " + MyApplication.currentUser.getPhone());
+        phone.setEmblem(arrowDown);
+        phone.setUIID("Container");
+        phone.setUIIDLine1("TodayEntry");
+        phone.setIcon(createCircleLine(0xffc06f, phone.getPreferredH(), false));
+        phone.setIconUIID("Container");
+        phone.addActionListener(x -> {
+            String ret = Utils.requestChange(TextField.NUMERIC, MyApplication.currentUser.getPhone() != null ? "" + MyApplication.currentUser.getPhone() : "");
+            if (ret == null) {
+            } else if (ret.isEmpty() || ret.length() != 8 || !intMatcher.match(ret)) {
+                Utils.showDialog("Invalid phone number");
+            } else {
+                MyApplication.currentUser.setPhone(ret);
+                UserService.changePhone(MyApplication.currentUser, ret);
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+
+            }
+
+        });
+        add(FlowLayout.encloseIn(phone));
+
+        MultiButton photo = new MultiButton("Change Picture");
+        photo.setEmblem(FontImage.createMaterial(FontImage.MATERIAL_PHOTO_CAMERA, "Label", 3));
+        photo.setUIID("Container");
+        photo.setUIIDLine1("TodayEntry");
+        photo.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
+        photo.setIconUIID("Container");
+        photo.addActionListener(x -> {
+            Dialog ip = new InfiniteProgress().showInifiniteBlocking();
+
+            if (UserService.changePicture()) {
+                new ProfileForm(UIManager.initFirstTheme("/theme_1")).show();
+                ip.dispose();
+
+            } else {
+                ip.dispose();
+                Utils.showDialog("Please check your connection");
+            }
+
+        });
+        add(FlowLayout.encloseIn(photo));
+
+        MultiButton password = new MultiButton("Change Password");
+        password.setEmblem(arrowDown);
+        password.setUIID("Container");
+        password.setUIIDLine1("TodayEntry");
+        password.setIcon(createCircleLine(0xd997f1, photo.getPreferredH(), false));
+        password.setIconUIID("Container");
+        password.addActionListener(x -> {
+            String ret = Utils.requestChangePassword();
+            if (ret == null) {
+            } else if (ret.isEmpty()) {
+                Utils.showDialog("Invalid Password");
+            } else {
+                UserService.changePassword(MyApplication.currentUser, ret);
+            }
+
+        });
+
+        add(FlowLayout.encloseIn(password));
+
         setupSideMenu(res);
     }
 
@@ -90,7 +181,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setUIIDLine1("TodayEntry");
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(), first));
         finishLandingPage.setIconUIID("Container");
-        add(FlowLayout.encloseIn(finishLandingPage));
+        add(TableLayout.encloseIn(2, finishLandingPage));
     }
 
     private Image createCircleLine(int color, int height, boolean first) {
@@ -113,4 +204,5 @@ public class ProfileForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
+
 }

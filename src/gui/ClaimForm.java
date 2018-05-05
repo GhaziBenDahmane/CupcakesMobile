@@ -24,7 +24,7 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.list.DefaultListModel;
-import com.codename1.ui.plaf.RoundBorder;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.spinner.Picker;
@@ -84,7 +84,7 @@ public class ClaimForm extends SideMenuBaseForm {
 
             Picker p = new Picker();
             p.setStrings(characters);
-
+            p.setText("Select type!");
             Label typeLabel = new Label("Type", "Container");
             typeLabel.getAllStyles().setAlignment(Component.CENTER);
 
@@ -92,22 +92,21 @@ public class ClaimForm extends SideMenuBaseForm {
             descLabel.getAllStyles().setAlignment(Component.CENTER);
             TextArea description = new TextArea("", 5, 20, TextArea.ANY);
             ok.addActionListener((evt) -> {
-                /*es.addEvent(new Event(id + 1,
-                        title.getText(),
-                        Integer.parseInt(nbPerson.getText()),
-                        sDate.getDate(),
-                        sDate.getDate(),
-                        Integer.parseInt(nbTable.getText()),
-                        Integer.parseInt(nbTable.getText()),
-                        "Pending",
-                        0.0)
-                );*/
-                Claim c = new Claim();
-                c.setClient(MyApplication.currentUser);
-                c.setDescription(description.getText());
-                c.setType(p.getSelectedString());
-                ClaimService.add(c);
-                dlg.dispose();
+                if (null == p.getSelectedString()) {
+                    Utils.showDialog("Select a type");
+                } else if (description.getText().trim().isEmpty()) {
+                    Utils.showDialog("You need to write a description!");
+
+                } else {
+                    Claim c = new Claim();
+                    c.setClient(MyApplication.currentUser);
+                    c.setDescription(description.getText());
+                    c.setType(p.getSelectedString());
+                    ClaimService.add(c);
+                    System.out.println(p.getSelectedString());
+                    dlg.dispose();
+                    new ClaimForm(UIManager.initFirstTheme("/theme_1")).show();
+                }
 
             });
 
@@ -175,6 +174,8 @@ public class ClaimForm extends SideMenuBaseForm {
         delete.addPointerPressedListener((evt) -> {
             Utils.showConfirm(x -> {
                 ClaimService.delete(e);
+                new ClaimForm(UIManager.initFirstTheme("/theme_1")).show();
+
             });
         });
         Label type = new Label("" + e.getType());
@@ -231,14 +232,9 @@ public class ClaimForm extends SideMenuBaseForm {
         new StatsForm(res).show();
     }
 
-    public void setDesign(Style s) {
+    public static void setDesign(Style s) {
         Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
-        s.setBorder(RoundBorder.create().
-                rectangle(true).
-                color(0xffffff).
-                strokeColor(0).
-                strokeOpacity(120).
-                stroke(borderStroke));
+        s.setBorder(Border.createLineBorder(1));
         s.setMarginUnit(Style.UNIT_TYPE_DIPS);
         s.setMargin(Component.BOTTOM, 3);
     }

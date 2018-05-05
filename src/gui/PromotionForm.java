@@ -9,6 +9,7 @@ import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
+import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -26,6 +27,7 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.util.Resources;
+import java.util.ArrayList;
 
 public class PromotionForm extends SideMenuBaseForm {
 
@@ -34,6 +36,9 @@ public class PromotionForm extends SideMenuBaseForm {
     Style style = UIManager.getInstance().getComponentStyle("Label");
     private static final String PATH = "http://localhost/picture/";
     Style s = UIManager.getInstance().getComponentStyle("Button");
+    PromotionService ps = new PromotionService();
+    Promotion e = ps.SelectOnePromotion();
+    ArrayList<Promotion> promotions = ps.SelectAllPromotion();
 
     FontImage p = FontImage.createMaterial(FontImage.MATERIAL_PORTRAIT, s);
 
@@ -55,13 +60,13 @@ public class PromotionForm extends SideMenuBaseForm {
         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
         tb.setTitleComponent(titleCmp);
 
-            PromotionService ps = new PromotionService();
-            for (Promotion p : ps.SelectAllPromotion()) {
+        PromotionService ps = new PromotionService();
+        for (Promotion p : ps.SelectAllPromotion()) {
 
-                add(createContainer(p));
+            add(createContainer(p));
 
-            }
-            
+        }
+
         setupSideMenu(res);
     }
 
@@ -95,25 +100,63 @@ public class PromotionForm extends SideMenuBaseForm {
     protected void showOtherForm(Resources res) {
         new StatsForm(res).show();
     }
-    
-    
+
     public Container createContainer(Promotion e) {
         Label icon = new Label(FontImage.createMaterial(FontImage.MATERIAL_MORE, style));
         icon.getAllStyles().setAlignment(Component.LEFT);
 
-       /* Label more = new Label(FontImage.createMaterial(FontImage.MATERIAL_MORE_HORIZ, style));
+        Label more = new Label(FontImage.createMaterial(FontImage.MATERIAL_MORE_HORIZ, style));
         more.getAllStyles().setAlignment(Component.RIGHT);
         more.addPointerPressedListener((evt) -> {
-            Form list = new Form("Promotion List");
-            PromotionService ps = new PromotionService();
-            for (Promotion p : ps.SelectAllPromotion()) {
+            removeAll();
+            Toolbar.setGlobalToolbar(true);
+            Display.getInstance().scheduleBackgroundTask(() -> {
+                // this will take a while...
+                Display.getInstance().callSerially(() -> {
+                    removeAll();
+                    for (Promotion c : promotions) {
 
-                list.add(createContainer(p));
+                        MultiButton m = new MultiButton();
 
-            }
-            list.show();
+                        m.setTextLine1("discount : " + c.getDiscount());
+                        // m.setTextLine2("Image: " + c.getImage());
+                        // m.setTextLine3("Content: " + c.getContent());
+                        // m.setTextLine4("date: " + c.getDate());
+
+                        add(m);
+                    }
+
+                    revalidate();
+                });
+            });
+
+            getToolbar().addSearchCommand(x -> {
+                String text = (String) x.getSource();
+                if (text == null || text.length() == 0) {
+                    // clear search
+                    for (Component cmp : getContentPane()) {
+                        cmp.setHidden(false);
+                        cmp.setVisible(true);
+                    }
+                    getContentPane().animateLayout(150);
+                } else {
+                    text = text.toLowerCase();
+                    for (Component cmp : getContentPane()) {
+                        MultiButton mb = (MultiButton) cmp;
+                        String line1 = mb.getTextLine1();
+                        //String line2 = mb.getTextLine2();
+                        String line3 = mb.getTextLine3();
+                        boolean show = line1 != null && line1.toLowerCase().indexOf(text) > -1
+                                //|| line2 != null && line2.toLowerCase().indexOf(text) > -1
+                                || line3 != null && line3.toLowerCase().indexOf(text) > -1;
+                        mb.setHidden(!show);
+                        mb.setVisible(show);
+                    }
+                    getContentPane().animateLayout(150);
+                }
+            }, 4);
         });
-*/
+
         Label discount = new Label("" + e.getDiscount() * 100 + "%", "Container");
         discount.getAllStyles().setAlignment(Component.CENTER);
         discount.getAllStyles().setUnderline(true);
@@ -136,8 +179,8 @@ public class PromotionForm extends SideMenuBaseForm {
                 new Label("Starting date"),
                 startDate,
                 new Label("Ending Date "),
-                endDate
-                );
+                endDate,
+                GridLayout.encloseIn(2, more));
         Style boxStyle = box.getUnselectedStyle();
         boxStyle.setBgTransparency(255);
         boxStyle.setBgColor(0xeeeeee);

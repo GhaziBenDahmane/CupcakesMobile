@@ -1,8 +1,10 @@
 package gui;
 
 import Service.UserService;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -22,20 +24,19 @@ public class LoginForm extends Form {
         super(new BorderLayout(BorderLayout.CENTER_BEHAVIOR_CENTER_ABSOLUTE));
         setUIID("LoginForm");
         Container welcome = FlowLayout.encloseCenter(
-                new Label("Welcome, ", "WelcomeWhite"),
-                new Label("Jennifer", "WelcomeBlue")
+                new Label("Welcome, ", "WelcomeBlue")
         );
 
         getTitleArea().setUIID("Container");
 
-        Image profilePic = theme.getImage("user-picture.jpg");
+        Image profilePic = theme.getImage("profile.jpg");
         Image mask = theme.getImage("round-mask.png");
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
         Label profilePicLabel = new Label(profilePic, "ProfilePic");
         profilePicLabel.setMask(mask.createMask());
 
         TextField login = new TextField("", "Login", 20, TextField.EMAILADDR);
-        TextField password = new TextField("password", "Password", 20, TextField.PASSWORD);
+        TextField password = new TextField("", "Password", 20, TextField.PASSWORD);
         login.getAllStyles().setMargin(LEFT, 0);
         password.getAllStyles().setMargin(LEFT, 0);
         Label loginIcon = new Label("", "TextField");
@@ -50,7 +51,9 @@ public class LoginForm extends Form {
         loginButton.addActionListener(e -> {
             if (UserService.login(login.getText(), password.getText())) {
                 try {
+                    Dialog ip = new InfiniteProgress().showInifiniteBlocking();
                     UserService.downloadPhoto();
+                    ip.dispose();
 
                 } catch (Exception z) {
                     MyApplication.userPicture = null;
@@ -59,7 +62,7 @@ public class LoginForm extends Form {
                 new WalkthruForm(theme).show();
                 Toolbar.setGlobalToolbar(true);
             } else {
-
+                Utils.Utils.showDialog("Incorrect combination");
             }
         });
 
@@ -80,9 +83,9 @@ public class LoginForm extends Form {
                 profilePicLabel,
                 spaceLabel,
                 BorderLayout.center(login).
-                        add(BorderLayout.WEST, loginIcon),
+                add(BorderLayout.WEST, loginIcon),
                 BorderLayout.center(password).
-                        add(BorderLayout.WEST, passwordIcon),
+                add(BorderLayout.WEST, passwordIcon),
                 loginButton,
                 createNewAccount
         );

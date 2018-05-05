@@ -48,7 +48,6 @@ public final class EventList {
     private Form form;
     private MultiButton mb;
     private Container container;
-    protected final AutoCompleteTextField search;
     private Resources theme;
     private int id;
     Style s = UIManager.getInstance().getComponentStyle("Button");
@@ -71,42 +70,12 @@ com.codename1.ui.util.Resources resourceObjectInstance = com.codename1.ui.util.R
         ArrayList<Integer> ids = new ArrayList<>();
         
         
-        search = new AutoCompleteTextField(options) {
-            @Override
-            protected boolean filter(String text) {
-                if (text.length() == 0) {
-                    return false;
-                }
-                ArrayList<Event> l = es.findProducts(text);
+        
 
-                if (l == null || l.isEmpty()) {
-                    return false;
-                }
+      
+       
 
-                options.removeAll();
-                for (Event s : l) {
-                    options.addItem(s.getTitle());
-                    ids.add(s.getId());
-                }
-
-                return true;
-            }
-
-        };
-
-        search.setHint("Name Product", FontImage.createMaterial(FontImage.MATERIAL_SEARCH, style));
-        search.addListListener((ActionListener) (ActionEvent evt) -> {
-            System.out.println(search.getText());
-            int i = ids.get(options.getSelectedIndex());
-
-            f.show();
-        });
-
-        search.setMinimumElementsShownInPopup(4);
-        f.getToolbar().addCommandToRightBar("", FontImage.createMaterial(FontImage.MATERIAL_BACKSPACE, style), e -> {
-            form.show();
-            f.removeAll();
-        });
+       
 
         for (Event e : events) {
 

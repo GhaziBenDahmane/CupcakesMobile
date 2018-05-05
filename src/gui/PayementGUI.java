@@ -13,6 +13,7 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
+import com.codename1.ui.Stroke;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionEvent;
@@ -20,11 +21,16 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.events.DataChangedListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.plaf.RoundBorder;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.table.TableLayout;
 import com.codename1.ui.validation.GroupConstraint;
 import com.codename1.ui.validation.LengthConstraint;
 import com.codename1.ui.validation.RegexConstraint;
 import com.codename1.ui.validation.Validator;
+import com.mycompany.myapp.MyApplication;
+import java.io.IOException;
+
 
 /**
  *
@@ -58,6 +64,7 @@ public class PayementGUI {
         val.addComponent(new Label("E-Mail"));
         TextField email = new TextField();
         email.setConstraint(TextArea.EMAILADDR);
+        email.setText(MyApplication.currentUser.getEmail());
         val.addComponent(email);
 
         val.addComponent(new Label("Credit Card"));
@@ -79,14 +86,15 @@ public class PayementGUI {
         creditCardContainer.addComponent(num4);
 
         val.addComponent(creditCardContainer);
-        Container c = new Container( BoxLayout.x());
+        Container c = new Container(BoxLayout.x());
         c.addComponent(new Label("Month"));
         final TextField month = new TextField(2);
         c.addComponent(new Label("Year"));
         final TextField year = new TextField(2);
-        c.addAll(month,year);
+        c.addAll(month, year);
         val.addComponent(c);
-
+        month.setConstraint(TextArea.NUMERIC);
+        year.setConstraint(TextArea.NUMERIC);
         Button submit = new Button("Submit");
         TableLayout.Constraint cn = tl.createConstraint();
         cn.setHorizontalSpan(spanButton);
@@ -111,18 +119,40 @@ public class PayementGUI {
         automoveToNext(month, year);
 
         v.addSubmitButtons(submit);
-        
+
         submit.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
                 PaymentService ps = new PaymentService();
-                ps.payemnt(amount,month.getText()+"/"+year.getText(),num1.getText()+num2.getText()+num3.getText()+num4.getText());
-                CartGUI cghui = new CartGUI();
-                cghui.getForm().show();
-                
+                ps.payemnt(amount, month.getText() + "/" + year.getText(), num1.getText() + num2.getText() + num3.getText() + num4.getText());
+                try {
+                    ProductGUI p =new ProductGUI();
+                    p.show();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+
             }
         });
+        setDesign(firstName.getAllStyles());
+        firstName.getAllStyles().setFgColor(0x00000000);
+        setDesign(surname.getAllStyles());
+        surname.getAllStyles().setFgColor(0x00000000);
+        setDesign(email.getAllStyles());
+        email.getAllStyles().setFgColor(0x00000000);
+        setDesign(num1.getAllStyles());
+        setDesign(num2.getAllStyles());
+        setDesign(num3.getAllStyles());
+        setDesign(num4.getAllStyles());
+        num1.getAllStyles().setFgColor(0x00000000);
+        num2.getAllStyles().setFgColor(0x00000000);
+        num3.getAllStyles().setFgColor(0x00000000);
+        num4.getAllStyles().setFgColor(0x00000000);
+        setDesign(month.getAllStyles());
+        setDesign(year.getAllStyles());
+        month.getAllStyles().setFgColor(0x00000000);
+        year.getAllStyles().setFgColor(0x00000000);
 
         val.show();
     }
@@ -147,6 +177,18 @@ public class PayementGUI {
 
     public void setVal(Form val) {
         this.val = val;
+    }
+
+    public final void setDesign(Style s) {
+        Stroke borderStroke = new Stroke(2, Stroke.CAP_SQUARE, Stroke.JOIN_MITER, 1);
+        s.setBorder(RoundBorder.create().
+                rectangle(true).
+                color(0xffffff).
+                strokeColor(0).
+                strokeOpacity(120).
+                stroke(borderStroke));
+        s.setMarginUnit(Style.UNIT_TYPE_DIPS);
+        s.setMargin(Component.BOTTOM, 3);
     }
 
 }

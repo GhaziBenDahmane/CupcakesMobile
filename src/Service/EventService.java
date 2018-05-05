@@ -12,6 +12,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.events.ActionListener;
+import com.mycompany.myapp.MyApplication;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,14 +27,13 @@ import java.text.SimpleDateFormat;
  * @author haffe
  */
 public class EventService {
-
     public void addEvent(Event e) {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/event/add?title=" + e.getTitle() + "&sdate=" + toDateTime(e.getStartDate()) + ""
+        con.setUrl("http://192.168.0.101:8000/event/add?title=" + e.getTitle() + "&sdate=" + toDateTime(e.getStartDate()) + ""
                 + "&edate=" + toDateTime(e.getEndDate()) + "&nbPerson=" + e.getNbPerson() + "&nbTable=" + e.getNbTable()
-                + "&band=" + e.getBand() + "&cost=" + e.getCost() + "&user=user&url=" + e.getId());
+                + "&band=" + e.getBand() + "&cost=" + e.getCost() + "&user="+MyApplication.currentUser.getUsername()+"&url=" + e.getId());
 
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
@@ -43,7 +43,7 @@ public class EventService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/event/" + e.getId() + "/delete");
+        con.setUrl("http://192.168.0.101:8000/event/" + e.getId() + "/delete");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -59,7 +59,7 @@ public class EventService {
         ConnectionRequest con = new ConnectionRequest();
         con.setHttpMethod("GET");
         con.setPost(true);
-        con.setUrl("http://127.0.0.1:8000/event/list");
+        con.setUrl("http://192.168.0.101:8000/event/list");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -73,12 +73,15 @@ public class EventService {
                     for (Map<String, Object> obj : list) {
                         Event event = new Event();
                         float id = Float.parseFloat(obj.get("id").toString());
+                        float nbPerson = Float.parseFloat(obj.get("nbPerson").toString());
 
                         event.setId((int) id);
                         event.setTitle(obj.get("title").toString());
                         event.setStatus(obj.get("status").toString());
                         event.setStartDate(toDate(obj.get("startDate").toString()));
                         event.setEndDate(toDate((String) obj.get("endDate")));
+                        event.setUser( obj.get("user").toString());
+                        event.setNbPerson((int)nbPerson);
 
                         listEvents.add(event);
                     }
@@ -93,55 +96,14 @@ public class EventService {
 
     public Date toDate(String date) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             return sdf.parse(date);
         } catch (ParseException ex) {
         }
         return null;
     }
 
-    public ArrayList<Event> findProducts(String name) {
-        if (name.length() > 0) {
-            ArrayList<Event> listEvents = new ArrayList<>();
-            ConnectionRequest con = new ConnectionRequest();
-            con.setUrl("http://localhost/WebService/Product/FindProducts.php/?name" + name);
-
-            con.addResponseListener(new ActionListener<NetworkEvent>() {
-                @Override
-                public void actionPerformed(NetworkEvent evt) {
-                    //listTasks = getListTask(new String(con.getResponseData()));
-                    JSONParser jsonp = new JSONParser();
-                    System.out.println("Response" + new CharArrayReader(new String(con.getResponseData()).toCharArray()));
-
-                    try {
-                        Map<String, Object> events = jsonp.parseJSON(new CharArrayReader(new String(con.getResponseData()).toCharArray()));
-                        System.out.println(events);
-                        //System.out.println(tasks);
-                        List<Map<String, Object>> list = (List<Map<String, Object>>) events.get("root");
-                        System.out.println("list" + list);
-                        for (Map<String, Object> obj : list) {
-                            Event event = new Event();
-                            float id = Float.parseFloat(obj.get("id").toString());
-
-                            event.setId((int) id);
-                            event.setTitle(obj.get("title").toString());
-                            event.setStatus(obj.get("status").toString());
-                            event.setStartDate(toDate(obj.get("startDate").toString()));
-                            event.setEndDate(toDate((String) obj.get("endDate")));
-                            listEvents.add(event);
-
-                        }
-                    } catch (IOException ex) {
-                    }
-                }
-            });
-            NetworkManager.getInstance().addToQueueAndWait(con);
-            return listEvents;
-        }
-
-        return null;
-
-    }
+    
 
     private String toDateTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
