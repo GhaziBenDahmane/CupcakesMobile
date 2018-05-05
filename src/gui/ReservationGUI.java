@@ -253,7 +253,11 @@ public class ReservationGUI extends SideMenuBaseForm{
 
         Label delete = new Label(FontImage.createMaterial(FontImage.MATERIAL_REMOVE_CIRCLE, style));
         Label more = new Label(FontImage.createMaterial(FontImage.MATERIAL_MORE, style));
-        
+      
+        more.addPointerPressedListener((evt) -> {
+ 
+            new ReservationList();
+        });
      
         
         delete.addPointerPressedListener((evt) -> {

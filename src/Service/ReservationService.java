@@ -55,12 +55,12 @@ public class ReservationService {
         while (val.length() < 4) {
             val = "0" + val;
         }
-        Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
+       /* Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
                 queryParam("To", "+21652746638").
                 queryParam("From", fromPhone).
                 queryParam("Body", "You have reserved a table at Cupcakes corner at " + today.toString()+" This the entry code : "+val ).
                 header("Authorization", "Basic " + Base64.encodeNoNewline((accountSID + ":" + authToken).getBytes())).
-                getAsJsonMap();
+                getAsJsonMap();*/
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
 
