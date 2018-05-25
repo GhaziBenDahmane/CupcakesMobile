@@ -6,7 +6,7 @@
 package gui;
 
 import Entity.Formation;
-import Service.ServiceFormation;
+import Service.FormationService;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
@@ -43,7 +43,7 @@ public class Affichage extends SideMenuBaseForm {
         );
         lb = new SpanLabel("");
         add(lb);
-        ServiceFormation SP = new ServiceFormation();
+        FormationService SP = new FormationService();
         ArrayList<Formation> lis = SP.getList2();
         lb.setText(lis.toString());
         getToolbar().addCommandToRightBar("back", null, (ev) -> {

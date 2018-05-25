@@ -6,7 +6,7 @@
 package gui;
 
 import Entity.Formation;
-import Service.ServiceFormation;
+import Service.FormationService;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.MultiButton;
 import com.codename1.messaging.Message;
@@ -61,7 +61,7 @@ public class FormationForm extends SideMenuBaseForm {
         );
         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
 
-        ServiceFormation ps = new ServiceFormation();
+        FormationService ps = new FormationService();
         for (Formation F : ps.getList2()) {
 
             add(createContainer(F));
@@ -134,7 +134,7 @@ public class FormationForm extends SideMenuBaseForm {
         box.add(Email);
 
         supp.addActionListener((j) -> {
-            ServiceFormation ser = new ServiceFormation();
+            FormationService ser = new FormationService();
             String a = idSupp.getText();
             int id = Integer.parseInt(a);
             if (id > 1 && id < 20) {

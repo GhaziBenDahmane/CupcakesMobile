@@ -19,7 +19,7 @@ import gui.LoginForm;
  */
 public class MyApplication {
 
-    public final static String API_URL = "http://192.168.0.105/PiWeb/web/app_dev.php";
+    public final static String API_URL = "http://localhost:8000";
     public static Image userPicture = null;
     public static User currentUser = null;
     private Form current;
@@ -27,12 +27,8 @@ public class MyApplication {
 
     public void init(Object context) {
         theme = UIManager.initFirstTheme("/theme_1");
-
-        // Enable Toolbar on all Forms by default
         Toolbar.setGlobalToolbar(true);
         Toolbar.setCenteredDefault(false);
-        // Pro only feature, uncomment if you have a pro subscription
-        // Log.bindCrashProtection(true);
     }
 
     public void start() {

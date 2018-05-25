@@ -22,10 +22,10 @@ import java.util.Map;
  */
 public class ClaimService {
 
-    public final static String API_URL = MyApplication.API_URL + "/api/";
+    public final static String API_PATH = MyApplication.API_URL + "/api/";
 
     public static void add(Claim claim) {
-        Map responseData = Rest.post(API_URL + "claims")
+        Map responseData = Rest.post(API_PATH + "claims")
                 .queryParam("description", claim.getDescription())
                 .queryParam("type", claim.getType())
                 .queryParam("user", MyApplication.currentUser.getUsername())
@@ -36,7 +36,7 @@ public class ClaimService {
 
     public static List<Claim> getByUser() {
         List<Claim> u = new ArrayList<>();
-        Map result = Rest.get(API_URL + "users/" + MyApplication.currentUser.getUsername() + "/claims")
+        Map result = Rest.get(API_PATH + "users/" + MyApplication.currentUser.getUsername() + "/claims")
                 .getAsJsonMap()
                 .getResponseData();
         List l = (ArrayList) result.get("root");
@@ -52,7 +52,7 @@ public class ClaimService {
     }
 
     public static void delete(Claim claim) {
-        String result = Rest.delete(API_URL + "claims/" + claim.getId())
+        String result = Rest.delete(API_PATH + "claims/" + claim.getId())
                 .getAsString()
                 .getResponseData();
         System.out.println(result);
